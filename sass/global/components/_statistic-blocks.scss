@@ -1,0 +1,136 @@
+/***
+Dashboard stats
+***/
+
+@mixin dashboard-stat-variant($name, $bg-color, $text-color) {
+    &.#{$name} {
+        background-color: $bg-color;  
+
+        .visual {
+            > i { 
+                color: $text-color;
+                opacity: 0.3;
+                filter: alpha(opacity=30); 
+            }
+        }
+
+        .details {
+            .number {
+                color: $text-color; 
+            }
+
+            .desc {
+                color: $text-color; 
+                opacity: 0.8;
+                filter: alpha(opacity=80);  
+            }              
+        }
+
+        .more {
+            color: $text-color;
+            background-color: darken($bg-color, 4%);   
+        }
+    }
+}
+
+.dashboard-stat {
+    margin-bottom: 25px;
+
+    @include clearfix();
+
+    .portlet &:last-child {
+        margin-bottom: 0;
+    }
+
+    .visual {
+        width: 80px;
+        height:80px;
+        display: block;
+        float: left;
+        padding-top: 10px;
+        padding-left: 15px;   
+        margin-bottom: 15px;  
+        font-size: 35px; 
+        line-height: 35px; 
+
+        > i {
+            margin-left: -27px;  
+            font-size: 110px; 
+            line-height: 110px;  
+        }
+    }
+
+    .details { 
+        position: absolute;
+        right: 15px;
+        padding-right: 15px;  
+ 
+        .number {    
+            padding-top: 25px;  
+            text-align: right; 
+            font-size: 34px;
+            line-height: 36px;
+            letter-spacing: -1px;
+            margin-bottom: 0px;     
+            font-weight: 300;
+        }
+
+        .desc {
+            text-align: right;
+            font-size: 16px;
+            letter-spacing: 0px;
+            font-weight: 300;
+        }
+    }
+
+    .more {
+        clear: both;
+        display: block;   
+        padding: 6px 10px 6px 10px;
+        position: relative;
+        text-transform: uppercase;
+        font-weight: 300;
+        font-size: 11px;
+        opacity: 0.7;  
+        filter: alpha(opacity=70);
+
+        &:hover {
+            text-decoration: none;
+            opacity: 0.9;  
+            filter: alpha(opacity=90);
+        }
+
+        > i {
+            display: inline-block;
+            margin-top: 1px;
+            float: right;
+        }
+    }  
+
+    //@include dashboard-stat-variant("green", $metronic-green, $metronic-green-text);
+}
+
+/***
+Text Stats
+***/
+
+.text-stat {
+    h3 {
+        margin-top: 5px;
+        margin-bottom: 0px;
+        font-size: 18px;
+    }
+
+    span {
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+}
+
+@media (max-width: $screen-xs-max) { /* 767px */  
+
+  .text-stat {
+    margin-top: 20px;
+  }  
+
+}

@@ -1,0 +1,14 @@
+/***
+Customized Bootstrap Pagination
+***/
+
+.pagination {
+	margin: 10px 0;
+
+ 	.active > a,
+	.active > a:hover {
+  		background: #eee;
+ 	 	border-color: #dddddd;
+ 	 	color: #333;
+	}
+}

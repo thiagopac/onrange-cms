@@ -1,0 +1,41 @@
+@media print {
+	body {
+    	background-color: #fff !important;
+	}
+
+	.page-header {
+		display: none; 
+	}
+
+	.page-sidebar {
+		display: none;
+	}
+
+	.theme-panel {
+		display: none; 
+	}
+
+	.hidden-print {
+		display: none;
+	}
+
+	.page-footer {
+		display: none;
+	}
+
+	.no-page-break {
+		page-break-after: avoid;
+	}
+
+	.page-container {
+		margin: 0px !important;
+		padding: 0px !important;
+	}
+
+	.page-content {
+		min-height: 300px !important;
+		padding: 0px 20px 20px !important;
+		margin: 0 !important;
+	}
+}
+

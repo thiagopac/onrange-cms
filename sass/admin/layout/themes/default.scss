@@ -1,0 +1,123 @@
+//## Default theme color file
+
+@import '../../../global/_variables';  // global metronic framework variables
+@import '../../../global/components/_mixins'; // global metronic framework mixings
+
+@import '../../_variables'; // theme level variables
+
+// Theme Colors Settigns
+
+// Main settings
+$theme-name:                                                    		"default"; 
+$brand-main-color:                                              		#d64635 !default; 
+
+// Body and header
+$bg-color:                                                         		#3d3d3d !default;
+$header-bg-color:                                                  		#1f1f1f !default;      
+ 
+// Default horizontal menu
+$header-hor-menu-default-link-font-color:                       		#999999 !default;
+$header-hor-menu-default-link-font-color-on-hover:              		$header-hor-menu-default-link-font-color !default;
+$header-hor-menu-default-link-font-color-on-active:             		#f1f1f1 !default;
+
+$header-hor-menu-default-link-bg-color-on-hover:                		lighten($header-bg-color, 8%) !default; 
+$header-hor-menu-default-link-bg-color-on-active:               		$brand-main-color !default; 
+
+// Default horizontal sub menu 
+$header-hor-menu-dropdown-menu-bg-color:                        		$header-hor-menu-default-link-bg-color-on-hover !default;
+$header-hor-menu-dropdown-menu-link-font-color:                 		$header-hor-menu-default-link-font-color !default;
+$header-hor-menu-dropdown-menu-link-font-color-on-hover:        		$header-hor-menu-default-link-font-color-on-active !default;
+$header-hor-menu-dropdown-menu-link-bg-color-on-hover:           		$header-hor-menu-default-link-bg-color-on-active !default;
+
+// Default horizontal mega menu
+$header-hor-menu-mega-menu-vertical-devider-border-color:               lighten($header-hor-menu-default-link-bg-color-on-hover, 5%) !default;  
+$header-hor-menu-mega-menu-header-font-color:                   		lighten($header-hor-menu-default-link-font-color, 5%) !default;  
+
+// Light horizontal menu
+$header-light-hor-menu-default-link-font-color:                       	$header-hor-menu-default-link-font-color !default;
+$header-light-hor-menu-default-link-font-color-on-hover:              	#777777 !default;
+$header-light-hor-menu-default-link-font-color-on-active:             	$header-hor-menu-default-link-font-color-on-active !default;
+$header-light-hor-menu-default-link-bg-color-on-hover:                	#fefefe !default;
+$header-light-hor-menu-default-link-bg-color-on-active:               	$header-hor-menu-default-link-bg-color-on-active !default; 
+ 
+// Light horizontal sub menu
+$header-light-hor-menu-dropdown-menu-bg-color:                        	#fefefe !default;
+$header-light-hor-menu-dropdown-menu-link-font-color:                 	#777777 !default;
+$header-light-hor-menu-dropdown-menu-link-font-color-on-hover:        	#777777 !default;  
+$header-light-hor-menu-dropdown-menu-link-bg-color-on-hover:        	#f0f0f0 !default; 
+
+// Light horizontal mega menu  
+$header-light-hor-menu-mega-menu-vertical-devider-border-color:       	#eeeeee !default;   
+$header-light-hor-menu-mega-menu-header-font-color:                   	#666666 !default;   
+
+// Header search
+$header-search-bg-color:                                        		darken($header-bg-color, 4%) !default;
+$header-search-bg-hover-color:                                  		$header-hor-menu-default-link-bg-color-on-hover !default;
+$header-search-bg-color-on-open:                                 		$header-search-bg-hover-color !default;
+$header-search-font-color:                                      		#999999 !default; 
+$header-search-placeholder-font-color:                          		darken($header-search-font-color, 1%) !default;
+
+// Top menu
+$header-top-menu-bg-hover-color:                                		$header-hor-menu-default-link-bg-color-on-hover !default;
+$header-top-menu-bg-hover-color-on-dropdown-open:               		$header-hor-menu-default-link-bg-color-on-hover !default;
+$header-top-menu-badge-bg-color:                                		$brand-main-color;
+$header-top-menu-badge-font-color:                              		#ffffff;
+$header-top-menu-icon-font-color:                               		#999999 !default;
+
+// Top menu user bar
+$header-top-menu-user-font-color:                                       $header-hor-menu-default-link-font-color !default; 
+$header-top-menu-user-bg-color:                                 		$header-search-bg-color !default;
+
+// Sidebar menu
+$sidebar-menu-devider-border-color:                             		#4d4d4d !default;
+
+$sidebar-menu-link-font-color:                                  		#d9d9d9 !default;
+$sidebar-menu-link-font-color-on-hover:                         		$sidebar-menu-link-font-color !default;
+$sidebar-menu-link-font-color-on-active:                        		#ffffff !default;
+
+$sidebar-menu-link-icon-font-color:                             		#888888 !default;
+$sidebar-menu-link-icon-font-color-on-active:                   		$sidebar-menu-link-font-color-on-active !default;
+$sidebar-menu-link-icon-font-color-on-hover:                            $sidebar-menu-link-icon-font-color !default;
+
+$sidebar-menu-link-bg-color-on-hover:                           		#303030 !default;
+$sidebar-menu-link-bg-color-on-active:                          		$brand-main-color; 
+
+$sidebar-menu-link-arrow-bg-img-on-active:                      		"sidebar-menu-arrow.png" !default;
+$sidebar-menu-link-arrow-bg-img-on-active-reversed:             		"sidebar-menu-arrow-reverse.png" !default;
+
+$sidebar-menu-arrow-color:                                      		#777777 !default;
+$sidebar-menu-arrow-color-on-active:                            		$sidebar-menu-link-font-color-on-active !default;
+$sidebar-menu-arrow-color-on-hover:                                     $sidebar-menu-link-icon-font-color-on-hover !default; 
+
+$sidebar-menu-sub-menu-link-font-color:                         		#bdbdbd !default; 
+$sidebar-menu-sub-menu-link-icon-font-color:                    		$sidebar-menu-arrow-color !default;
+$sidebar-menu-sub-menu-link-bg-color-on-hover:                  		#575757 !default;
+$sidebar-menu-sub-menu-link-icon-font-color-on-hover:                   $sidebar-menu-link-icon-font-color-on-hover !default;
+
+// Sidebar for mobile
+$for-max-991px-page-sidebar-bg-color:                           		darken($bg-color, 7%) !default;
+$for-max-991px-page-sidebar-link-bg-color-on-hover:             		darken($bg-color, 10%) !default;
+
+// Sidebar search
+$sidebar-search-bg-color:                                               darken($bg-color, 5%) !default;
+$sidebar-search-bottom-border-color:                            		lighten($sidebar-menu-devider-border-color, 0%) !default;    
+$sidebar-search-full-border-color:                              		lighten($sidebar-menu-devider-border-color, 0%) !default;     
+$sidebar-search-input-font-color:                               		lighten($sidebar-menu-devider-border-color, 8%) !default;
+$sidebar-search-input-placeholder-font-color:                   		lighten($sidebar-menu-devider-border-color, 8%) !default;
+
+// Quick Sidebar
+$quick-sidebar-bg-color:												lighten($header-bg-color, 10%); 
+$quick-sidebar-font-color:												#888888;
+
+// Footer
+$footer-default-font-color:                                     		lighten($bg-color, 40%) !default;    
+$footer-default-go-top-bg-color:                                		lighten($bg-color, 7%) !default;       
+$footer-default-go-top-icon-font-color:                          		lighten($bg-color, 30%) !default;
+$footer-fixed-bg-color: 												darken($bg-color, 7%) !default;
+
+//Boxed layout
+$for-min-992px-page-boxed-page-container-bg-color:              		$sidebar-menu-devider-border-color !default;      
+$for-min-992px-page-boxed-bg-color:                             		darken($bg-color, 3%) !default;
+$for-min-992px-page-boxed-sidebar-fixed-border-color:           		$sidebar-menu-devider-border-color !default;
+
+@import '_base';

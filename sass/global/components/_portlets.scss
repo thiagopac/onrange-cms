@@ -1,0 +1,457 @@
+/***
+Portlets
+***/
+
+/* Basic portlet */
+
+.portlet  {
+    clear: both;
+    margin-top: 0px;
+    margin-bottom: 25px;
+    padding: 0px;
+
+    > .portlet-title {  
+        @include clearfix();
+
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+
+        > .caption {
+            float: left;
+            display: inline-block; 
+            font-size: 18px;
+            line-height: 18px;
+            font-weight: 400;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 8px; 
+        }
+
+        > .caption > i {
+            float: left;
+            margin-top: 4px;
+            display: inline-block;
+            font-size: 13px;
+            margin-right: 5px;
+            color: #666;
+
+            &.glyphicon {
+                margin-top: 2px;  
+            }
+        }
+    }
+
+    > .portlet-body {
+        clear: both;  
+        padding: 0;  
+    }
+ 
+    > .portlet-empty {
+        min-height: 125px; 
+    }
+
+    &.full-height-content {
+        margin-bottom: 0;
+    }
+}
+
+/* Portlet actions & tools */
+
+.portlet > {
+    .portlet-title {
+        > .tools,
+        > .actions {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+            margin-top: 6px;
+            float: right;
+        }
+
+        > .tools { 
+
+            > a {
+                display: inline-block;
+                height: 16px;
+                margin-left:5px;
+            }
+
+            > a.remove {
+                margin-bottom: 2px;
+                background-image:url(../img/portlet-remove-icon.png);
+                background-repeat: no-repeat;
+                width: 11px;
+            }
+
+            > a.config {
+                margin-bottom: 2px;
+                background-image:url(../img/portlet-config-icon.png);
+                background-repeat: no-repeat;
+                width: 12px;
+            }
+
+            > a.reload {
+                margin-bottom: 2px;
+                background-image:url(../img/portlet-reload-icon.png);
+                width: 13px;
+            }
+
+            > a.expand {
+                margin-bottom: 2px;
+                background-image:url(../img/portlet-expand-icon.png);
+                width: 14px;
+            }
+
+            > a.collapse {
+                margin-bottom: 2px;
+                background-image:url(../img/portlet-collapse-icon.png);
+                width: 14px;
+            }
+
+            > a:hover {
+                text-decoration: none;
+                -webkit-transition: all 0.1s ease-in-out;
+                -moz-transition: all 0.1s ease-in-out;
+                -o-transition: all 0.1s ease-in-out;
+                -ms-transition: all 0.1s ease-in-out;
+                transition: all 0.1s ease-in-out;
+                opacity:.6;  
+                filter:'alpha(opacity=60)';
+            }
+        }
+
+        > .actions {
+
+            > .dropdown-menu i {
+                color: #555555;
+            }
+
+            > .btn-group {
+                margin-top: -12px;
+            }
+
+            > .btn {
+                padding: 4px 10px;
+                margin-top: -13px;
+            }
+
+            > .btn-group > .btn {
+                padding: 4px 10px; 
+                margin-top: -1px;     
+            }
+
+            > .btn.btn-sm {
+                padding: 3px 8px;
+                margin-top: -13px;
+            }
+
+            > .btn-group > .btn-sm {
+                padding: 3px 8px;
+                margin-top: -1px;  
+            }
+        }
+
+        > .pagination.pagination-sm {
+            float: right;
+            display: inline-block;
+            margin: 0px;
+            margin-top: -4px;
+            border: 0;
+        }
+    }
+}
+
+/* Portlet actions on mobile view */
+
+@media (max-width: $screen-xs-max) {  /* 767px */  
+    .portlet {
+        > .portlet-title {
+            > .actions.btn-set { 
+                > .btn-group,
+                > .btn {
+                    margin-top: 0px;
+                    margin-bottom: 5px;
+                }
+            }
+        }
+    }
+}
+
+/* Portlet background colors */
+
+@mixin porlet-background($name, $color) {
+
+    .portlet > .portlet-body.#{$name}, 
+    .portlet.#{$name} {
+        background-color: $color;
+    }
+
+}
+
+//@include porlet-background("red", $metronic-red);
+
+/* Side bordered portlet */
+
+.portlet.bordered {
+    border-left: 2px solid #e6e9ec !important;   
+
+    > .portlet-title {
+        border-bottom: 0;
+    }
+} 
+
+/* Solid colored portlet */
+
+.portlet.solid {
+    padding: 10px;
+    border: 0px;
+
+    > .portlet-title {
+        margin-bottom: 5px;
+        border-bottom: 0;
+
+        > .tools {
+            margin-top: 2px;
+            border: 0px;
+
+            > a.remove {
+                background-image:url(../img/portlet-remove-icon-white.png);
+            }
+
+            > a.config {
+                background-image:url(../img/portlet-config-icon-white.png);
+            }
+
+            > a.reload {
+                background-image:url(../img/portlet-reload-icon-white.png);
+            }
+
+            > a.expand {
+                background-image:url(../img/portlet-expand-icon-white.png);
+            }
+
+            > a.collapse {
+                background-image:url(../img/portlet-collapse-icon-white.png);
+            }
+        }
+    }
+}
+
+@mixin porlet-solid($name, $color) {
+
+    .portlet.solid.#{$name} {
+
+        > .portlet-title,
+        > .portlet-body {
+            border: 0;
+            color: $color;
+        }
+
+        > .portlet-title {
+            > .caption {
+                > i {
+                    color: $color;
+                }
+            }
+        }
+    }
+}
+
+//@include porlet-solid("red", $metronic-blue-text);
+
+/* Solid bordered portlet */
+
+.portlet.solid.bordered > .portlet-title {
+  margin-bottom: 15px;
+}
+
+/* Box portlet */
+
+.portlet.box {
+    padding:0px !important;
+
+    > .portlet-title {  
+        margin-bottom: 0px;
+        padding:10px 10px 4px 10px;
+        border-bottom: 1px solid #eee;
+        color: #fff;
+
+        > .tools {
+            margin-top: 3px;
+
+            > a.remove {
+                background-image:url(../img/portlet-remove-icon-white.png);
+            }
+
+            > a.config {
+                background-image:url(../img/portlet-config-icon-white.png);
+            }
+
+            > a.reload {
+                background-image:url(../img/portlet-reload-icon-white.png);
+            }
+
+            > a.expand {
+                background-image:url(../img/portlet-expand-icon-white.png);
+            }
+
+            > a.collapse {
+                background-image:url(../img/portlet-collapse-icon-white.png);
+            }
+        }
+    }
+
+    > .portlet-body {
+        background-color: #fff;
+        padding: 10px;
+    }
+}
+
+@mixin porlet-box($name, $color, $text-color) {
+
+    .portlet.box.#{$name} {  
+        border: 1px solid lighten($color, 10%);
+        border-top: 0;
+
+        > .portlet-title {
+            background-color: $color;
+
+            > .caption {
+                > i {
+                    color: $text-color;
+                }
+            }
+
+            > .actions {
+                .btn-default {
+                    background: transparent !important; 
+                    background-color: transparent !important;
+                    border: 1px solid lighten($color, 22%);        
+                    color: lighten($color, 27%);  
+
+                    &:hover,
+                    &:focus,
+                    &:active,
+                    &.active {
+                        border: 1px solid lighten($color, 32%);
+                        color: lighten($color,37%);      
+                    }
+                }
+            }
+        }
+    }
+}
+
+//@include porlet-box("red", $metronic-red, $metronic-red-text);
+
+/***
+Portlet tabs
+***/
+
+.portlet-tabs { 
+
+    > .nav-tabs {
+        position: relative;
+        top: -41px;
+        margin-right: 10px;
+        overflow: hidden;
+        border-bottom: none;
+
+        > li {
+            float: right;
+            margin-left: 1px;
+
+            > a {
+                color: #fff;
+                padding-top: 8px;
+                padding-bottom: 10px;
+                line-height: 16px;
+                margin-top: 6px;
+                margin-left: 0px;
+                margin-right: 0px;
+                border-left: 0;    
+                border-right: 0;
+                -webkit-border-radius: 0px;
+                -moz-border-radius: 0px;
+                border-radius: 0px;   
+
+                &:hover {
+                    color: #333;
+                    margin-bottom: 0;
+                    border-bottom-color: transparent;
+                    margin-left: 0;
+                    margin-right: 0;
+                    border-left: 0;    
+                    border-right: 0;
+                    border-top-color:transparent;
+                    background-color: #fff;
+                }
+            }
+
+            &:last-child > a {
+                border-right:0;
+            }
+        }
+
+        > li.active {
+            color: #333;
+            border-top-color: transparent;
+
+            > a {
+                margin-bottom: 0px;
+                border-bottom: 0;
+                margin-left: 0px;
+                margin-right: 0px;
+                border-left: 0;    
+                border-right: 0;
+                border-top-color:transparent !important;
+                color: #555555;
+                cursor: default;
+                background-color: #fff;
+
+                &:hover {
+                    color: #333;
+                    margin-bottom: 0;
+                    border-bottom-color: transparent;
+                    margin-left: 0;
+                    margin-right: 0;
+                    border-left: 0;    
+                    border-right: 0;
+                    border-top-color:transparent;
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+
+    > .tab-content {
+        padding: 10px !important;
+        margin: 0px;
+        margin-top: -50px !important;
+    }
+}
+
+.portlet.tabbable {
+    .portlet-body {
+        padding: 0px;
+    }
+}
+
+.tab-pane {
+    > p:last-child {
+        margin-bottom: 0px;
+    }
+}
+
+/* Reverse aligned tabs */
+
+.tabs-reversed {
+    > li {
+        float: right;
+        margin-right: 0; 
+
+        > a {
+            margin-right: 0;
+        }
+    }
+}

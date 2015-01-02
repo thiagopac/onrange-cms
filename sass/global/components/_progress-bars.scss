@@ -1,0 +1,32 @@
+/***
+Customized Progress Bars
+***/
+
+.progress {  
+  border: 0; 
+  background-image: none;
+  filter: none;
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;   
+}
+
+.progress > .progress-bar-default {
+    @include progress-bar-variant($brand-default);
+}
+
+.progress > .progress-bar-success {
+    @include progress-bar-variant($brand-success);
+}
+
+.progress > .progress-bar-info {
+    @include progress-bar-variant($brand-info);
+}
+
+.progress > .progress-bar-danger {
+    @include progress-bar-variant($brand-danger);
+}
+
+.progress > .progress-bar-warning {
+    @include progress-bar-variant($brand-warning);
+}

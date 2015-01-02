@@ -1,0 +1,35 @@
+/***
+Bootstrap Markdown
+***/
+
+.md-input {
+  padding: 5px !important;
+  border-bottom: 0 !important;
+}
+
+.md-editor .btn-toolbar {
+  margin-left: 0px;
+}
+
+.md-editor.active {
+  border: 1px solid #999999;
+  -webkit-box-shadow: none !important;
+     -moz-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+/***
+Error state for WYSIWYG Editors
+***/
+
+.has-error .md-editor {
+  border: 1px solid $brand-danger !important;
+}
+
+.has-success .md-editor {
+  border: 1px solid $brand-success !important;
+}
+
+.has-warning .md-editor {
+  border: 1px solid $brand-warning !important;
+}

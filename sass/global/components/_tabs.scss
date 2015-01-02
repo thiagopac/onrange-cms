@@ -1,0 +1,266 @@
+/***
+Customized Bootstrap Tabs 
+***/
+
+/* Tabs and pills */
+
+.nav-tabs,
+.nav-pills {
+    margin-bottom: 10px;
+
+    > li {
+        > a {
+            font-size: 14px;
+
+            > .badge { 
+                margin-top: -3px;
+            }
+        }
+
+        .dropdown-menu {
+            &:before,
+            &:after {
+                display: none; 
+            }
+        }
+    }   
+
+    &.nav-tabs-sm,
+    &.nav-pills-sm {
+        > li > a {
+            font-size: 13px;
+        }  
+    }
+
+    .dropdown.open {
+        > .dropdown-toggle {
+            background: #eee;
+            color: #0d638f;
+            border-color: transparent;
+        }
+    } 
+}
+
+/* Left and right tabs */
+
+.tabs-right > .nav-tabs,
+.tabs-left > .nav-tabs {
+    border-bottom: 0;
+
+    > li {
+        float: none;
+
+        > a {
+            min-width: 74px;
+            margin-right: 0;
+            margin-bottom: 3px;
+        }
+    }  
+}
+
+/* Left tabs */
+
+.tabs-left > .nav-tabs {
+  float: left;
+  margin-right: 19px;
+  border-right: 1px solid #ddd;
+
+    > li > a {
+        margin-right: -1px;
+    
+        &:hover,
+        &:focus {
+            border-color: #eeeeee #dddddd #eeeeee #eeeeee;
+        }
+    }
+
+    > li.active > a,
+    > li.active > a:hover
+    > li.active > a:focus {
+        border-color: #ddd transparent #ddd #ddd;
+        *border-right-color: #ffffff;
+    }
+}
+
+/* Right tabs */
+
+.tabs-right > .nav-tabs {
+    float: right;
+    margin-left: 19px;
+    border-left: 1px solid #ddd;
+
+    > li > a {
+        margin-left: -1px;
+    
+        &:hover,
+        &:focus {
+            border-color: #eeeeee #eeeeee #eeeeee #dddddd;
+        }
+    }
+
+    > li.active > a,
+    > li.active > a:hover
+    > li.active > a:focus {
+        border-color: #ddd #ddd #ddd transparent;
+        *border-left-color: #ffffff;
+    }
+}
+
+/* Below tabs */
+
+.tabs-below > .nav-tabs,
+.tabs-below > .nav-pills {
+    border-bottom: 0;
+    margin-bottom: 0px;
+    margin-top: 10px;
+}
+
+.tabs-below > .nav-tabs {
+    border-top: 1px solid #ddd;
+    margin-bottom: 0;
+    margin-top: 10px;
+
+    > li > a{
+        margin-top: -1px;
+        margin-bottom: 0;
+
+        &:hover,
+        &:focus {
+            border-top-color: #ddd;
+            border-bottom-color: transparent;
+        }
+    }
+
+    .active a,
+    .active a:hover
+    .active a:focus {
+         border-color: transparent #ddd #ddd #ddd;
+    }
+}
+
+/***
+Custom tabs
+***/
+
+/* In BS3.0.0 tabbable class was removed. We had to added it back */
+
+.tabbable {
+    @include clearfix();
+}
+
+.tabbable-custom { 
+    margin-bottom: 15px; 
+    padding: 0px;  
+    overflow: hidden;
+
+    > .nav-tabs { 
+        border: none; 
+        margin: 0px;
+
+        > li { 
+            margin-right: 2px; 
+            border-top: 2px solid transparent; 
+
+            > a {
+                margin-right: 0;
+
+                &:hover {
+                    background: none;
+                    border-color:transparent;
+                }
+            }
+
+            &.active {
+                border-top: 3px solid $brand-danger; 
+                margin-top: 0; 
+                position: relative;
+
+                > a {
+                    border-top: none; 
+                    font-weight: 400; 
+
+                    &:hover {
+                        border-top: none; 
+                        background: #fff; 
+                        border-color: #d4d4d4 #d4d4d4 transparent; 
+                    }
+                }  
+            } 
+        }
+    }
+
+    > .tab-content { 
+        background-color: #fff;
+        border: 1px solid #ddd;  
+        -webkit-border-radius: 0; 
+        -moz-border-radius: 0; 
+        border-radius: 0; 
+        padding: 10px;
+    }
+
+    /* justified tabs */
+
+    &.nav-justified .tab-content {
+        margin-top: -1px;
+    }
+
+    /* boxless tabs */
+
+    &.boxless > .tab-content {
+        padding:15px 0;
+        border-left:none;
+        border-right:none;
+        border-bottom:none;
+    }
+
+    /* below justified tabs */
+
+    &.tabs-below.nav-justified .tab-content {
+        margin-top: 0px;
+        margin-bottom: -2px;
+    }
+
+    /* full width tabs */
+
+    &.tabbable-full-width {
+        .nav-tabs > li > a {
+            color:#424242;
+            font-size:15px;
+            padding:9px 15px;
+        }
+
+        > .tab-content {
+            padding:15px 0;
+            border-left:none;
+            border-right:none;
+            border-bottom:none;
+        }
+    }
+
+    /* below tabs */
+
+    &.tabs-below .nav-tabs {
+
+        > li > a { 
+            border-top: none; 
+            border-bottom: 2px solid transparent; 
+            margin-top: -1px; 
+        }
+
+        > li.active {
+            border-top: none; 
+            border-bottom: 3px solid #d12610; 
+            margin-bottom: 0; 
+            position: relative; 
+
+            > a {
+                border-bottom: none; 
+
+                &:hover {
+                    background: #fff; 
+                    border-color: #d4d4d4 #d4d4d4 transparent; 
+                }
+            }
+        }
+    }
+}   
