@@ -1,5 +1,5 @@
 <?
-##INCLUDES
+##INCLUDES.
 	require_once('../lib/config.php');
 	
 #CONTROLE SESSAO
