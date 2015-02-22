@@ -19,13 +19,13 @@
 		$SQL = "SELECT AL.ID_LOCAL, L.NOME FROM ADMINISTRADOR_LOCAL AL
 		JOIN LOCAL L ON (AL.ID_LOCAL = L.ID_LOCAL)
 		WHERE AL.ID_ADMINISTRADOR = $ID_CLIENTE
-		AND L.DT_EXCLUSAO IS NOT NULL";
+		AND L.DT_EXCLUSAO IS NULL";
 		
 		$ADMINISTRADOR_LOCAL = fnDB_DO_SELECT_WHILE($DB,$SQL);
 		
 	}else if($ID_TIPO_ADMIN == 1){
 		$SQL = "SELECT L.ID_LOCAL, L.NOME FROM LOCAL L
-				WHERE L.DT_EXCLUSAO IS NOT NULL";
+				WHERE L.DT_EXCLUSAO IS NULL";
 		
 		$ADMINISTRADOR_LOCAL = fnDB_DO_SELECT_WHILE($DB,$SQL);
 	}
@@ -60,57 +60,63 @@
 		
 		//***** Percentual de penetração
 		
-		//Determina a posição e o tipo do local
+		if($LOCAL_SELECIONADO != 0){
 		
-		$SQL = "SELECT ID_TIPO_LOCAL, LATITUDE,LONGITUDE
-		FROM LOCAL
-		WHERE ID_LOCAL = $LOCAL_SELECIONADO";
-		
-		$POS_LOCAL = fnDB_DO_SELECT($DB,$SQL);
-		
-		$LAT_LOCAL = $POS_LOCAL['LATITUDE'];
-		$LONG_LOCAL = $POS_LOCAL['LONGITUDE'];
-		
-		$TIPO_LOCAL = $POS_LOCAL['ID_TIPO_LOCAL'];
-		
-		//Determina a região onde buscar por outros locais para a comparação. 
-		//Por padrão o local estará no centro de um quadrado com o lado = $RAIO*2.
-		
-		$RAIO = 2;
-		
-		$MAXLAT = $LAT_LOCAL + rad2deg($RAIO/6371);
-		$MINLAT = $LAT_LOCAL - rad2deg($RAIO/6371);
-		$MAXLONG = $LONG_LOCAL + rad2deg($RAIO/6371/cos(deg2rad($LAT_LOCAL)));
-		$MINLONG = $LONG_LOCAL - rad2deg($RAIO/6371/cos(deg2rad($LAT_LOCAL)));
-		
-		//Seleciona a quantidade total de checkins correntes do local selecionado
-		
-		$SQL = "SELECT CHECKINS_CORRENTES.qt_checkin AS TOTAL_CHECKINS_LOCAL
-		FROM CHECKINS_CORRENTES
-		WHERE
-		ID_LOCAL = $LOCAL_SELECIONADO";
-		
-		$TOTAL_CHECKINS_LOCAL = fnDB_DO_SELECT($DB,$SQL);
-		
-		//Seleciona a quantidade total de checkins correntes dentro do range, cujo tipo é o mesmo
-		
-		$SQL = "SELECT SUM(CHECKINS_CORRENTES.qt_checkin) AS TOTAL_CHECKINS_REGIAO
-				FROM CHECKINS_CORRENTES JOIN LOCAL USING (ID_LOCAL)
-				WHERE
-				CHECKINS_CORRENTES.qt_checkin > 0
-				AND LOCAL.dt_exclusao IS NULL
-				AND LOCAL.id_tipo_local = $TIPO_LOCAL
-				AND LOCAL.latitude BETWEEN $MINLAT AND $MAXLAT
-				AND LOCAL.longitude BETWEEN $MINLONG AND $MAXLONG";
-		
-		$TOTAL_CHECKINS_REGIAO = fnDB_DO_SELECT($DB,$SQL);
-		
-		if ($TOTAL_CHECKINS_LOCAL['TOTAL_CHECKINS_LOCAL'] == null || $TOTAL_CHECKINS_REGIAO['TOTAL_CHECKINS_REGIAO'] == null) {
-			$PENETRACAO = 0;
+			//Determina a posição e o tipo do local
+			
+			$SQL = "SELECT ID_TIPO_LOCAL, LATITUDE,LONGITUDE
+			FROM LOCAL
+			WHERE ID_LOCAL = $LOCAL_SELECIONADO";
+			
+			$POS_LOCAL = fnDB_DO_SELECT($DB,$SQL);
+			
+			$LAT_LOCAL = $POS_LOCAL['LATITUDE'];
+			$LONG_LOCAL = $POS_LOCAL['LONGITUDE'];
+			
+			$TIPO_LOCAL = $POS_LOCAL['ID_TIPO_LOCAL'];
+			
+			//Determina a região onde buscar por outros locais para a comparação. 
+			//Por padrão o local estará no centro de um quadrado com o lado = $RAIO*2.
+			
+			$RAIO = 2;
+			
+			$MAXLAT = $LAT_LOCAL + rad2deg($RAIO/6371);
+			$MINLAT = $LAT_LOCAL - rad2deg($RAIO/6371);
+			$MAXLONG = $LONG_LOCAL + rad2deg($RAIO/6371/cos(deg2rad($LAT_LOCAL)));
+			$MINLONG = $LONG_LOCAL - rad2deg($RAIO/6371/cos(deg2rad($LAT_LOCAL)));
+			
+			//Seleciona a quantidade total de checkins correntes do local selecionado
+			
+			$SQL = "SELECT CHECKINS_CORRENTES.qt_checkin AS TOTAL_CHECKINS_LOCAL
+			FROM CHECKINS_CORRENTES
+			WHERE
+			ID_LOCAL = $LOCAL_SELECIONADO";
+			
+			$TOTAL_CHECKINS_LOCAL = fnDB_DO_SELECT($DB,$SQL);
+			
+			//Seleciona a quantidade total de checkins correntes dentro do range, cujo tipo é o mesmo
+			
+			$SQL = "SELECT SUM(CHECKINS_CORRENTES.qt_checkin) AS TOTAL_CHECKINS_REGIAO
+					FROM CHECKINS_CORRENTES JOIN LOCAL USING (ID_LOCAL)
+					WHERE
+					CHECKINS_CORRENTES.qt_checkin > 0
+					AND LOCAL.dt_exclusao IS NULL
+					AND LOCAL.id_tipo_local = $TIPO_LOCAL
+					AND LOCAL.latitude BETWEEN $MINLAT AND $MAXLAT
+					AND LOCAL.longitude BETWEEN $MINLONG AND $MAXLONG";
+			
+			$TOTAL_CHECKINS_REGIAO = fnDB_DO_SELECT($DB,$SQL);
+			
+			if ($TOTAL_CHECKINS_LOCAL['TOTAL_CHECKINS_LOCAL'] == null || $TOTAL_CHECKINS_REGIAO['TOTAL_CHECKINS_REGIAO'] == null) {
+				$PENETRACAO = 0;
+			}
+			else{
+				$PENETRACAO = $TOTAL_CHECKINS_LOCAL['TOTAL_CHECKINS_LOCAL'] / $TOTAL_CHECKINS_REGIAO['TOTAL_CHECKINS_REGIAO'] * 100;
+				$PENETRACAO = NUMBER_FORMAT($PENETRACAO,1);
+			}
 		}
 		else{
-			$PENETRACAO = $TOTAL_CHECKINS_LOCAL['TOTAL_CHECKINS_LOCAL'] / $TOTAL_CHECKINS_REGIAO['TOTAL_CHECKINS_REGIAO'] * 100;
-			$PENETRACAO = NUMBER_FORMAT($PENETRACAO,1);
+			$PENETRACAO = 0;
 		}
 	}
 ?>
@@ -358,7 +364,11 @@
 								?>
 							</div>
 							<div class="desc">
-								 Tx. de penetração
+								<?	
+								 if($PENETRACAO != 0) {
+									echo "Tx. de penetração";
+								 }
+								?>
 							</div>
 						</div>
 						<a class="more" href="#">
