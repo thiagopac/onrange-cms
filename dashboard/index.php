@@ -10,7 +10,7 @@
 
 #INPUTS
 	$MSG = addslashes($_REQUEST['MSG']);
-	$CLIENTE_SELECIONADO = $_REQUEST['cliente_selecionado'];
+	$LOCAL_SELECIONADO = $_REQUEST['LOCAL_SELECIONADO'];
 
 #INICIO LOGICA
 	$DB = fnDBConn();
@@ -28,10 +28,13 @@
 		$ADMINISTRADOR_LOCAL = fnDB_DO_SELECT_WHILE($DB,$SQL);
 	}
 	
-	if (ISSET($CLIENTE_SELECIONADO)) {
+	if (ISSET($LOCAL_SELECIONADO)) {
+		
+		//***** Quantidade de checkins no local selecionado
+		
 		$SQL = "SELECT LOCAL.ID_LOCAL, LOCAL.NOME, CHECKINS_CORRENTES.QT_CHECKIN
 		FROM LOCAL JOIN CHECKINS_CORRENTES ON LOCAL.ID_LOCAL = CHECKINS_CORRENTES.ID_LOCAL
-		WHERE LOCAL.ID_LOCAL = $CLIENTE_SELECIONADO
+		WHERE LOCAL.ID_LOCAL = $LOCAL_SELECIONADO
 		GROUP BY LOCAL.ID_LOCAL";
 		
 		$QT_CHECKIN = fnDB_DO_SELECT($DB,$SQL);
@@ -40,6 +43,73 @@
 			$QT_CHECKIN = array("QT_CHECKIN" => "0");
 		}
 		
+		//***** Quantidade de promos no mês atual
+		
+		$SQL = "SELECT COUNT(1) AS QT_PROMO
+		FROM PROMO
+		WHERE ID_LOCAL = $LOCAL_SELECIONADO
+		  AND NOW() BETWEEN DT_DISPONIBILIZACAO AND DT_FIM";
+		
+		$QT_PROMO = fnDB_DO_SELECT($DB,$SQL);
+		
+		if ($QT_PROMO['QT_PROMO'] == null) {
+			$QT_PROMO = array("QT_PROMO" => "0");
+		}
+		
+		//***** Percentual de penetração
+		
+		//Determina a posição e o tipo do local
+		
+		$SQL = "SELECT ID_TIPO_LOCAL, LATITUDE,LONGITUDE
+		FROM LOCAL
+		WHERE ID_LOCAL = $LOCAL_SELECIONADO";
+		
+		$POS_LOCAL = fnDB_DO_SELECT($DB,$SQL);
+		
+		$LAT_LOCAL = $POS_LOCAL['LATITUDE'];
+		$LONG_LOCAL = $POS_LOCAL['LONGITUDE'];
+		
+		$TIPO_LOCAL = $POS_LOCAL['ID_TIPO_LOCAL'];
+		
+		//Determina a região onde buscar por outros locais para a comparação. 
+		//Por padrão o local estará no centro de um quadrado com o lado = $RAIO*2.
+		
+		$RAIO = 2;
+		
+		$MAXLAT = $LAT_LOCAL + rad2deg($RAIO/6371);
+		$MINLAT = $LAT_LOCAL - rad2deg($RAIO/6371);
+		$MAXLONG = $LONG_LOCAL + rad2deg($RAIO/6371/cos(deg2rad($LAT_LOCAL)));
+		$MINLONG = $LONG_LOCAL - rad2deg($RAIO/6371/cos(deg2rad($LAT_LOCAL)));
+		
+		//Seleciona a quantidade total de checkins correntes do local selecionado
+		
+		$SQL = "SELECT CHECKINS_CORRENTES.qt_checkin AS TOTAL_CHECKINS_LOCAL
+		FROM CHECKINS_CORRENTES
+		WHERE
+		ID_LOCAL = $LOCAL_SELECIONADO";
+		
+		$TOTAL_CHECKINS_LOCAL = fnDB_DO_SELECT($DB,$SQL);
+		
+		//Seleciona a quantidade total de checkins correntes dentro do range, cujo tipo é o mesmo
+		
+		$SQL = "SELECT SUM(CHECKINS_CORRENTES.qt_checkin) AS TOTAL_CHECKINS_REGIAO
+				FROM CHECKINS_CORRENTES JOIN LOCAL USING (ID_LOCAL)
+				WHERE
+				CHECKINS_CORRENTES.qt_checkin > 0
+				AND LOCAL.dt_exclusao IS NULL
+				AND LOCAL.id_tipo_local = $TIPO_LOCAL
+				AND LOCAL.latitude BETWEEN $MINLAT AND $MAXLAT
+				AND LOCAL.longitude BETWEEN $MINLONG AND $MAXLONG";
+		
+		$TOTAL_CHECKINS_REGIAO = fnDB_DO_SELECT($DB,$SQL);
+		
+		if ($TOTAL_CHECKINS_LOCAL['TOTAL_CHECKINS_LOCAL'] == null || $TOTAL_CHECKINS_REGIAO['TOTAL_CHECKINS_REGIAO'] == null) {
+			$PENETRACAO = 0;
+		}
+		else{
+			$PENETRACAO = $TOTAL_CHECKINS_LOCAL['TOTAL_CHECKINS_LOCAL'] / $TOTAL_CHECKINS_REGIAO['TOTAL_CHECKINS_REGIAO'] * 100;
+			$PENETRACAO = NUMBER_FORMAT($PENETRACAO,1);
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -167,13 +237,13 @@
 					<div class="form-body">
 					 	<div class="col-md-3">
 					 		<form action="index.php" method="POST">
-								<select onchange="this.form.submit()" class="bs-select form-control" name="cliente_selecionado" id="cliente_selecionado">
+								<select onchange="this.form.submit()" class="bs-select form-control" name="LOCAL_SELECIONADO" id="LOCAL_SELECIONADO">
 									<option id="0" value="0">Selecione um local</option>
 									<?php 
 									foreach($ADMINISTRADOR_LOCAL as $KEY => $ROW)
 										{
 										?>
-										<option <? if ($CLIENTE_SELECIONADO == $ROW['ID_LOCAL']) echo 'selected'; ?> id="<?=$ROW['ID_LOCAL']?>" value="<?=$ROW['ID_LOCAL']?>"><?=$ROW['NOME']?></option>
+										<option <? if ($LOCAL_SELECIONADO == $ROW['ID_LOCAL']) echo 'selected'; ?> id="<?=$ROW['ID_LOCAL']?>" value="<?=$ROW['ID_LOCAL']?>"><?=$ROW['NOME']?></option>
 										<?
 										}
 									?>
@@ -182,10 +252,6 @@
 						 </div>
 					</div>
 				</div>
-			
-				
-
-				
 				<!-- BEGIN DASHBOARD STATS -->
 			<div class="row">
 				<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -195,7 +261,7 @@
 						</div>
 						<div class="details">
 							<div class="number">
-							<? if ($CLIENTE_SELECIONADO != null && ($CLIENTE_SELECIONADO != '0' || $QT_CHECKIN['QT_CHECKIN'] != 0)) {
+							<? if ($LOCAL_SELECIONADO != null && ($LOCAL_SELECIONADO != '0' || $QT_CHECKIN['QT_CHECKIN'] != 0)) {
 									echo $QT_CHECKIN['QT_CHECKIN'];
 								}ELSE{
 									echo "N/A";
@@ -203,10 +269,12 @@
 							?>
 							</div>
 							<div class="desc">
-							<? if ($CLIENTE_SELECIONADO != null && ($CLIENTE_SELECIONADO != '0' || $QT_CHECKIN['QT_CHECKIN'] != 0)) {
-									echo 'Checkins agora';
-								}ELSE{
-									echo "-";
+							<? if ($LOCAL_SELECIONADO != null && ($LOCAL_SELECIONADO != '0' || $QT_CHECKIN['QT_CHECKIN'] != 0)) {
+									if($QT_CHECKIN['QT_CHECKIN'] == 1){
+										echo 'Checkin agora';
+									}else{
+										echo 'Checkins agora';
+									}
 								}
 							?>
 								 
@@ -224,10 +292,36 @@
 						</div>
 						<div class="details">
 							<div class="number">
-								 N/A
+								 <? 
+								 	if ($LOCAL_SELECIONADO != null){ 
+										if($LOCAL_SELECIONADO != '0'){ 
+								 			if($QT_PROMO['QT_PROMO'] != 0) {
+												echo $QT_PROMO['QT_PROMO'];
+											}
+											else{
+												echo "0";
+											}
+										}else{
+											echo "N/A";		
+										}
+								 	}
+									else{
+										echo "N/A";
+									}
+
+								?>
 							</div>
 							<div class="desc">
-								 Promos / mês
+								<? 
+								 	if ($LOCAL_SELECIONADO != null && $LOCAL_SELECIONADO != '0'){
+										if($QT_PROMO['QT_PROMO'] == 1){
+											echo "Promo ativo";
+										}else{
+											echo "Promos ativos";
+										 }
+								 	}	
+								?>
+								 
 							</div>
 						</div>
 						<a class="more" href="#">
@@ -242,7 +336,24 @@
 						</div>
 						<div class="details">
 							<div class="number">
-								 N/A%
+								 <? 
+								 	if ($LOCAL_SELECIONADO != null){ 
+										if($LOCAL_SELECIONADO != '0'){ 
+								 			if($PENETRACAO != 0) {
+												echo $PENETRACAO . '%';
+											}
+											else{
+												echo "0%";
+											}
+										}else{
+											echo "N/A";		
+										}
+								 	}
+									else{
+										echo "N/A";
+									}
+
+								?>
 							</div>
 							<div class="desc">
 								 Tx. de penetração
@@ -280,7 +391,7 @@
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
 	<div class="page-footer-inner">
-		 2014 &copy; <?=$TITULO?>
+		 2015 &copy; <?=$TITULO?>
 	</div>
 	<div class="page-footer-tools">
 		<span class="go-top">
