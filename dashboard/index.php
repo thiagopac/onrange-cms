@@ -19,13 +19,15 @@
 		$SQL = "SELECT AL.ID_LOCAL, L.NOME FROM ADMINISTRADOR_LOCAL AL
 		JOIN LOCAL L ON (AL.ID_LOCAL = L.ID_LOCAL)
 		WHERE AL.ID_ADMINISTRADOR = $ID_CLIENTE
-		AND L.DT_EXCLUSAO IS NULL";
+		AND L.DT_EXCLUSAO IS NULL
+		ORDER BY L.NOME ASC";
 		
 		$ADMINISTRADOR_LOCAL = fnDB_DO_SELECT_WHILE($DB,$SQL);
 		
 	}else if($ID_TIPO_ADMIN == 1){
 		$SQL = "SELECT L.ID_LOCAL, L.NOME FROM LOCAL L
-				WHERE L.DT_EXCLUSAO IS NULL";
+				WHERE L.DT_EXCLUSAO IS NULL
+				ORDER BY L.NOME ASC";
 		
 		$ADMINISTRADOR_LOCAL = fnDB_DO_SELECT_WHILE($DB,$SQL);
 	}
@@ -289,7 +291,7 @@
 							</div>
 						</div>
 						<a class="more" href="#">
-						O que é isso? <i class="m-icon-swapright m-icon-white"></i>
+						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
 				</div>
@@ -333,7 +335,7 @@
 							</div>
 						</div>
 						<a class="more" href="#">
-						O que é isso? <i class="m-icon-swapright m-icon-white"></i>
+						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
 				</div>
@@ -372,7 +374,7 @@
 							</div>
 						</div>
 						<a class="more" href="#">
-						O que é isso? <i class="m-icon-swapright m-icon-white"></i>
+						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
 				</div>
@@ -390,7 +392,7 @@
 							</div>
 						</div>
 						<a class="more" href="#">
-						O que é isso? <i class="m-icon-swapright m-icon-white"></i>
+						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
 				</div>
