@@ -7,10 +7,16 @@
 	
 	$ID_CLIENTE = $_SESSION['ADMINISTRADOR']['ID'];
 	$ID_TIPO_ADMIN = $_SESSION['ADMINISTRADOR']['ID_TIPO_ADMIN'];
-
+	
+	if(ISSET($_REQUEST['LOCAL_SELECIONADO'])){
+		$LOCAL_SELECIONADO = $_REQUEST['LOCAL_SELECIONADO'];
+		$_SESSION['LOCAL_SELECIONADO'] =  $_REQUEST['LOCAL_SELECIONADO'];
+	}else{
+		$LOCAL_SELECIONADO = $_SESSION['LOCAL_SELECIONADO'];
+	}
+	
 #INPUTS
 	$MSG = addslashes($_REQUEST['MSG']);
-	$LOCAL_SELECIONADO = $_REQUEST['LOCAL_SELECIONADO'];
 
 #INICIO LOGICA
 	$DB = fnDBConn();
@@ -290,7 +296,7 @@
 								 
 							</div>
 						</div>
-						<a class="more" href="#">
+						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=checkin" ?>">
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -334,7 +340,7 @@
 								 
 							</div>
 						</div>
-						<a class="more" href="#">
+						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=promo" ?>">
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -373,7 +379,7 @@
 								?>
 							</div>
 						</div>
-						<a class="more" href="#">
+						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=penetracao" ?>">
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -391,14 +397,42 @@
 								 Popularidade
 							</div>
 						</div>
-						<a class="more" href="#">
+						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=popularidade" ?>">
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
 				</div>
 			</div>
 			<!-- END DASHBOARD STATS -->
-			</div>`
+			<?php if ($_REQUEST['indicador'] == "checkin"){?>
+			  <!-- INICIO GRAFICO DE CHECKINS -->
+					<!-- BEGIN PORTLET-->
+					<div class="portlet solid grey-cararra bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bar-chart-o"></i>Checkins <small>- Ultimos 30 dias</small>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div id="site_activities_loading">
+								<img src="../assets/admin/layout/img/loading.gif" alt="loading"/>
+							</div>
+							<div id="grafico_checkins_conteudo" class="display-none">
+								<div id="grafico_checkins" style="height: 228px;">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END PORTLET-->
+			  <!-- FIM GRAFICO DE CHECKINS --> 
+			<?php } else if($_REQUEST['indicador'] == "promo"){?>
+			   Promos
+			<?php } else if ($_REQUEST['indicador'] == "penetracao"){?>
+			   Penetracao
+			<?php }else if ($_REQUEST['indicador'] == "popularidade"){?>
+			   Popularidade
+			<?php }?>
+			</div>
 			
 		</div>
 	</div>
@@ -421,14 +455,39 @@
 <script src="../assets/global/plugins/respond.min.js"></script>
 <script src="../assets/global/plugins/excanvas.min.js"></script> 
 <![endif]-->
-	<script src="../assets/global/plugins/jquery-1.11.0.min.js"
-		type="text/javascript"></script>
-	<script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js"
-		type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery-1.11.0.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="../assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 	<!-- END CORE PLUGINS -->
 
 	<!-- BEGIN PAGE LEVEL PLUGINS -->
-	<script src="../assets/global/plugins/flot/jquery.flot.min.js"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
+<!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
+<script src="../assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
+	
 
 	<!-- END PAGE LEVEL PLUGINS -->
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -438,10 +497,11 @@
 		type="text/javascript"></script>
 		<script src="../assets/admin/pages/scripts/components-pickers.js"></script>
 		<script src="../assets/admin/pages/scripts/components-dropdowns.js"></script>
+		
+		
 	<!-- END PAGE LEVEL SCRIPTS -->
 
-
-	<script>
+<script>
 jQuery(document).ready(function()
 	{       
 	// initiate layout and plugins
@@ -449,6 +509,144 @@ jQuery(document).ready(function()
 	Layout.init(); // init current layout
 	ComponentsPickers.init();
 	ComponentsDropdowns.init();
+	});
+
+
+function showChartTooltip(x, y, xValue, yValue) {
+    $('<div id="tooltip" class="chart-tooltip">' + yValue + '<\/div>').css({
+        position: 'absolute',
+        display: 'none',
+        top: y - 40,
+        left: x - 40,
+        border: '0px solid #ccc',
+        padding: '2px 6px',
+        'background-color': '#fff'
+    }).appendTo("body").fadeIn(200);
+}
+
+if ($('#grafico_checkins').size() != 0) {
+    //site activities
+    var previousPoint2 = null;
+    $('#site_activities_loading').hide();
+    $('#grafico_checkins_conteudo').show();
+
+    var data1 = [
+        ['JAN 25', 91],
+        ['JAN 26', 55],
+        ['JAN 27', 67],
+        ['JAN 28', 56],
+        ['JAN 29', 88],
+        ['JAN 31', 76],
+        ['FEV 01', 99],
+        ['FEV 02', 89],
+        ['FEV 03', 56],
+        ['FEV 04', 89],
+        ['FEV 05', 56],
+        ['FEV 06', 90],
+        ['FEV 07', 97],
+        ['FEV 08', 67],
+        ['FEV 09', 67],
+        ['FEV 10', 88],
+        ['FEV 11', 58],
+        ['FEV 12', 99],
+        ['FEV 13', 65],
+        ['FEV 14', 78],
+        ['FEV 15', 35],
+        ['FEV 16', 80],
+        ['FEV 17', 53],
+        ['FEV 18', 21],
+        ['FEV 19', 56],
+        ['FEV 20', 80],
+        ['FEV 21', 105],
+        ['FEV 22', 47],
+        ['FEV 23', 82],
+        ['FEV 24', 140]
+        
+    ];
+
+
+    var plot_statistics = $.plot($("#grafico_checkins"),
+
+        [{
+            data: data1,
+            lines: {
+                fill: 0.2,
+                lineWidth: 0,
+            },
+            color: ['#BAD9F5']
+        }, {
+            data: data1,
+            points: {
+                show: true,
+                fill: true,
+                radius: 4,
+                fillColor: "#9ACAE6",
+                lineWidth: 2
+            },
+            color: '#9ACAE6',
+            shadowSize: 1
+        }, {
+            data: data1,
+            lines: {
+                show: true,
+                fill: false,
+                lineWidth: 3
+            },
+            color: '#9ACAE6',
+            shadowSize: 0
+        }],
+
+        {
+
+            xaxis: {
+                tickLength: 0,
+                tickDecimals: 0,
+                mode: "categories",
+                min: 0,
+                font: {
+                    lineHeight: 18,
+                    style: "normal",
+                    variant: "small-caps",
+                    color: "#6F7B8A"
+                }
+            },
+            yaxis: {
+                ticks: 5,
+                tickDecimals: 0,
+                tickColor: "#eee",
+                font: {
+                    lineHeight: 14,
+                    style: "normal",
+                    variant: "small-caps",
+                    color: "#6F7B8A"
+                }
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            }
+        });
+
+    $("#grafico_checkins").bind("plothover", function (event, pos, item) {
+        $("#x").text(pos.x.toFixed(2));
+        $("#y").text(pos.y.toFixed(2));
+        if (item) {
+            if (previousPoint2 != item.dataIndex) {
+                previousPoint2 = item.dataIndex;
+                $("#tooltip").remove();
+                var x = item.datapoint[0].toFixed(2),
+                    y = item.datapoint[1].toFixed(2);
+                showChartTooltip(item.pageX, item.pageY, item.datapoint[0], item.datapoint[1] + ' checkins');
+            }
+        }
+    });
+
+    $('#grafico_checkins').bind("mouseleave", function () {
+        $("#tooltip").remove();
+    });
 }
 </script>
 	<!-- END JAVASCRIPTS -->
