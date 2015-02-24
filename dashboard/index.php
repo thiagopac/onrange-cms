@@ -428,7 +428,22 @@
 			<?php } else if($_REQUEST['indicador'] == "promo"){?>
 			   Promos
 			<?php } else if ($_REQUEST['indicador'] == "penetracao"){?>
-			   Penetracao
+			<!-- INICIO GRAFICO DE PENETRAÇÃO -->
+					<!-- BEGIN PORTLET-->
+					<div class="portlet solid grey-cararra bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bullhorn"></i>Taxa de penetracao<small> - no momento</small>
+							</div>
+						</div>
+						 <div class="portlet-body">
+					<h4></h4>
+					<div id="grafico_pizza_penetracao" class="chart">
+					</div>
+				</div>
+					</div>
+					<!-- END PORTLET-->
+			<!-- FIM GRAFICO DE PENETRAÇÃO -->
 			<?php }else if ($_REQUEST['indicador'] == "popularidade"){?>
 			   Popularidade
 			<?php }?>
@@ -478,6 +493,7 @@
 <script src="../assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
 <script src="../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
@@ -488,29 +504,28 @@
 <script src="../assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
 	
-
-	<!-- END PAGE LEVEL PLUGINS -->
-	<!-- BEGIN PAGE LEVEL SCRIPTS -->
-	<script src="../assets/global/scripts/metronic.js"
-		type="text/javascript"></script>
-	<script src="../assets/admin/layout/scripts/layout.js"
-		type="text/javascript"></script>
-		<script src="../assets/admin/pages/scripts/components-pickers.js"></script>
-		<script src="../assets/admin/pages/scripts/components-dropdowns.js"></script>
-		
-		
-	<!-- END PAGE LEVEL SCRIPTS -->
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="../assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="../assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="../assets/admin/pages/scripts/components-pickers.js"></script>
+<script src="../assets/admin/pages/scripts/components-dropdowns.js"></script>
+	
+	
+<!-- END PAGE LEVEL SCRIPTS -->
 
 <script>
 jQuery(document).ready(function()
-	{       
+{       
 	// initiate layout and plugins
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	ComponentsPickers.init();
 	ComponentsDropdowns.init();
-	});
+});
 
+
+//INÍCIO GRÁFICO LINEAR - CHECKINS
 
 function showChartTooltip(x, y, xValue, yValue) {
     $('<div id="tooltip" class="chart-tooltip">' + yValue + '<\/div>').css({
@@ -648,6 +663,38 @@ if ($('#grafico_checkins').size() != 0) {
         $("#tooltip").remove();
     });
 }
+
+//FIM GRÁFICO LINEAR - CHECKINS
+
+//INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
+var data = [
+            {
+                data: 56,
+                color:"#F7464A",
+                label: "Lord Pub"
+            },
+            {
+                data: 24,
+                color: "#46BFBD",
+                label: "Jack Rock Bar"
+            },
+            {
+                data: 20,
+                color: "#FDB45C",
+                label: "Circus Rock Bar"
+            }
+        ];
+
+// DEFAULT
+$.plot($("#grafico_pizza_penetracao"), data, {
+        series: {
+            pie: {
+                show: true
+            }
+        }
+    });
+//INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
+
 </script>
 	<!-- END JAVASCRIPTS -->
 </body>
