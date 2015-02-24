@@ -373,7 +373,7 @@
 							</div>
 							<div class="desc">
 								<?	
-								 if($PENETRACAO != 0) {
+								 if($LOCAL_SELECIONADO != null && ($LOCAL_SELECIONADO != '0' ||$PENETRACAO != 0)) {
 									echo "Tx. de penetração";
 								 }
 								?>
