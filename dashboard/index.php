@@ -654,7 +654,7 @@ if ($('#grafico_checkins').size() != 0) {
                 $("#tooltip").remove();
                 var x = item.datapoint[0].toFixed(2),
                     y = item.datapoint[1].toFixed(2);
-                showChartTooltip(item.pageX, item.pageY, item.datapoint[0], item.datapoint[1] + ' checkins');
+                showChartTooltip(item.pageX-5, item.pageY, item.datapoint[0], item.datapoint[1] + ' checkins');
             }
         }
     });
@@ -691,6 +691,10 @@ $.plot($("#grafico_pizza_penetracao"), data, {
             pie: {
                 show: true
             }
+        },
+        grid: {
+            hoverable: true,
+            clickable: true
         }
     });
 //INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
