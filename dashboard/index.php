@@ -867,6 +867,45 @@ $.plot($("#grafico_pizza_penetracao"), data, {
             clickable: true
         }
     });
+    
+function showTooltip(x, y, contents) {
+    $('<div id="tooltip">' + contents + '</div>').css( {
+        position: 'absolute',
+        display: 'none',
+        top: y + 5,
+        left: x + 5,
+        border: '1px solid #fdd',
+        padding: '2px',
+        'background-color': '#fee',
+        opacity: 0.80
+    }).appendTo("body").fadeIn(200);
+}
+
+var previousPoint = null;
+$("#grafico_pizza_penetracao").bind("plothover", function (event, pos, item) {
+    $("#x").text(pos.pageX);
+    $("#y").text(pos.pageY);
+        if (item) {
+                       if (previousPoint != item.datapoint) {
+                previousPoint = item.datapoint;
+                                    $("#tooltip").remove();
+                showTooltip(pos.pageX, pos.pageY, item.series.label + " " + item.datapoint[0] + "%");
+            }
+        }
+        else {
+            $("#tooltip").remove();
+            previousPoint = null;
+        }
+});
+
+$("#grafico_pizza_penetracao").bind("plotclick", function (event, pos, item) {
+    if (item) {
+        $("#clickdata").text("You clicked point " + item.dataIndex
++ " in " + item.series.label + ".");
+        //plot.highlight(item.series, item.datapoint);
+
+    }
+}); 
 
 
 //FIM GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
