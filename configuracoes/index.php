@@ -243,7 +243,7 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
 	<div class="page-footer-inner">
-		 2014 &copy; <?=$TITULO?>
+		 <?=date("Y"); ?> &copy; <?=$TITULO?>
 	</div>
 	<div class="page-footer-tools">
 		<span class="go-top">

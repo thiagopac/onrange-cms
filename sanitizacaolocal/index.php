@@ -246,7 +246,7 @@ License: You must have a valid license purchased only from themeforest(the above
 			<!-- BEGIN FOOTER -->
 			<div class="page-footer">
 				<div class="page-footer-inner">
-		 2014 &copy; <?=$TITULO?>
+		 <?=date("Y"); ?> &copy; <?=$TITULO?>
 	</div>
 				<div class="page-footer-tools">
 					<span class="go-top"> <i class="fa fa-angle-up"></i>
