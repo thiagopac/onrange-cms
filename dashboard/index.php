@@ -403,7 +403,7 @@
 						</div>
 						<div class="details">
 							<div class="number">
-								 N/A%
+								 N/A
 							</div>
 							<div class="desc">
 								 Popularidade
