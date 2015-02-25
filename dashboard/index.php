@@ -410,7 +410,7 @@
 					<div class="portlet solid grey-cararra bordered">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i>Checkins<small> - Últimos 30 dias</small>
+								<i class="fa fa-bar-chart-o"></i>Checkins<small> - &Uacute;ltimos 30 dias</small>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -432,7 +432,7 @@
 			  <div class="portlet solid grey-cararra bordered">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i>Audiência por gênero<small> - Últimos 30 dias</small>
+								<i class="fa fa-bar-chart-o"></i>Audi&ecirc;ncia por g&ecirc;nero<small> - &Uacute;ltimos 30 dias</small>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -441,7 +441,7 @@
 							<div class="btn-toolbar">
 								<div class="btn-group stackControls">
 									<input type="button" class="btn blue" value="Empilhado"/>
-									<input type="button" class="btn red" value="Não-empilhado"/>
+									<input type="button" class="btn red" value="N&atilde;o-empilhado"/>
 								</div>
 								
 								<div class="space5">
