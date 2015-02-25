@@ -296,7 +296,11 @@
 								 
 							</div>
 						</div>
-						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=checkin" ?>">
+						<? if ($LOCAL_SELECIONADO != null && $LOCAL_SELECIONADO != '0') { ?>
+							<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=checkin" ?>">
+						<? }else{ ?>
+							<a class="more" href="#">
+						<? } ?>
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -340,7 +344,11 @@
 								 
 							</div>
 						</div>
-						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=promo" ?>">
+						<? if ($LOCAL_SELECIONADO != null && $LOCAL_SELECIONADO != '0') { ?>
+							<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=promo" ?>">
+						<? }else{ ?>
+							<a class="more" href="#">
+						<? } ?>
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -379,7 +387,11 @@
 								?>
 							</div>
 						</div>
-						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=penetracao" ?>">
+						<? if ($LOCAL_SELECIONADO != null && $LOCAL_SELECIONADO != '0') { ?>
+							<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=penetracao" ?>">
+						<? }else{ ?>
+							<a class="more" href="#">
+						<? } ?>
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -397,7 +409,11 @@
 								 Popularidade
 							</div>
 						</div>
-						<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=popularidade" ?>">
+						<? if ($LOCAL_SELECIONADO != null && $LOCAL_SELECIONADO != '0') { ?>
+							<a class="more" href="<? echo $_SERVER['PHP_SELF'] ."?indicador=popularidade" ?>">
+						<? }else{ ?>
+							<a class="more" href="#">
+						<? } ?>
 						detalhes <i class="m-icon-swapright m-icon-white"></i>
 						</a>
 					</div>
@@ -464,7 +480,7 @@
 					<div class="portlet solid grey-cararra bordered">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bullhorn"></i>Taxa de penetração<small> - no momento</small>
+								<i class="fa fa-bullhorn"></i>Taxa de penetraÃ§Ã£o<small> - no momento</small>
 							</div>
 						</div>
 						 <div class="portlet-body">
@@ -687,137 +703,137 @@ if ($('#grafico_checkins').size() != 0) {
 //FIM GRÁFICO LINEAR - CHECKINS
 
 //INÍCIO GRAFICO DE BARRAS DE CHECKINS POR GENERO
-
-var arrHomens = [
-          [0, 40],
-          [1, 20],
-          [2, 30],
-          [3, 36],
-          [4, 40],
-          [5, 40],
-          [6, 50],
-          [7, 36],
-          [8, 23],
-          [9, 41],
-          [10, 20],
-          [11, 41],
-          [12, 51],
-          [13, 33],
-          [14, 41],
-          [15, 48],
-          [16, 38],
-          [17, 55],
-          [18, 42],
-          [19, 23],
-          [20, 20],
-          [21, 46],
-          [22, 20],
-          [23, 10],
-          [24, 20],
-          [25, 40],
-          [26, 50],
-          [27, 20],
-          [28, 50],
-          [29, 81]];
-
-var arrMulheres = [
-                   [0, 51],
-                   [1, 35],
-                   [2, 37],
-                   [3, 20],
-                   [4, 48],
-                   [5, 36],
-                   [6, 49],
-                   [7, 53],
-                   [8, 33],
-                   [9, 47],
-                   [10, 36],
-                   [11, 49],
-                   [12, 46],
-                   [13, 34],
-                   [14, 26],
-                   [15, 40],
-                   [16, 20],
-                   [17, 44],
-                   [18, 23],
-                   [19, 55],
-                   [20, 15],
-                   [21, 34],
-                   [22, 33],
-                   [23, 11],
-                   [24, 36],
-                   [25, 40],
-                   [26, 55],
-                   [27, 27],
-                   [28, 32],
-                   [29, 59]];
-
-var stack = 0,
-    bars = true,
-    lines = false,
-    steps = false;
-
-function plotWithOptions() {
-    $.plot($("#grafico_checkins_genero"), 
-
-        [{
-            label: "Homens",
-            data: arrHomens,
-            color: "#0000FF",
-            lines: {
-                lineWidth: 1,
-            },
-            shadowSize: 0
-        }, {
-            label: "Mulheres",
-            data: arrMulheres,
-            color: "#FF0000",
-            lines: {
-                lineWidth: 1,
-            },
-            shadowSize: 0
-        }]
-
-        , {
-            series: {
-                stack: stack,
-                lines: {
-                    show: lines,
-                    fill: true,
-                    steps: steps,
-                    lineWidth: 0, // in pixels;
-                },
-                bars: {
-                    show: bars,
-                    barWidth: 0.5,
-                    lineWidth: 0, // in pixels
-                    shadowSize: 0,
-                    align: 'center'
-                }
-            },
-            grid: {
-                tickColor: "#eee",
-                borderColor: "#eee",
-                borderWidth: 1
-            }
-        }                       
-    );
-}   
-
-$(".stackControls input").click(function (e) {
-    e.preventDefault();
-    stack = $(this).val() == "Empilhado" ? true : null;
-    plotWithOptions();
-});
-$(".graphControls input").click(function (e) {
-    e.preventDefault();
-    bars = $(this).val().indexOf("Colunas") != -1;
-    lines = $(this).val().indexOf("Linhas") != -1;
-    plotWithOptions();
-});
-
-plotWithOptions();
-
+if ($('#grafico_checkins_genero').size() != 0) {
+	var arrHomens = [
+	          [0, 40],
+	          [1, 20],
+	          [2, 30],
+	          [3, 36],
+	          [4, 40],
+	          [5, 40],
+	          [6, 50],
+	          [7, 36],
+	          [8, 23],
+	          [9, 41],
+	          [10, 20],
+	          [11, 41],
+	          [12, 51],
+	          [13, 33],
+	          [14, 41],
+	          [15, 48],
+	          [16, 38],
+	          [17, 55],
+	          [18, 42],
+	          [19, 23],
+	          [20, 20],
+	          [21, 46],
+	          [22, 20],
+	          [23, 10],
+	          [24, 20],
+	          [25, 40],
+	          [26, 50],
+	          [27, 20],
+	          [28, 50],
+	          [29, 81]];
+	
+	var arrMulheres = [
+	                   [0, 51],
+	                   [1, 35],
+	                   [2, 37],
+	                   [3, 20],
+	                   [4, 48],
+	                   [5, 36],
+	                   [6, 49],
+	                   [7, 53],
+	                   [8, 33],
+	                   [9, 47],
+	                   [10, 36],
+	                   [11, 49],
+	                   [12, 46],
+	                   [13, 34],
+	                   [14, 26],
+	                   [15, 40],
+	                   [16, 20],
+	                   [17, 44],
+	                   [18, 23],
+	                   [19, 55],
+	                   [20, 15],
+	                   [21, 34],
+	                   [22, 33],
+	                   [23, 11],
+	                   [24, 36],
+	                   [25, 40],
+	                   [26, 55],
+	                   [27, 27],
+	                   [28, 32],
+	                   [29, 59]];
+	
+	var stack = 0,
+	    bars = true,
+	    lines = false,
+	    steps = false;
+	
+	function plotWithOptions() {
+	    $.plot($("#grafico_checkins_genero"), 
+	
+	        [{
+	            label: "Homens",
+	            data: arrHomens,
+	            color: "#0000FF",
+	            lines: {
+	                lineWidth: 1,
+	            },
+	            shadowSize: 0
+	        }, {
+	            label: "Mulheres",
+	            data: arrMulheres,
+	            color: "#FF0000",
+	            lines: {
+	                lineWidth: 1,
+	            },
+	            shadowSize: 0
+	        }]
+	
+	        , {
+	            series: {
+	                stack: stack,
+	                lines: {
+	                    show: lines,
+	                    fill: true,
+	                    steps: steps,
+	                    lineWidth: 0, // in pixels;
+	                },
+	                bars: {
+	                    show: bars,
+	                    barWidth: 0.5,
+	                    lineWidth: 0, // in pixels
+	                    shadowSize: 0,
+	                    align: 'center'
+	                }
+	            },
+	            grid: {
+	                tickColor: "#eee",
+	                borderColor: "#eee",
+	                borderWidth: 1
+	            }
+	        }                       
+	    );
+	}   
+	
+	$(".stackControls input").click(function (e) {
+	    e.preventDefault();
+	    stack = $(this).val() == "Empilhado" ? true : null;
+	    plotWithOptions();
+	});
+	$(".graphControls input").click(function (e) {
+	    e.preventDefault();
+	    bars = $(this).val().indexOf("Colunas") != -1;
+	    lines = $(this).val().indexOf("Linhas") != -1;
+	    plotWithOptions();
+	});
+	
+	plotWithOptions();
+}
 //FIM GRAFICO DE BARRAS DE CHECKINS POR GENERO
 
 //INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
@@ -851,6 +867,8 @@ $.plot($("#grafico_pizza_penetracao"), data, {
             clickable: true
         }
     });
+
+
 //FIM GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
 
 </script>
