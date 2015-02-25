@@ -410,7 +410,7 @@
 					<div class="portlet solid grey-cararra bordered">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bar-chart-o"></i>Checkins <small>- Ultimos 30 dias</small>
+								<i class="fa fa-bar-chart-o"></i>Checkins<small> - Últimos 30 dias</small>
 							</div>
 						</div>
 						<div class="portlet-body">
@@ -424,7 +424,38 @@
 						</div>
 					</div>
 					<!-- END PORTLET-->
-			  <!-- FIM GRAFICO DE CHECKINS --> 
+			  <!-- FIM GRAFICO DE CHECKINS -->
+			  
+			  <!-- INICIO GRAFICO DE BARRAS DE CHECKINS POR GENERO -->
+					<!-- BEGIN PORTLET-->
+					
+			  <div class="portlet solid grey-cararra bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bar-chart-o"></i>Audiência por gênero<small> - Últimos 30 dias</small>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div id="grafico_checkins_genero" style="height:350px;">
+							</div>
+							<div class="btn-toolbar">
+								<div class="btn-group stackControls">
+									<input type="button" class="btn blue" value="Empilhado"/>
+									<input type="button" class="btn red" value="Não-empilhado"/>
+								</div>
+								
+								<div class="space5">
+								</div>
+								<div class="btn-group graphControls">
+									<input type="button" class="btn" value="Colunas"/>
+									<input type="button" class="btn" value="Linhas"/>
+								</div>
+							</div>
+						</div>
+			 </div>
+			 
+			 		<!-- END PORTLET-->
+			  <!-- FIM GRAFICO DE BARRAS DE CHECKINS POR GENERO -->
 			<?php } else if($_REQUEST['indicador'] == "promo"){?>
 			   Promos
 			<?php } else if ($_REQUEST['indicador'] == "penetracao"){?>
@@ -433,7 +464,7 @@
 					<div class="portlet solid grey-cararra bordered">
 						<div class="portlet-title">
 							<div class="caption">
-								<i class="fa fa-bullhorn"></i>Taxa de penetracao<small> - no momento</small>
+								<i class="fa fa-bullhorn"></i>Taxa de penetração<small> - no momento</small>
 							</div>
 						</div>
 						 <div class="portlet-body">
@@ -481,30 +512,20 @@
 <script src="../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
-	<!-- END CORE PLUGINS -->
+<!-- END CORE PLUGINS -->
 
-	<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="../assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.germany.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js" type="text/javascript"></script>
+<!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="../assets/global/plugins/flot/jquery.flot.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/flot/jquery.flot.resize.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
 <script src="../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/jquery.pulsate.min.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/bootstrap-daterangepicker/moment.min.js" type="text/javascript"></script>
-<script src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js" type="text/javascript"></script>
-<!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
-<script src="../assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js" type="text/javascript"></script>
+<script src="../assets/global/plugins/flot/jquery.flot.stack.min.js"></script>
 <script src="../assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
-	
+
 <!-- END PAGE LEVEL PLUGINS -->
+
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
@@ -546,37 +567,36 @@ if ($('#grafico_checkins').size() != 0) {
     $('#grafico_checkins_conteudo').show();
 
     var data1 = [
-        ['JAN 25', 91],
-        ['JAN 26', 55],
-        ['JAN 27', 67],
-        ['JAN 28', 56],
-        ['JAN 29', 88],
-        ['JAN 31', 76],
-        ['FEV 01', 99],
-        ['FEV 02', 89],
-        ['FEV 03', 56],
-        ['FEV 04', 89],
-        ['FEV 05', 56],
-        ['FEV 06', 90],
-        ['FEV 07', 97],
-        ['FEV 08', 67],
-        ['FEV 09', 67],
-        ['FEV 10', 88],
-        ['FEV 11', 58],
-        ['FEV 12', 99],
-        ['FEV 13', 65],
-        ['FEV 14', 78],
-        ['FEV 15', 35],
-        ['FEV 16', 80],
-        ['FEV 17', 53],
-        ['FEV 18', 21],
-        ['FEV 19', 56],
-        ['FEV 20', 80],
-        ['FEV 21', 105],
-        ['FEV 22', 47],
-        ['FEV 23', 82],
-        ['FEV 24', 140]
-        
+				['25/01', 91],
+				['26/01', 55],
+				['27/01', 67],
+				['28/01', 56],
+				['29/01', 88],
+				['31/01', 76],
+				['01/02', 99],
+				['02/02', 89],
+				['03/02', 56],
+				['04/02', 89],
+				['05/02', 56],
+				['06/02', 90],
+				['07/02', 97],
+				['08/02', 67],
+				['09/02', 67],
+				['10/02', 88],
+				['11/02', 58],
+				['12/02', 99],
+				['13/02', 65],
+				['14/02', 78],
+				['15/02', 35],
+				['16/02', 80],
+				['17/02', 53],
+				['18/02', 21],
+				['19/02', 56],
+				['20/02', 80],
+				['21/02', 105],
+				['22/02', 47],
+				['23/02', 82],
+				['24/02', 140]
     ];
 
 
@@ -666,6 +686,140 @@ if ($('#grafico_checkins').size() != 0) {
 
 //FIM GRÁFICO LINEAR - CHECKINS
 
+//INÍCIO GRAFICO DE BARRAS DE CHECKINS POR GENERO
+
+var arrHomens = [
+          [0, 40],
+          [1, 20],
+          [2, 30],
+          [3, 36],
+          [4, 40],
+          [5, 40],
+          [6, 50],
+          [7, 36],
+          [8, 23],
+          [9, 41],
+          [10, 20],
+          [11, 41],
+          [12, 51],
+          [13, 33],
+          [14, 41],
+          [15, 48],
+          [16, 38],
+          [17, 55],
+          [18, 42],
+          [19, 23],
+          [20, 20],
+          [21, 46],
+          [22, 20],
+          [23, 10],
+          [24, 20],
+          [25, 40],
+          [26, 50],
+          [27, 20],
+          [28, 50],
+          [29, 81]];
+
+var arrMulheres = [
+                   [0, 51],
+                   [1, 35],
+                   [2, 37],
+                   [3, 20],
+                   [4, 48],
+                   [5, 36],
+                   [6, 49],
+                   [7, 53],
+                   [8, 33],
+                   [9, 47],
+                   [10, 36],
+                   [11, 49],
+                   [12, 46],
+                   [13, 34],
+                   [14, 26],
+                   [15, 40],
+                   [16, 20],
+                   [17, 44],
+                   [18, 23],
+                   [19, 55],
+                   [20, 15],
+                   [21, 34],
+                   [22, 33],
+                   [23, 11],
+                   [24, 36],
+                   [25, 40],
+                   [26, 55],
+                   [27, 27],
+                   [28, 32],
+                   [29, 59]];
+
+var stack = 0,
+    bars = true,
+    lines = false,
+    steps = false;
+
+function plotWithOptions() {
+    $.plot($("#grafico_checkins_genero"), 
+
+        [{
+            label: "Homens",
+            data: arrHomens,
+            color: "#0000FF",
+            lines: {
+                lineWidth: 1,
+            },
+            shadowSize: 0
+        }, {
+            label: "Mulheres",
+            data: arrMulheres,
+            color: "#FF0000",
+            lines: {
+                lineWidth: 1,
+            },
+            shadowSize: 0
+        }]
+
+        , {
+            series: {
+                stack: stack,
+                lines: {
+                    show: lines,
+                    fill: true,
+                    steps: steps,
+                    lineWidth: 0, // in pixels;
+                },
+                bars: {
+                    show: bars,
+                    barWidth: 0.5,
+                    lineWidth: 0, // in pixels
+                    shadowSize: 0,
+                    align: 'center'
+                }
+            },
+            grid: {
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            }
+        }                       
+    );
+}   
+
+$(".stackControls input").click(function (e) {
+    e.preventDefault();
+    stack = $(this).val() == "Empilhado" ? true : null;
+    plotWithOptions();
+});
+$(".graphControls input").click(function (e) {
+    e.preventDefault();
+    bars = $(this).val().indexOf("Colunas") != -1;
+    lines = $(this).val().indexOf("Linhas") != -1;
+    plotWithOptions();
+});
+
+plotWithOptions();
+
+//FIM GRAFICO DE BARRAS DE CHECKINS POR GENERO
+
 //INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
 var data = [
             {
@@ -697,7 +851,7 @@ $.plot($("#grafico_pizza_penetracao"), data, {
             clickable: true
         }
     });
-//INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
+//FIM GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
 
 </script>
 	<!-- END JAVASCRIPTS -->
