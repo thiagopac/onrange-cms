@@ -1,4 +1,4 @@
-<?php 
+<?php
 ##INCLUDES
 	include('lib/config.php');
 	

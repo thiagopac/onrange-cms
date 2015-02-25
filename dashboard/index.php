@@ -457,6 +457,9 @@
 							</div>
 						</div>
 						<div class="portlet-body">
+							<div id="site_activities_loading2">
+								<img src="../assets/admin/layout/img/loading.gif" alt="loading"/>
+							</div>
 							<div id="grafico_checkins_genero" style="height:350px;">
 							</div>
 							<div class="btn-toolbar">
@@ -498,6 +501,9 @@
 							</div>
 						</div>
 			   			<div class="portlet-body">
+			   				<div id="site_activities_loading3">
+								<img src="../assets/admin/layout/img/loading.gif" alt="loading"/>
+							</div>
 							<div id="grafico_promos_linear" class="chart">
 							</div>
 						</div>
@@ -515,6 +521,9 @@
 							</div>
 						</div>
 						<div class="portlet-body">
+							<div id="site_activities_loading4">
+								<img src="../assets/admin/layout/img/loading.gif" alt="loading"/>
+							</div>
 							<div id="grafico_pizza_penetracao" class="chart">
 							</div>
 						</div>
@@ -594,7 +603,6 @@ jQuery(document).ready(function()
 
 
 //INÍCIO GRÁFICO LINEAR - CHECKINS
-
 function showChartTooltip(x, y, xValue, yValue) {
     $('<div id="tooltip" class="chart-tooltip">' + yValue + '<\/div>').css({
         position: 'absolute',
@@ -730,11 +738,13 @@ if ($('#grafico_checkins').size() != 0) {
         $("#tooltip").remove();
     });
 }
-
 //FIM GRÁFICO LINEAR - CHECKINS
 
 //INÍCIO GRAFICO DE BARRAS DE CHECKINS POR GENERO
 if ($('#grafico_checkins_genero').size() != 0) {
+    $('#site_activities_loading2').hide();
+    $('#grafico_checkins_genero').show();
+    
 	var arrHomens = [
 	          [0, 40],
 	          [1, 20],
@@ -867,80 +877,10 @@ if ($('#grafico_checkins_genero').size() != 0) {
 }
 //FIM GRAFICO DE BARRAS DE CHECKINS POR GENERO
 
-//INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
-if ($('#grafico_pizza_penetracao').size() != 0) {
-	var data = [
-	            {
-	                data: 56,
-	                color:"#F7464A",
-	                label: "Lord Pub"
-	            },
-	            {
-	                data: 24,
-	                color: "#46BFBD",
-	                label: "Jack Rock Bar"
-	            },
-	            {
-	                data: 20,
-	                color: "#FDB45C",
-	                label: "Circus Rock Bar"
-	            }
-	        ];
-	
-	// DEFAULT
-	$.plot($("#grafico_pizza_penetracao"), data, {
-	        series: {
-	            pie: {
-	                show: true
-	            }
-	        },
-	        grid: {
-	            hoverable: true,
-	            clickable: true
-	        }
-	    });
-	    
-	function showTooltip(x, y, contents) {
-	    $('<div id="tooltip">' + contents + '</div>').css( {
-	        position: 'absolute',
-	        display: 'none',
-	        top: y + 5,
-	        left: x + 5,
-	        border: '1px solid #fdd',
-	        padding: '2px',
-	        'background-color': '#fee',
-	        opacity: 0.80
-	    }).appendTo("body").fadeIn(200);
-	}
-	
-	var previousPoint = null;
-	$("#grafico_pizza_penetracao").bind("plothover", function (event, pos, item) {
-	    $("#x").text(pos.pageX);
-	    $("#y").text(pos.pageY);
-	        if (item) {
-	                       if (previousPoint != item.datapoint) {
-	                previousPoint = item.datapoint;
-	                                    $("#tooltip").remove();
-	                showTooltip(pos.pageX, pos.pageY, item.series.label + " " + item.datapoint[0] + "%");
-	            }
-	        }
-	        else {
-	            $("#tooltip").remove();
-	            previousPoint = null;
-	        }
-	});
-	
-	$("#grafico_pizza_penetracao").bind("plotclick", function (event, pos, item) {
-	    if (item) {
-	        $("#clickdata").text("You clicked point " + item.dataIndex
-	+ " in " + item.series.label + ".");
-	        //plot.highlight(item.series, item.datapoint);
-	
-	    }
-	}); 
-}
-
+//INÍCIO GRAFICO LINEAR DE PROMOS
 if ($('#grafico_promos_linear').size() != 0) {
+    $('#site_activities_loading3').hide();
+    $('#grafico_promos_linear').show();
 
 	 function randValue() {
          return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
@@ -1067,7 +1007,82 @@ if ($('#grafico_promos_linear').size() != 0) {
         }
     });
 }
+//FIM GRAFICO LINEAR DE PROMOS
 
+//INÍCIO GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
+if ($('#grafico_pizza_penetracao').size() != 0) {
+    $('#site_activities_loading4').hide();
+    $('#grafico_pizza_penetracao').show();
+	var data = [
+	            {
+	                data: 56,
+	                color:"#F7464A",
+	                label: "Lord Pub"
+	            },
+	            {
+	                data: 24,
+	                color: "#46BFBD",
+	                label: "Jack Rock Bar"
+	            },
+	            {
+	                data: 20,
+	                color: "#FDB45C",
+	                label: "Circus Rock Bar"
+	            }
+	        ];
+	
+	// DEFAULT
+	$.plot($("#grafico_pizza_penetracao"), data, {
+	        series: {
+	            pie: {
+	                show: true
+	            }
+	        },
+	        grid: {
+	            hoverable: true,
+	            clickable: true
+	        }
+	    });
+	    
+	function showTooltip(x, y, contents) {
+	    $('<div id="tooltip">' + contents + '</div>').css( {
+	        position: 'absolute',
+	        display: 'none',
+	        top: y + 5,
+	        left: x + 5,
+	        border: '1px solid #fdd',
+	        padding: '2px',
+	        'background-color': '#fee',
+	        opacity: 0.80
+	    }).appendTo("body").fadeIn(200);
+	}
+	
+	var previousPoint = null;
+	$("#grafico_pizza_penetracao").bind("plothover", function (event, pos, item) {
+	    $("#x").text(pos.pageX);
+	    $("#y").text(pos.pageY);
+	        if (item) {
+	                       if (previousPoint != item.datapoint) {
+	                previousPoint = item.datapoint;
+	                                    $("#tooltip").remove();
+	                showTooltip(pos.pageX, pos.pageY, item.series.label + " " + item.datapoint[0] + "%");
+	            }
+	        }
+	        else {
+	            $("#tooltip").remove();
+	            previousPoint = null;
+	        }
+	});
+	
+	$("#grafico_pizza_penetracao").bind("plotclick", function (event, pos, item) {
+	    if (item) {
+	        $("#clickdata").text("You clicked point " + item.dataIndex
+	+ " in " + item.series.label + ".");
+	        //plot.highlight(item.series, item.datapoint);
+	
+	    }
+	}); 
+}
 //FIM GRÁFICO DE PIZZA - TAXA DE PENETRAÇÃO
 
 </script>

@@ -349,7 +349,7 @@
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 					<!--img alt="" class="img-circle" src="../assets/admin/layout/img/avatar3_small.jpg"/-->
 					<i class="icon-user"></i>
-					<span class="username"><?=utf8_encode($_SESSION['ADMINISTRADOR']['NOME'])?></span>
+					<span class="username"><?=$_SESSION['ADMINISTRADOR']['NOME']?></span>
 					<i class="fa fa-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
