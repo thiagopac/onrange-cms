@@ -15,6 +15,10 @@
 		$LOCAL_SELECIONADO = $_SESSION['LOCAL_SELECIONADO'];
 	}
 	
+	if(ISSET($_REQUEST['PROMO_SELECIONADO'])){
+		$PROMO_SELECIONADO = $_REQUEST['PROMO_SELECIONADO'];
+	}
+
 #INPUTS
 	$MSG = addslashes($_REQUEST['MSG']);
 
@@ -38,7 +42,7 @@
 		$ADMINISTRADOR_LOCAL = fnDB_DO_SELECT_WHILE($DB,$SQL);
 	}
 	
-	if (ISSET($LOCAL_SELECIONADO)) {
+	if (ISSET($LOCAL_SELECIONADO) && $LOCAL_SELECIONADO != 0 && $LOCAL_SELECIONADO != "") {
 		
 		//***** Quantidade de checkins no local selecionado
 		
@@ -253,13 +257,14 @@
 					<div class="form-body">
 					 	<div class="col-md-3">
 					 		<form action="index.php" method="POST">
-								<select onchange="this.form.submit()" class="bs-select form-control" name="LOCAL_SELECIONADO" id="LOCAL_SELECIONADO">
-									<option id="0" value="0">Selecione um local</option>
+								<select onchange="this.form.submit()" class="form-control input select2me" name="LOCAL_SELECIONADO" id="LOCAL_SELECIONADO" data-placeholder="Selecione um local">
+									<!-- <option id="0" value="0">Selecione um local</option> -->
+									<option value=""></option>
 									<?php 
 									foreach($ADMINISTRADOR_LOCAL as $KEY => $ROW)
 										{
 										?>
-										<option <? if ($LOCAL_SELECIONADO == $ROW['ID_LOCAL']) echo 'selected'; ?> id="<?=$ROW['ID_LOCAL']?>" value="<?=$ROW['ID_LOCAL']?>"><?=$ROW['NOME']?></option>
+										<option <? if ($LOCAL_SELECIONADO == $ROW['ID_LOCAL']) echo 'selected'; ?> id="<?=$ROW['ID_LOCAL']?>" value="<?=$ROW['ID_LOCAL']?>">[<?=$ROW['ID_LOCAL']?>] - <?=$ROW['NOME']?></option>
 										<?
 										}
 									?>
@@ -473,7 +478,33 @@
 			 		<!-- END PORTLET-->
 			  <!-- FIM GRAFICO DE BARRAS DE CHECKINS POR GENERO -->
 			<?php } else if($_REQUEST['indicador'] == "promo"){?>
-			   Promos
+			<!-- INICIO COMBO PROMOS -->
+			<form action="index.php?indicador=promo" method="POST">
+			<select onchange="this.form.submit()" class="form-control input-large select2me" data-placeholder="Selecione uma campanha" id="PROMO_SELECIONADO" name="PROMO_SELECIONADO">
+				<option value=""></option>
+				<option value="1" <? if ($PROMO_SELECIONADO == 1) echo 'selected'; ?>>Dose dupla por nossa conta!</option>
+				<option value="2" <? if ($PROMO_SELECIONADO == 2) echo 'selected'; ?>>Um chopp ou refri pelo checkin!</option>
+			</select>
+			</form>
+			   <!-- FIM COMBO PROMOS -->
+			   <p></p>
+			   <!-- INICIO GRAFICO PROMOS -->
+			   		<!-- BEGIN PORTLET-->
+			   		<? if ($PROMO_SELECIONADO != null) { ?>
+			   		<div class="portlet solid grey-cararra bordered">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-bullhorn"></i>Acompanhamento de promos<small> - &Uacute;ltimos 30 dias</small>
+							</div>
+						</div>
+			   			<div class="portlet-body">
+							<div id="grafico_promos_linear" class="chart">
+							</div>
+						</div>
+					</div>
+					<? } ?>
+					<!-- END PORTLET-->
+			   <!-- FIM GRAFICO DE PROMOS -->
 			<?php } else if ($_REQUEST['indicador'] == "penetracao"){?>
 			<!-- INICIO GRAFICO DE PENETRA«√O -->
 					<!-- BEGIN PORTLET-->
@@ -483,11 +514,10 @@
 								<i class="fa fa-bullhorn"></i>Taxa de penetra√ß√£o<small> - no momento</small>
 							</div>
 						</div>
-						 <div class="portlet-body">
-					<h4></h4>
-					<div id="grafico_pizza_penetracao" class="chart">
-					</div>
-				</div>
+						<div class="portlet-body">
+							<div id="grafico_pizza_penetracao" class="chart">
+							</div>
+						</div>
 					</div>
 					<!-- END PORTLET-->
 			<!-- FIM GRAFICO DE PENETRA«√O -->
@@ -539,7 +569,7 @@
 <script src="../assets/global/plugins/jquery-easypiechart/jquery.easypiechart.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/jquery.sparkline.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/gritter/js/jquery.gritter.js" type="text/javascript"></script>
-
+<script src="../assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -547,8 +577,9 @@
 <script src="../assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="../assets/admin/pages/scripts/components-pickers.js"></script>
 <script src="../assets/admin/pages/scripts/components-dropdowns.js"></script>
-	
-	
+<script type="text/javascript" src="../assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="../assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
+
 <!-- END PAGE LEVEL SCRIPTS -->
 
 <script>
@@ -837,76 +868,205 @@ if ($('#grafico_checkins_genero').size() != 0) {
 //FIM GRAFICO DE BARRAS DE CHECKINS POR GENERO
 
 //INÕCIO GR¡FICO DE PIZZA - TAXA DE PENETRA«√O
-var data = [
-            {
-                data: 56,
-                color:"#F7464A",
-                label: "Lord Pub"
-            },
-            {
-                data: 24,
-                color: "#46BFBD",
-                label: "Jack Rock Bar"
-            },
-            {
-                data: 20,
-                color: "#FDB45C",
-                label: "Circus Rock Bar"
-            }
-        ];
-
-// DEFAULT
-$.plot($("#grafico_pizza_penetracao"), data, {
-        series: {
-            pie: {
-                show: true
-            }
-        },
-        grid: {
-            hoverable: true,
-            clickable: true
-        }
-    });
-    
-function showTooltip(x, y, contents) {
-    $('<div id="tooltip">' + contents + '</div>').css( {
-        position: 'absolute',
-        display: 'none',
-        top: y + 5,
-        left: x + 5,
-        border: '1px solid #fdd',
-        padding: '2px',
-        'background-color': '#fee',
-        opacity: 0.80
-    }).appendTo("body").fadeIn(200);
+if ($('#grafico_pizza_penetracao').size() != 0) {
+	var data = [
+	            {
+	                data: 56,
+	                color:"#F7464A",
+	                label: "Lord Pub"
+	            },
+	            {
+	                data: 24,
+	                color: "#46BFBD",
+	                label: "Jack Rock Bar"
+	            },
+	            {
+	                data: 20,
+	                color: "#FDB45C",
+	                label: "Circus Rock Bar"
+	            }
+	        ];
+	
+	// DEFAULT
+	$.plot($("#grafico_pizza_penetracao"), data, {
+	        series: {
+	            pie: {
+	                show: true
+	            }
+	        },
+	        grid: {
+	            hoverable: true,
+	            clickable: true
+	        }
+	    });
+	    
+	function showTooltip(x, y, contents) {
+	    $('<div id="tooltip">' + contents + '</div>').css( {
+	        position: 'absolute',
+	        display: 'none',
+	        top: y + 5,
+	        left: x + 5,
+	        border: '1px solid #fdd',
+	        padding: '2px',
+	        'background-color': '#fee',
+	        opacity: 0.80
+	    }).appendTo("body").fadeIn(200);
+	}
+	
+	var previousPoint = null;
+	$("#grafico_pizza_penetracao").bind("plothover", function (event, pos, item) {
+	    $("#x").text(pos.pageX);
+	    $("#y").text(pos.pageY);
+	        if (item) {
+	                       if (previousPoint != item.datapoint) {
+	                previousPoint = item.datapoint;
+	                                    $("#tooltip").remove();
+	                showTooltip(pos.pageX, pos.pageY, item.series.label + " " + item.datapoint[0] + "%");
+	            }
+	        }
+	        else {
+	            $("#tooltip").remove();
+	            previousPoint = null;
+	        }
+	});
+	
+	$("#grafico_pizza_penetracao").bind("plotclick", function (event, pos, item) {
+	    if (item) {
+	        $("#clickdata").text("You clicked point " + item.dataIndex
+	+ " in " + item.series.label + ".");
+	        //plot.highlight(item.series, item.datapoint);
+	
+	    }
+	}); 
 }
 
-var previousPoint = null;
-$("#grafico_pizza_penetracao").bind("plothover", function (event, pos, item) {
-    $("#x").text(pos.pageX);
-    $("#y").text(pos.pageY);
-        if (item) {
-                       if (previousPoint != item.datapoint) {
-                previousPoint = item.datapoint;
-                                    $("#tooltip").remove();
-                showTooltip(pos.pageX, pos.pageY, item.series.label + " " + item.datapoint[0] + "%");
+if ($('#grafico_promos_linear').size() != 0) {
+
+	 function randValue() {
+         return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+     }
+	   
+    var promos_enviados = [
+        [1, randValue()],
+        [2, randValue()],
+        [3, 2 + randValue()],
+        [4, 3 + randValue()],
+        [5, 5 + randValue()],
+        [6, 10 + randValue()],
+        [7, 15 + randValue()],
+        [8, 20 + randValue()],
+        [9, 25 + randValue()],
+        [10, 30 + randValue()],
+        [11, 35 + randValue()],
+        [12, 25 + randValue()],
+        [13, 15 + randValue()],
+        [14, 20 + randValue()],
+        [15, 45 + randValue()],
+        [16, 50 + randValue()],
+        [17, 65 + randValue()],
+        [18, 70 + randValue()],
+        [19, 85 + randValue()],
+        [20, 80 + randValue()],
+        [21, 75 + randValue()],
+        [22, 80 + randValue()],
+        [23, 75 + randValue()],
+        [24, 70 + randValue()],
+        [25, 65 + randValue()],
+        [26, 75 + randValue()],
+        [27, 80 + randValue()],
+        [28, 85 + randValue()],
+        [29, 90 + randValue()],
+        [30, 95 + randValue()]
+    ];
+
+    var plot = $.plot($("#grafico_promos_linear"), [{
+                data: promos_enviados,
+                label: "Promos enviados",
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+
             }
-        }
-        else {
+        ], {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                                opacity: 0.05
+                            }, {
+                                opacity: 0.01
+                            }
+                        ]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            },
+            yaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            }
+        });
+
+
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+    }
+
+    var previousPoint = null;
+    $("#grafico_promos_linear").bind("plothover", function (event, pos, item) {
+        $("#x").text(pos.x.toFixed(2));
+        $("#y").text(pos.y.toFixed(2));
+
+        if (item) {
+            if (previousPoint != item.dataIndex) {
+                previousPoint = item.dataIndex;
+
+                $("#tooltip").remove();
+                var x = item.datapoint[0].toFixed(2),
+                    y = item.datapoint[1].toFixed(0);
+
+                showTooltip(item.pageX-60, item.pageY-50, y + ' promos');
+            }
+        } else {
             $("#tooltip").remove();
             previousPoint = null;
         }
-});
-
-$("#grafico_pizza_penetracao").bind("plotclick", function (event, pos, item) {
-    if (item) {
-        $("#clickdata").text("You clicked point " + item.dataIndex
-+ " in " + item.series.label + ".");
-        //plot.highlight(item.series, item.datapoint);
-
-    }
-}); 
-
+    });
+}
 
 //FIM GR¡FICO DE PIZZA - TAXA DE PENETRA«√O
 
