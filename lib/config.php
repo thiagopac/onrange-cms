@@ -40,6 +40,8 @@ date_default_timezone_set('America/Sao_Paulo');
 	$MENU_GRANT[]  = array('clientes');
 	$MENU_GRANT[]  = array('locais');
 	$MENU_GRANT[]  = array('clienteslocais');
+	$MENU_GRANT[]  = array('gerarpromos');
+	$MENU_GRANT[]  = array('listarpromos');
 	$MENU_GRANT[]  = array('logs_no_sistema');
 	
 	

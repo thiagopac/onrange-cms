@@ -95,6 +95,31 @@
 					</a>
 				</li>
 				<? } ?>
+				<? if ((fnVerifica_Grant('gerarpromos')) || (fnVerifica_Grant('listapromos')) ){ ?>
+				<li class="last <? if (in_array($MENU_ATIVO,array('gerarpromos','listarpromos'))) echo 'active'; ?>">
+				<a href="javascript:;">
+						<i class="fa fa-tags"></i>
+						<span class="title">Promos</span>
+						<span class="arrow"></span>
+						</a>
+						<ul class="sub-menu">
+						<!-- BEGIN REPORT OPTION -->
+							<? if (fnVerifica_Grant('gerarpromos')) { ?>
+							<li class="<? if ($MENU_ATIVO == 'gerarpromos') echo 'active'; ?>">
+								<a href="../promos/gerarpromos.php">
+								Gerar promos</a>
+							</li>
+							<? } ?>
+							<? if (fnVerifica_Grant('listarpromos')) { ?>
+							<li class="<? if ($MENU_ATIVO == 'listarpromos') echo 'active'; ?>">
+								<a href="../promos/listarpromos.php">
+								Listar promos</a>
+							</li>
+							<? } ?>
+						<!-- END REPORT OPTION -->
+						</ul>
+					</li>
+				<? } ?>
 				<? if ((fnVerifica_Grant('confirmacoes_diarias')) || (fnVerifica_Grant('consumo_sms')) || (fnVerifica_Grant('visao_confirmacoes')) || (fnVerifica_Grant('visao_alunos_confirmados')) || (fnVerifica_Grant('respostas_robo')) || (fnVerifica_Grant('historico_aluno')) || (fnVerifica_Grant('confirmacoes_e_senhas')) || (fnVerifica_Grant('logs_no_sistema'))) { ?>
 				<li class="last <? if (in_array($MENU_ATIVO,array('confirmacoes_diarias','consumo_sms','mensagens_enviadas','visao_confirmacoes','visao_alunos_confirmados','respostas_robo','historico_aluno','confirmacoes_e_senhas','logs_no_sistema'))) echo 'active'; ?>">
 					<a href="javascript:;">
