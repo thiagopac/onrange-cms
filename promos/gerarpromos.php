@@ -240,9 +240,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                                                              <div class="form-group">
                                                                                     <label class="control-label col-md-3">É promo de checkin?</label>
                                                                                    
-                                                                                     <div class="col-md-5">
+                                                                                     <div class="col-md-9">
 																						<input type="checkbox" class="make-switch" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>">
-																						<span class="help-block"> Este é o nome do promo. Use um nome curto e simples.</span>
+																						<span class="help-block"> Marque aqui caso seja um promo que deve ser enviada automaticamente após checkin do usuário no local</span>
 																					</div>
                                                                                     
                                                                             </div>

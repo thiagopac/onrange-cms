@@ -3,7 +3,7 @@
 	require_once('../lib/config.php');
 	
 #CONTROLE SESSAO
-	fnInicia_Sessao('logs_no_sistema');
+	fnInicia_Sessao('listarpromos');
 
 #INPUTS
 
@@ -112,7 +112,7 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 				<div class="col-md-12">
 					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 					<h3 class="page-title">
-					Logs no Sistema <small></small>
+					Listar promos <small></small>
 					</h3>
 					<!--button type="button" class="btn red" style="right: 15px; position: absolute; margin-top: -40px" onClick="parent.location='novo.php'">Novo Cliente</button-->
 					<!-- END PAGE TITLE & BREADCRUMB-->
@@ -141,7 +141,7 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 								<div class="row form-group">
 													
 													<div class="col-md-4">
-														<label>Período que foram gerado dos logs</label>
+														<label>Período que foram gerado os promos</label>
 														<div id="reportrange" class="form-control">
 															<i class="fa fa-calendar"></i>
 															&nbsp; <span>June 1, 2014 - June 30, 2014</span>
@@ -151,7 +151,7 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 												</div>
 								<div class="row form-group">
 													<div class="col-md-4">
-														<label>Total de Logs</label><br>
+														<label>Total de Promos</label><br>
 														<?
 														foreach($TOTAL as $KEY => $ROW)
 														{
@@ -182,16 +182,16 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 							<thead class="flip-content">
 							<tr>
 								<th width="160px">
-									 Data do Log
+									 Data do Promo
 								</th>
 								<th class="numeric" width="140px">
-									 CPF
+									 Nome
 								</th>
 								<th>
-									 Cenário
+									 Usado
 								</th>
 								<th width="160px">
-									 Log
+									 Checkin
 								</th>
 							</tr>
 							</thead>

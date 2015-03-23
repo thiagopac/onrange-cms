@@ -17,11 +17,11 @@ date_default_timezone_set('America/Sao_Paulo');
 	set_time_limit($PHP_TIMEOUT);
 	
 #ACESSO MYSQL
-	$MYSQL_HOST  = "mysql.hostinger.com.br";
-	$MYSQL_LOGIN = "u138894269_onrng";
-	$MYSQL_SENHA = 'onrange8375';
+	$MYSQL_HOST  = "localhost";
+	$MYSQL_LOGIN = "root";
+	$MYSQL_SENHA = '0nr4ng364638375m1r0';
 	$MYSQL_PORTA = 3306;
-	$MYSQL_DATABASE = 'u138894269_onrng';
+	$MYSQL_DATABASE = 'onrange-homologacao';
 //	var_dump($_SERVER['SERVER_NAME']);die;
 	if ($_SERVER['SERVER_NAME'] == 'localhost')
 		{
