@@ -4,15 +4,21 @@
 	$MYSQL_TIMEOUT = $PHP_TIMEOUT + 10;
         
 //definindo hora padrão da aplicacao
-date_default_timezone_set('America/Sao_Paulo');        
+date_default_timezone_set('America/Sao_Paulo');
+
+//#ERROR REPORT - LEVE ESTE PEDAÇO ABAIXO DE CÓDIGO PARA O SCRIPT QUE VC QUER ATIVAR A EXIBIÇÃO DE ERROS PHP
+//ini_set('display_errors', 1);
+//ini_set('log_errors', 1);
+//ini_set('error_log', dirname(__FILE__) . '/error_log.txt');
+//error_reporting(E_ALL);
 	
 #DEFAULT
 	error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);	
 	
-	if ($_SERVER['SERVER_ADMIN'] == 'admin@roomnants.com')
-		define('FILE_LOG', '/var/log/www/'.date('Y-m-d').'-cms.roomnants.com_PHP_error.log');
+	if ($_SERVER['SERVER_ADMIN'] == 'admin@onrange.com.br')
+		define('FILE_LOG', '/var/log/www/'.date('Y-m-d').'-cms.onrange.com.br_PHP_error.log');
 	else
-		define('FILE_LOG', 'C:/Server/Apache2.2/logs/'.date('Y-m-d')."-cms.roomnants.com_PHP_error.log");
+		define('FILE_LOG', 'C:/Server/Apache2.2/logs/'.date('Y-m-d')."-cms.onrange.com.br_PHP_error.log");
 
 	set_time_limit($PHP_TIMEOUT);
 	
