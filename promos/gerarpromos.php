@@ -174,7 +174,8 @@ License: You must have a valid license purchased only from themeforest(the above
 						<div class="portlet-body form">
 							
                                                             <!-- BEGIN FORM-->
-                                                            <form action="../exec/index_promo_add.php" class="form-horizontal form-bordered form-label-stripped" method="POST">
+                                                            <form action="../exec/" class="form-horizontal form-bordered form-label-stripped" method="POST">
+                                                                    <input type="hidden" name="e" id="e" value="promo_add" />
                                                                     <div class="form-body">
                                                                             <div class="form-group">
                                                                                     <label class="control-label col-md-3">Local</label>
