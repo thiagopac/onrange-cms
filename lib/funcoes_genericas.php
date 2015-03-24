@@ -81,6 +81,8 @@ function fnDBConn()
 	$erro = false;	
 	$DBtmp = mysqli_connect($MYSQL_HOST, $MYSQL_LOGIN, $MYSQL_SENHA, $MYSQL_DATABASE,$MYSQL_PORTA) or $erro = true;
         
+	$DBtmp->set_charset("utf8");
+	
 	if ($erro)
 		{
 		$erro = false;	
@@ -118,6 +120,7 @@ function fnDBConn_CLIENTE($JSON)
 	$erro = false;		
 	$DBtmp = mysqli_connect($CLI_HOST, $CLI_LOGIN, $CLI_SENHA, $CLI_DATABASE,$CLI_PORTA) or $erro = true;
 	
+	$DBtmp->set_charset("utf8");
 	
 	if ($erro)
 		return(array('ERRO','Erro ao conectar no MySQL: '.mysqli_connect_error()));
@@ -152,7 +155,6 @@ function fnDB_DO_SELECT_WHILE($DB, $strSQL)
 	$SQL_DUMP .= "\n********************************************************************************\n";
 	$SQL_DUMP .= $strSQL;
 
-	
 	$qy = mysqli_query($DB,$strSQL) or $error = true;
 
 	if($error) fnLogText('(fnDB_DO_SELECT_WHILE) MySQL Error: '.mysqli_error($DB).' (SQL: '.$strSQL.')',true);
