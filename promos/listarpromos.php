@@ -10,10 +10,12 @@
 	
 #INICIO LOGICA
 	$DB = fnDBConn();
-	$SQL = "SELECT P.ID_PROMO, L.NOME AS NOME_LOCAL, P.DT_INICIO, P.DT_FIM, P.NOME AS NOME_PROMO, P.DESCRICAO, P.PROMO_CHECKIN 
+	$SQL = "SELECT P.ID_PROMO, L.NOME AS NOME_LOCAL, P.DT_INICIO, P.DT_FIM, P.NOME AS NOME_PROMO, P.DESCRICAO, P.PROMO_CHECKIN, SUM(CASE WHEN PUC.ID_USUARIO IS NOT NULL THEN 1 ELSE 0 END) AS UTILIZADOS, SUM(CASE WHEN PUC.ID_USUARIO IS NOT NULL THEN 0 ELSE 1 END) AS NAO_UTILIZADOS
 			FROM PROMO P
 			INNER JOIN LOCAL L ON (P.ID_LOCAL = L.ID_LOCAL)
-			ORDER BY P.ID_PROMO DESC";
+			INNER JOIN PROMO_CODIGO_USUARIO PUC ON(P.ID_PROMO = PUC.ID_PROMO)
+			GROUP BY P.ID_PROMO
+			ORDER BY ID_PROMO DESC";
 	$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
 
 #� IE?
@@ -70,10 +72,15 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 <link href="../assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>
-<style type="text/css">
-tr.tr_link:hover{
-  cursor: pointer;
+ <style type="text/css" media="print">
+#lb1{
+	display:none;
 }
+   
+#lb2{
+    display:block;
+}
+
 </style>
 </head>
 <!-- END HEAD -->
@@ -88,6 +95,7 @@ tr.tr_link:hover{
 <!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
 <!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
 <body class="page-header-fixed page-quick-sidebar-over-content">
+
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
 	<!-- BEGIN HEADER INNER -->
@@ -121,11 +129,11 @@ tr.tr_link:hover{
 		<div class="page-content">
 			<!-- BEGIN PAGE HEADER-->
 
-			<div class="row">
+			<div id="lb1" class="row">
 				<div class="col-md-12">
 					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 					<h3 class="page-title">
-					Listar promos <small>Clique no promo para abrir os códigos</small>
+					Listar promos <small>Clique no botão <i>ver</i> para abrir os códigos</small>
 					</h3>
 					<!--button type="button" class="btn red" style="right: 15px; position: absolute; margin-top: -40px" onClick="parent.location='novo.php'">Novo Cliente</button-->
 					<!-- END PAGE TITLE & BREADCRUMB-->
@@ -135,35 +143,34 @@ tr.tr_link:hover{
 			
 			
 					<!-- BEGIN SAMPLE TABLE PORTLET-->
-					<div class="portlet box red">
 						<div class="portlet-title_sem_titulo">
 						</div>
-						<div class="portlet-body flip-scroll">
+						<div class="portlet-body flip-scroll" id="lb1">
 							<table class="table table-bordered table-striped table-condensed flip-content" id="datatable">
 							<thead class="flip-content">
 							<tr>
-								<th width="130px">
+								<th width="130px" style="text-align:center;">
 									 Local
 								</th>
-								<th width="160px">
+								<th width="160px" style="text-align:center;">
 									 Nome
 								</th>
-								<th>
+								<th style="text-align:center;">
 									 Início
 								</th>
-								<th>
+								<th style="text-align:center;">
 									 Fim
 								</th>
-								<th>
+								<th style="text-align:center;">
 									 Descrição
 								</th>
-								<th>
+								<th style="text-align:center;">
 									 Utilizados
 								</th>
-								<th>
+								<th style="text-align:center;">
 									 Disponíveis
 								</th>
-								<th>
+								<th style="text-align:center;">
 									 Códigos
 								</th>
 							</tr>
@@ -174,55 +181,31 @@ tr.tr_link:hover{
 								{
 								?>
 								<tr>
-									<td>
+									<td align="center" style="vertical-align:middle;">
 										 <?=$ROW['NOME_LOCAL']?>
 									</td>
-									<td>
+									<td align="center" style="vertical-align:middle;">
 										 <?=$ROW['NOME_PROMO']?>
 									</td>
-									<td>
+									<td align="center" style="vertical-align:middle;">
 										 <?=$ROW['DT_INICIO']?>
 									</td>
-									<td>
+									<td align="center" style="vertical-align:middle;">
 										 <?=$ROW['DT_FIM']?>
 									</td>
-									<td>
+									<td align="center" style="vertical-align:middle;">
 										 <?=$ROW['DESCRICAO']?>
 									</td>
-									<td>
-										 <? //=$ROW['']?>
+									<td align="center" style="vertical-align:middle;">
+										 <?=$ROW['NAO_UTILIZADOS']?>
 									</td>
-									<td>
-										 <? //=$ROW['']?>
+									<td align="center" style="vertical-align:middle;">
+										 <?=$ROW['UTILIZADOS']?>
 									</td>
-									<td>
+									<td align="center" style="vertical-align:middle;">
 									<a class="btn default" data-toggle="modal" href="<?='#'.$ROW['ID_PROMO']?>">Ver</a>
 									</td>
 								</tr>
-								
-								
-								<!-- /.modal -->
-							<div class="modal fade bs-modal-lg" id="<?=$ROW['ID_PROMO']?>" tabindex="-1" role="dialog" aria-hidden="true">
-								<div class="modal-dialog modal-lg">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-											<h4 class="modal-title"><?=$ROW['NOME_PROMO']?></h4>
-										</div>
-										<div class="modal-body">
-											 <?=$ROW['NOME_LOCAL']?>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn default" data-dismiss="modal">Fechar</button>
-											<button type="button" class="btn blue"><i class="fa fa-print"></i> Imprimir</button>
-										</div>
-									</div>
-									<!-- /.modal-content -->
-								</div>
-								<!-- /.modal-dialog -->
-							</div>
-							<!-- /.modal -->
-								
 								
 								<?
 								} 
@@ -232,9 +215,59 @@ tr.tr_link:hover{
 							
 						</div>
 						
-				
+			<?php
+			foreach($RET as $KEY => $ROW){
+			?>
+				<!-- /.modal --><div id="lb2">
+							<div class="modal fade" id="<?=$ROW['ID_PROMO']?>" tabindex="-1" role="basic" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title"><?=$ROW['NOME_PROMO']?></h4>
+										</div>
+										<div class="modal-body">
+										<table class="table table-bordered table-striped table-condensed flip-content" id="datatable">
+											<thead class="flip-content">
+											<tr>
+												<th style="text-align:center;">
+													 Ordem
+												</th>
+												<th style="text-align:center;">
+													 Código
+												</th>
+												</tr></thead>
+												<tbody>
+										<?php
+											$DB = fnDBConn();
+											$ID_PROMO = $ROW['ID_PROMO'];
+											$SQL = "SELECT PROMO_CODIGO FROM promo_codigo_usuario WHERE ID_PROMO = $ID_PROMO";
+											$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
+											$ROWSPAN = "<tr><td rowspan=10 align='center' style='vertical-align:middle;'>1</td></tr>";
+											echo $ROWSPAN;
+											foreach($RET as $KEY => $ROW){
+												echo "<tr><td align='center'>".$ROW['PROMO_CODIGO']."</tr></td>";
+											}
+										?>
+										</tbody>
+										</table>
+										
+										</div>
+										<div class="modal-footer" id="lb1">
+											<button type="button" class="btn default" data-dismiss="modal">Fechar</button>
+											<button type="button" class="btn blue" onClick="window.print()"><i class="fa fa-print"></i> Imprimir</button>
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div></div>
+							<!-- /.modal -->
+			<?
+			} 
+			?>
 					
-					</div>
+
 					<!-- END SAMPLE TABLE PORTLET-->
         <br/>
         <br/>
