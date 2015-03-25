@@ -7,10 +7,18 @@
 
 #INPUTS
 
-#É IE?
+	
+#INICIO LOGICA
+	$DB = fnDBConn();
+	$SQL = "SELECT P.ID_PROMO, L.NOME AS NOME_LOCAL, P.DT_INICIO, P.DT_FIM, P.NOME AS NOME_PROMO, P.DESCRICAO, P.PROMO_CHECKIN 
+			FROM PROMO P
+			INNER JOIN LOCAL L ON (P.ID_LOCAL = L.ID_LOCAL)
+			ORDER BY P.ID_PROMO DESC";
+	$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
+
+#� IE?
 	if (preg_match('~MSIE|Internet Explorer~i', $_SERVER['HTTP_USER_AGENT']) || ((strpos($_SERVER['HTTP_USER_AGENT'], 'Trident/') !== false) && (strpos($_SERVER['HTTP_USER_AGENT'], 'rv:') !== false)))
 		$BrowserIE = true;
-	
 
 ?>
 <!--
@@ -62,6 +70,11 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 <link href="../assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>
+<style type="text/css">
+tr.tr_link:hover{
+  cursor: pointer;
+}
+</style>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
@@ -112,65 +125,13 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 				<div class="col-md-12">
 					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 					<h3 class="page-title">
-					Listar promos <small></small>
+					Listar promos <small>Clique no promo para abrir os códigos</small>
 					</h3>
 					<!--button type="button" class="btn red" style="right: 15px; position: absolute; margin-top: -40px" onClick="parent.location='novo.php'">Novo Cliente</button-->
 					<!-- END PAGE TITLE & BREADCRUMB-->
 				</div>
 			</div>
 			<!-- END PAGE HEADER-->
-
-
-
-<!-- ------------------ -->
-<div class="portlet box red">
-						<div class="portlet-title_sem_titulo">
-						</div>
-						<div class="portlet-body form">
-							<form role="form">
-							<input type="hidden" name="dat_inicio" id="dat_inicio" value="" />
-							<input type="hidden" name="dat_fim" id="dat_fim" value="" />
-							<input type="hidden" name="dat_completa" id="dat_completa" value="" />
-								<div class="form-body">
-								<? if ($MSG != '') { ?>
-								<div class="alert alert-danger display">
-									<button class="close" data-close="alert"></button>
-									<?=$MSG?>
-								</div>
-								<? } ?>
-								<div class="row form-group">
-													
-													<div class="col-md-4">
-														<label>Período que foram gerado os promos</label>
-														<div id="reportrange" class="form-control">
-															<i class="fa fa-calendar"></i>
-															&nbsp; <span>June 1, 2014 - June 30, 2014</span>
-															<b class="fa fa-angle-down"></b>
-														</div>
-													</div>
-												</div>
-								<div class="row form-group">
-													<div class="col-md-4">
-														<label>Total de Promos</label><br>
-														<?
-														foreach($TOTAL as $KEY => $ROW)
-														{
-														?>
-														<input disabled="disabled" type="text" name="gerou_log" class="form-control" placeholder="Número de Logs" value="<?=$ROW['gerou_log']?>">
-														<?
-														}
-														?>
-													</div>
-												</div>	
-								</div>
-								<div class="form-actions2">
-																	<button type="submit" class="btn red">Pesquisar</button>
-                                                                                                                                        <a href="#" class="btn red" id="exportExcel">Exportar Excel</a>
-								</div>
-							</form>
-						</div>
-					</div>
-<!-- ------------------ -->
 			
 			
 					<!-- BEGIN SAMPLE TABLE PORTLET-->
@@ -181,17 +142,29 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 							<table class="table table-bordered table-striped table-condensed flip-content" id="datatable">
 							<thead class="flip-content">
 							<tr>
-								<th width="160px">
-									 Data do Promo
+								<th width="130px">
+									 Local
 								</th>
-								<th class="numeric" width="140px">
+								<th width="160px">
 									 Nome
 								</th>
 								<th>
-									 Usado
+									 Início
 								</th>
-								<th width="160px">
-									 Checkin
+								<th>
+									 Fim
+								</th>
+								<th>
+									 Descrição
+								</th>
+								<th>
+									 Utilizados
+								</th>
+								<th>
+									 Disponíveis
+								</th>
+								<th>
+									 Códigos
 								</th>
 							</tr>
 							</thead>
@@ -201,27 +174,62 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 								{
 								?>
 								<tr>
-									<td ">
-										 <?=$ROW['data_log']?>
+									<td>
+										 <?=$ROW['NOME_LOCAL']?>
 									</td>
 									<td>
-										 <?=$ROW['cpf']?>
+										 <?=$ROW['NOME_PROMO']?>
 									</td>
 									<td>
-										 <?=$ROW['cenario']?>
+										 <?=$ROW['DT_INICIO']?>
 									</td>
 									<td>
-										 <?=$ROW['logs']?>
+										 <?=$ROW['DT_FIM']?>
+									</td>
+									<td>
+										 <?=$ROW['DESCRICAO']?>
+									</td>
+									<td>
+										 <? //=$ROW['']?>
+									</td>
+									<td>
+										 <? //=$ROW['']?>
+									</td>
+									<td>
+									<a class="btn default" data-toggle="modal" href="<?='#'.$ROW['ID_PROMO']?>">Ver</a>
 									</td>
 								</tr>
+								
+								
+								<!-- /.modal -->
+							<div class="modal fade bs-modal-lg" id="<?=$ROW['ID_PROMO']?>" tabindex="-1" role="dialog" aria-hidden="true">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+											<h4 class="modal-title"><?=$ROW['NOME_PROMO']?></h4>
+										</div>
+										<div class="modal-body">
+											 <?=$ROW['NOME_LOCAL']?>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn default" data-dismiss="modal">Fechar</button>
+											<button type="button" class="btn blue"><i class="fa fa-print"></i> Imprimir</button>
+										</div>
+									</div>
+									<!-- /.modal-content -->
+								</div>
+								<!-- /.modal-dialog -->
+							</div>
+							<!-- /.modal -->
+								
+								
 								<?
 								} 
 								?>
 							</tbody>
 							</table>
 							
-<!--							<p align="right"><a href="#" class="btn red" id="exportExcel">Exportar Excel</a></p>-->
-						
 						</div>
 						
 				
@@ -290,35 +298,10 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 <script src="../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <script src="../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-select/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/select2/select2.min.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/clockface/js/clockface.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-daterangepicker/moment.min.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-<script type="text/javascript" src="../assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
-<!-- END PAGE LEVEL PLUGINS -->
-<!-- BEGIN PAGE LEVEL PLUGINS -->
-<script src="../assets/global/plugins/flot/jquery.flot.min.js"></script>
-<script src="../assets/global/plugins/flot/jquery.flot.resize.min.js"></script>
-<script src="../assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
-<script src="../assets/global/plugins/flot/jquery.flot.stack.min.js"></script>
-<script src="../assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
-<script src="../assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
-<!-- END PAGE LEVEL PLUGINS -->
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
 <script src="../assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
-<script src="../assets/admin/pages/scripts/components-pickers.js"></script>
-<script type="text/javascript" src="../assets/outros/excellentexport.js"></script>
-<script src="../assets/admin/pages/scripts/components-dropdowns.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
         jQuery(document).ready(function()
@@ -327,30 +310,8 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 			Metronic.init(); // init metronic core components
 			Layout.init(); // init current layout
 			QuickSidebar.init() // init quick sidebar
-			ComponentsPickers.init();
-			ComponentsDropdowns.init();
-		     //Charts.init();
-		     //Charts.initCharts();
-		     //Charts.initPieCharts();
-		     //Charts.initBarCharts();
-			
-			
-			$('#reportrange span').html('<?=$DAT_COMPLETA?>');
-			$('#dat_inicio').val('<?=$DAT_INICIO?>');
-			$('#dat_fim').val('<?=$DAT_FIM?>');
-			$('#dat_completa').val('<?=$DAT_COMPLETA?>');
-			
-			//AJAX END
-			});   
 
-		  $('#exportExcel').click(function() {
-			  $.post("../exec/?e=exportExcel", {
-				content: $('#datatable').html(),
-				}, function(response){
-					$("body").append("<iframe src='../exec/?e=exportExcel&download=1' style='display: none;' ></iframe>"); 
-				});	
-		  });
-			
+			});
 		 			
     </script>
 <!-- END JAVASCRIPTS -->
