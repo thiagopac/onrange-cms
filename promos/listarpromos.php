@@ -227,7 +227,7 @@
 										<?php
 										    $DB = fnDBConn();
 											$ID_PROMO = $ROW['ID_PROMO'];
-											$SQL = "SELECT PROMO_CODIGO FROM PROMO_CODIGO_USUARIO WHERE ID_PROMO = $ID_PROMO";
+											$SQL = "SELECT PROMO_CODIGO FROM PROMO_CODIGO_USUARIO WHERE ID_PROMO = $ID_PROMO AND ID_USUARIO IS NULL";
 											$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
 											$ROWSPAN = "<tr><td rowspan=10 align='center' style='vertical-align:middle;'>1</td></tr>";
 											echo $ROWSPAN;
