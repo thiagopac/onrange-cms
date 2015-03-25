@@ -156,11 +156,8 @@
 								<th style="text-align:center;">
 									 Utilizados
 								</th>
-								<th style="text-align:center;">
+								<th style="text-align:center;" colspan=2>
 									 Disponíveis
-								</th>
-								<th style="text-align:center;">
-									 Códigos
 								</th>
 							</tr>
 							</thead>
@@ -188,7 +185,7 @@
 									<td align="center" style="vertical-align:middle;">
 										 <?=$ROW['UTILIZADOS']?>
 									</td>
-									<td align="center" style="vertical-align:middle;">
+									<td align="center" style="vertical-align:middle;" width="60px">
 										 <?=$ROW['NAO_UTILIZADOS']?>
 									</td>
 									<td align="center" style="vertical-align:middle;">
