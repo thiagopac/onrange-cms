@@ -186,10 +186,10 @@
 										 <?=$ROW['DESCRICAO']?>
 									</td>
 									<td align="center" style="vertical-align:middle;">
-										 <?=$ROW['NAO_UTILIZADOS']?>
+										 <?=$ROW['UTILIZADOS']?>
 									</td>
 									<td align="center" style="vertical-align:middle;">
-										 <?=$ROW['UTILIZADOS']?>
+										 <?=$ROW['NAO_UTILIZADOS']?>
 									</td>
 									<td align="center" style="vertical-align:middle;">
 									<a class="btn default" data-toggle="modal" href="<?='#'.$ROW['ID_PROMO']?>">Ver</a>
