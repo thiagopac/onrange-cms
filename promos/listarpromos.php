@@ -5,9 +5,6 @@
 #CONTROLE SESSAO
 	fnInicia_Sessao('listarpromos');
 
-#INPUTS
-
-	
 #INICIO LOGICA
 	$DB = fnDBConn();
 	$SQL = "SELECT P.ID_PROMO, L.NOME AS NOME_LOCAL, P.DT_INICIO, P.DT_FIM, P.NOME AS NOME_PROMO, P.DESCRICAO, P.PROMO_CHECKIN, SUM(CASE WHEN PUC.ID_USUARIO IS NOT NULL THEN 1 ELSE 0 END) AS UTILIZADOS, SUM(CASE WHEN PUC.ID_USUARIO IS NOT NULL THEN 0 ELSE 1 END) AS NAO_UTILIZADOS
@@ -23,13 +20,6 @@
 		$BrowserIE = true;
 
 ?>
-<!--
-CONSULTAS SQL:
-<?
-if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
-	echo $SQL_DUMP;
-?>
--->
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
@@ -141,7 +131,6 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 			</div>
 			<!-- END PAGE HEADER-->
 			
-			
 					<!-- BEGIN SAMPLE TABLE PORTLET-->
 						<div class="portlet-title_sem_titulo">
 						</div>
@@ -239,9 +228,9 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 												</tr></thead>
 												<tbody>
 										<?php
-											$DB = fnDBConn();
+										    $DB = fnDBConn();
 											$ID_PROMO = $ROW['ID_PROMO'];
-											$SQL = "SELECT PROMO_CODIGO FROM promo_codigo_usuario WHERE ID_PROMO = $ID_PROMO";
+											$SQL = "SELECT PROMO_CODIGO FROM PROMO_CODIGO_USUARIO WHERE ID_PROMO = $ID_PROMO";
 											$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
 											$ROWSPAN = "<tr><td rowspan=10 align='center' style='vertical-align:middle;'>1</td></tr>";
 											echo $ROWSPAN;
@@ -261,13 +250,12 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 									<!-- /.modal-content -->
 								</div>
 								<!-- /.modal-dialog -->
-							</div></div>
+							</div>
+							</div>
 							<!-- /.modal -->
 			<?
 			} 
 			?>
-					
-
 					<!-- END SAMPLE TABLE PORTLET-->
         <br/>
         <br/>
@@ -276,10 +264,6 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 	</div>
 	<!-- END CONTENT -->
 </div>
-
-
-
-
 
 
 <!-- END CONTAINER -->
@@ -294,23 +278,6 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 		</span>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
