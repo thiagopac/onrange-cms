@@ -189,7 +189,9 @@
 										 <?=$ROW['NAO_UTILIZADOS']?>
 									</td>
 									<td align="center" style="vertical-align:middle;">
+									<?php if($ROW['NAO_UTILIZADOS']!=0){?>
 									<a class="btn default" data-toggle="modal" href="<?='#'.$ROW['ID_PROMO']?>">Ver</a>
+									<?php } ?>
 									</td>
 								</tr>
 								
