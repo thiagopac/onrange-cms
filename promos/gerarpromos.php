@@ -152,11 +152,11 @@ License: You must have a valid license purchased only from themeforest(the above
 				</div>
 				<!-- END PAGE HEADER-->
 				
-				<? if ($MSG != '') { ?>
-								<div class="alert alert-danger display">
+				<? if ($_REQUEST['msg'] != '') { ?>
+								<div class="alert alert-success display">
 									<button class="close" data-close="alert"></button>
-									<i class="fa-lg fa fa-warning"></i>
-									<?=$MSG?>
+									<i class="fa-lg fa fa-check"></i>
+									<?=$_REQUEST['msg']?>
 								</div>
 								<? } ?>
 				
@@ -242,7 +242,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                                                     <label class="control-label col-md-3">É promo de checkin?</label>
                                                                                    
                                                                                      <div class="col-md-9">
-																						<input type="checkbox" class="make-switch" name="promoCheckin" id="promoCheckin" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>">
+																						<input type="checkbox" class="make-switch" name="promoCheckin" id="promoCheckin" data-on-text="<i class='fa fa-check'></i>" data-off-text="<i class='fa fa-times'></i>" checked>
 																						<span class="help-block"> Marque aqui caso seja um promo que deve ser enviada automaticamente após checkin do usuário no local</span>
 																					</div>
                                                                                     
