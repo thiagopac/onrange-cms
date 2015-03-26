@@ -122,35 +122,12 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!-- BEGIN CONTENT -->
 	<div class="page-content-wrapper">
 		<div class="page-content">
-			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-							<h4 class="modal-title">Modal title</h4>
-						</div>
-						<div class="modal-body">
-							 Widget settings form goes here
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn blue">Save changes</button>
-							<button type="button" class="btn default" data-dismiss="modal">Close</button>
-						</div>
-					</div>
-					<!-- /.modal-content -->
-				</div>
-				<!-- /.modal-dialog -->
-			</div>
-			<!-- /.modal -->
-			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			
 			<!-- BEGIN PAGE HEADER-->
 			<div class="row">
 				<div class="col-md-12">
 					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 					<h3 class="page-title">
-					Novo administrador <small></small>
+					Dados do administrador <small></small>
 					</h3>
 					
 					<!-- END PAGE TITLE & BREADCRUMB-->
@@ -194,10 +171,13 @@ License: You must have a valid license purchased only from themeforest(the above
 									<div class="form-group last password-strength">
 										<label class="control-label col-md-3">Senha</label>
 										<div class="col-md-4">
-											<input type="text" class="form-control" name="password" id="password_strength">
+											<input type="password" class="form-control" name="password" id="password_strength">
 										</div>
+										<label for="chkShowPassword" style="margin:5px;">
+							                <input type="checkbox" id="chkShowPassword" />
+							                Mostrar senha
+							             </label>
 									</div>
-									
 								</div>
 								
 								
@@ -271,10 +251,27 @@ License: You must have a valid license purchased only from themeforest(the above
         jQuery(document).ready(function() {       
            // initiate layout and plugins
            Metronic.init(); // init metronic core components
-Layout.init(); // init current layout
-QuickSidebar.init() // init quick sidebar
+			Layout.init(); // init current layout
+			QuickSidebar.init() // init quick sidebar
            ComponentsFormTools.init();
-        });   
+        });
+
+        $(function () {
+            $("#chkShowPassword").bind("click", function () {
+                var txtPassword = $("[id*=password_strength]");
+                if ($(this).is(":checked")) {
+                    txtPassword.after('<input onchange = "PasswordChanged(this);" id = "txt_' + txtPassword.attr("id") + '" class="form-control" name="password" type = "text" value = "' + txtPassword.val() + '" />');
+                    txtPassword.hide();
+                } else {
+                    txtPassword.val(txtPassword.next().val());
+                    txtPassword.next().remove();
+                    txtPassword.show();
+                }
+            });
+        });
+        function PasswordChanged(txt) {
+            $(txt).prev().val($(txt).val());
+        }
     </script>
 <!-- END JAVASCRIPTS -->
 </body>
