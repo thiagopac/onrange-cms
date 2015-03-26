@@ -13,7 +13,7 @@
 	
 //Validacao
 	if ($ID_LOCAL == 0)
-		die('Falha Geral: ID de Local invalido'); 
+		die('Falha Geral: ID de Local invÃ¡lido'); 
 		
 //Programacao
 	$DB = fnDBConn();
@@ -41,7 +41,7 @@
 	
 	$LOTE = (int)$LOTE;
 	
-	//Cria códigos
+	//Cria cï¿½digos
 	for($i=0;$i<$LOTE;$i++){
 		$CODIGOS[$i] = substr(str_shuffle("BCDFGHJKLMNPQRSTVWXZBCDFGHJKLMNPQRSTVWXZBCDFGHJKLMNPQRSTVWXZBCDFGHJKLMNPQRSTVWXZBCDFGHJKLMNPQRSTVWXZ"), 0, 5);
 	
@@ -67,7 +67,7 @@
 	$RET = fnDB_DO_EXEC($DB,$SQL);
 		
 	
-	fnDB_LOG_AUDITORIA_ADD($DB,"Adicionou um Promo para o local: <strong>$ID_LOCAL</strong> com <strong>$LOTE</strong> códigos.");
+	fnDB_LOG_AUDITORIA_ADD($DB,"Adicionou um Promo para o local: <strong>$ID_LOCAL</strong> com <strong>$LOTE</strong> cÃ³digos.");
 	
 	header('location: ../promos/gerarpromos.php?msg='.urlencode('Promo criado com sucesso!'));
 	exit;
