@@ -61,10 +61,10 @@ body {-webkit-print-color-adjust:exact;}
 			while($quantAgrupadores != 0){
 				if(($quantAgrupadores*10) %10 == 0) { //checa se o numero é divisível por 10 com resto 0
 					$arrImpressores[] = $quantAgrupadores*10; //se for, ele adiciona a um array
-					$arrImpressores[] = 0; //adicionamos tb o numero 0, para que tenha agregador desde a 1a impressao
 				}
 				$quantAgrupadores--; //vamos decrecentando o contador até 0
 			}
+			$arrImpressores[] = 0; //adicionamos tb o numero 0, para que tenha agregador desde a 1a impressao
 			
 			$contChecaImpressor = 0; //contador que checa se estamos em um número que se deve imprimir a linha do agregador
 			
