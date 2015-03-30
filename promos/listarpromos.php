@@ -229,7 +229,7 @@
 										<?php
 										    $DB = fnDBConn();
 											$ID_PROMO = $ROW['ID_PROMO'];
-											$SQL = "SELECT PROMO_CODIGO FROM PROMO_CODIGO_USUARIO WHERE ID_PROMO = $ID_PROMO AND ID_USUARIO IS NULL";
+											$SQL = "SELECT PROMO_CODIGO FROM PROMO_CODIGO_USUARIO WHERE ID_PROMO = $ID_PROMO AND ID_USUARIO IS NULL ORDER BY PROMO_CODIGO ASC";
 											$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
 											$contCodigos = count($RET); //quantidade de códigos do promo
 											$quantAgrupadores = (int) ($contCodigos / 10); //isso aqui faz a divisao e pega apenas a parte inteira da divisão, para saber quando criar a linha de agrupador
