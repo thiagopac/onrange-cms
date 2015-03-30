@@ -22,6 +22,9 @@
 	<head>
 		<title><?=$TITULO?></title>
 		 <style>
+table, th, td, tr {
+    border: solid black 1px;
+}
 @media print
 {
 html {overflow-x: visible;}
@@ -46,7 +49,7 @@ body {-webkit-print-color-adjust:exact;}
 					 Ordem
 				</th>
 				<th style="text-align:center;">
-					 Código
+					 C&oacute;digo
 				</th>
 				</tr>
 				</thead>
@@ -73,7 +76,7 @@ body {-webkit-print-color-adjust:exact;}
 				$agrupador = $ROW['PROMO_CODIGO'][0]; //pega o agrupador do banco, pelo primeiro caractere da string do codigo de promo												
 				$codigo = substr_replace($ROW['PROMO_CODIGO'],'',0,2);//pegando o resto do código sem o agrupador e sem o hífen
 				
-				$ROWSPAN = "<tr><td rowspan=11 align='center' style='vertical-align:middle;'>$agrupador</td></tr>"; //imprimindo o agrupador com um rowspan de 11, deixando espaço pra coluna de cabeçalho
+				$ROWSPAN = "<tr><td rowspan=11 align='center' style='vertical-align:middle;font-size:22px;border:solid black 1px;'>$agrupador</td></tr>"; //imprimindo o agrupador com um rowspan de 11, deixando espaço pra coluna de cabeçalho
 
 				if (in_array($contChecaImpressor, $arrImpressores, true)) { //se nosso contador que checa se é hora de imprimir o agrupador estiver dentro de um dos números dos array, ele imprime
 					echo $ROWSPAN; //imprime a linha do agregador
@@ -82,9 +85,9 @@ body {-webkit-print-color-adjust:exact;}
 				$contChecaImpressor++; //aumentamos o contador que checa se é hora de imprimir o agregador
 				
 				if($contChecaImpressor %2 != 0)
-					echo "<tr><td align='center'>".$codigo."</tr></td>"; //imprime a linha com o código do promo
+					echo "<tr><td align='center' style='font-size:16px;'>".$codigo."</td></tr>"; //imprime a linha com o código do promo
 				else
-					echo "<tr><td align='center' style='background-color:#f0f0f0'>".$codigo."</tr></td>"; //imprime a linha com o código do promo
+					echo "<tr><td align='center' style='background-color:#f0f0f0;font-size:16px;'>".$codigo."</td></tr>"; //imprime a linha com o código do promo
 			}
 		?>
 		</tbody>

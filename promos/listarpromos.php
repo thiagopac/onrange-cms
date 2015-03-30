@@ -248,7 +248,7 @@
 												$agrupador = $ROW['PROMO_CODIGO'][0]; //pega o agrupador do banco, pelo primeiro caractere da string do codigo de promo												
 												$codigo = substr_replace($ROW['PROMO_CODIGO'],'',0,2);//pegando o resto do código sem o agrupador e sem o hífen
 												
-												$ROWSPAN = "<tr><td rowspan=11 align='center' style='vertical-align:middle;'>$agrupador</td></tr>"; //imprimindo o agrupador com um rowspan de 11, deixando espaço pra coluna de cabeçalho
+												$ROWSPAN = "<tr><td rowspan=11 align='center' style='vertical-align:middle;font-size:22px;'>$agrupador</td></tr>"; //imprimindo o agrupador com um rowspan de 11, deixando espaço pra coluna de cabeçalho
 	
 												if (in_array($contChecaImpressor, $arrImpressores, true)) { //se nosso contador que checa se é hora de imprimir o agrupador estiver dentro de um dos números dos array, ele imprime
 													echo $ROWSPAN; //imprime a linha do agregador
@@ -256,7 +256,7 @@
 												
 												$contChecaImpressor++; //aumentamos o contador que checa se é hora de imprimir o agregador
 												
-												echo "<tr><td align='center'>".$codigo."</tr></td>"; //imprime a linha com o código do promo
+												echo "<tr><td align='center' style='vertical-align:middle;font-size:16px;'>".$codigo."</tr></td>"; //imprime a linha com o código do promo
 											}
 										?>
 										</tbody>
