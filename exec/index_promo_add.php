@@ -53,7 +53,7 @@
 		$i = count($CODIGOS)-1;
 	}
 	
-	sort($CODIGOS,SORT_STRING);
+	sort($CODIGOS);
 	
 	//Gera SQL de insert
 	
