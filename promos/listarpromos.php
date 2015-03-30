@@ -68,7 +68,7 @@
 }
    
 #lb2{
-    display:block;
+    display: block;
 }
 
 </style>
@@ -265,7 +265,7 @@
 										</div>
 										<div class="modal-footer" id="lb1">
 											<button type="button" class="btn default" data-dismiss="modal">Fechar</button>
-											<button type="button" class="btn blue" onClick="window.print()"><i class="fa fa-print"></i> Imprimir</button>
+											<button type="button" class="btn blue"  onClick="window.open('./impressaocodigos.php?promo=<?=$ID_PROMO?>', '_blank')"><i class="fa fa-print"></i> Imprimir</button>
 										</div>
 									</div>
 									<!-- /.modal-content -->
