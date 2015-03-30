@@ -231,10 +231,32 @@
 											$ID_PROMO = $ROW['ID_PROMO'];
 											$SQL = "SELECT PROMO_CODIGO FROM PROMO_CODIGO_USUARIO WHERE ID_PROMO = $ID_PROMO AND ID_USUARIO IS NULL";
 											$RET = fnDB_DO_SELECT_WHILE($DB,$SQL);
-											$ROWSPAN = "<tr><td rowspan=10 align='center' style='vertical-align:middle;'>1</td></tr>";
-											echo $ROWSPAN;
+											$contCodigos = count($RET); //quantidade de códigos do promo
+											$quantAgrupadores = (int) ($contCodigos / 10); //isso aqui faz a divisao e pega apenas a parte inteira da divisão, para saber quando criar a linha de agrupador
+											while($quantAgrupadores != 0){
+												if(($quantAgrupadores*10) %10 == 0) { //checa se o numero é divisível por 10 com resto 0
+													$arrImpressores[] = $quantAgrupadores*10; //se for, ele adiciona a um array
+													$arrImpressores[] = 0; //adicionamos tb o numero 0, para que tenha agregador desde a 1a impressao
+												}
+												$quantAgrupadores--; //vamos decrecentando o contador até 0
+											}
+											
+											$contChecaImpressor = 0; //contador que checa se estamos em um número que se deve imprimir a linha do agregador
+											
 											foreach($RET as $KEY => $ROW){
-												echo "<tr><td align='center'>".$ROW['PROMO_CODIGO']."</tr></td>";
+
+												$agrupador = $ROW['PROMO_CODIGO'][0]; //pega o agrupador do banco, pelo primeiro caractere da string do codigo de promo												
+												$codigo = substr_replace($ROW['PROMO_CODIGO'],'',0,2);//pegando o resto do código sem o agrupador e sem o hífen
+												
+												$ROWSPAN = "<tr><td rowspan=11 align='center' style='vertical-align:middle;'>$agrupador</td></tr>"; //imprimindo o agrupador com um rowspan de 11, deixando espaço pra coluna de cabeçalho
+	
+												if (in_array($contChecaImpressor, $arrImpressores, true)) { //se nosso contador que checa se é hora de imprimir o agrupador estiver dentro de um dos números dos array, ele imprime
+													echo $ROWSPAN; //imprime a linha do agregador
+												}
+												
+												$contChecaImpressor++; //aumentamos o contador que checa se é hora de imprimir o agregador
+												
+												echo "<tr><td align='center'>".$codigo."</tr></td>"; //imprime a linha com o código do promo
 											}
 										?>
 										</tbody>
