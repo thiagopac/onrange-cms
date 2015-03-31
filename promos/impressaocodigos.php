@@ -25,15 +25,23 @@
 table, th, td, tr {
     border: solid black 1px;
 }
+ </style>
+<style type="text/css" media="print">
+@page 
+{
+	size: auto;   /* auto is the initial value */
+	margin: 0mm;  /* this affects the margin in the printer settings */
+}
+   
 @media print
 {
-html {overflow-x: visible;}
-  table { page-break-after:auto }
-  tr    { page-break-inside:avoid; page-break-after:auto }
-  td    { page-break-inside:avoid; page-break-after:auto }
-  thead { display:table-header-group }
-  tfoot { display:table-footer-group }
-body {-webkit-print-color-adjust:exact;}
+	html {overflow-x: visible;}
+	table { page-break-after:auto }
+	tr    { page-break-inside:avoid; page-break-after:auto }
+	td    { page-break-inside:avoid; page-break-after:auto }
+	thead { display:table-header-group }
+	tfoot { display:table-footer-group }
+	body {-webkit-print-color-adjust:exact;}
 }
 
 </style>
