@@ -44,6 +44,7 @@
 					<a href="../administradores/">
 					<i class="icon-user"></i>
 					<span class="title">Administradores</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -52,6 +53,7 @@
 					<a href="../auditoria/">
 					<i class="icon-briefcase"></i>
 					<span class="title">Auditoria</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -60,6 +62,7 @@
 					<a href="../configuracoes/">
 					<i class="fa fa-cogs"></i>
 					<span class="title">Configurações</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -68,6 +71,7 @@
 					<a href="../sanitizacaolocal/">
 					<i class="fa fa-code-fork"></i>
 					<span class="title">Sanitização de local</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -76,6 +80,7 @@
 					<a href="../clientes/">
 					<i class="fa fa-users"></i>
 					<span class="title">Clientes</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -84,6 +89,7 @@
 					<a href="../locais/">
 					<i class="fa fa-map-marker"></i>
 					<span class="title">Locais</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -92,6 +98,7 @@
 					<a href="../clienteslocais/">
 					<i class="fa fa-link"></i>
 					<span class="title">Clientes &#8596; Locais</span>
+					<span class="selected"></span>
 					</a>
 				</li>
 				<? } ?>
@@ -101,6 +108,7 @@
 						<i class="fa fa-tags"></i>
 						<span class="title">Promos</span>
 						<span class="arrow"></span>
+						<span class="selected"></span>
 						</a>
 						<ul class="sub-menu">
 						<!-- BEGIN REPORT OPTION -->
@@ -125,6 +133,7 @@
 					<a href="javascript:;">
 					<i class="icon-bar-chart"></i>
 					<span class="title">Relatórios</span>
+					<span class="selected"></span>
 					<span class="arrow"></span>
 					</a>
 					<ul class="sub-menu">
