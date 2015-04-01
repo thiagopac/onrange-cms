@@ -241,7 +241,7 @@ if ((int)$_SESSION['ADMINISTRADOR']['id_cliente'] == 1) //Admin
 <link href="../assets/global/css/components.css" rel="stylesheet" type="text/css"/>
 <link href="../assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
 <link href="../assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
-<link id="style_color" href="../assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="../assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
 <link href="../assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>

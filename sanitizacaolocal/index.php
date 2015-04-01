@@ -94,7 +94,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <link href="../assets/admin/layout/css/layout.css" rel="stylesheet"
 	type="text/css" />
 <link id="style_color"
-	href="../assets/admin/layout/css/themes/default.css" rel="stylesheet"
+	href="../assets/admin/layout/css/themes/darkblue.css" rel="stylesheet"
 	type="text/css" />
 <link href="../assets/admin/layout/css/custom.css" rel="stylesheet"
 	type="text/css" />
