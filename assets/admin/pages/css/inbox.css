@@ -50,13 +50,14 @@ Inbox Page
 }
 
 .inbox .inbox-nav li.active b {
-  top: 0;
-  right: -4px;
-  width: 8px;
-  height: 35px;
+  top: 12px;
+  right: -6px;
+  width: 6px;
   position: absolute;
   display: inline-block;
-  background: url(../img/inbox-nav-arrow-blue.png) no-repeat;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid #169ef4;
 }
 
 .inbox .inbox-nav li:hover a {
@@ -467,6 +468,11 @@ Inbox Page
 .inbox-compose .wysihtml5-toolbar > li > a,
 .inbox-compose .wysihtml5-toolbar > li > div > a {
   background: #fff;
+}
+.inbox-compose .wysihtml5-toolbar > li > a:hover,
+.inbox-compose .wysihtml5-toolbar > li > div > a:hover {
+  background: #f1f1f1;
+  border-radius: 0;
 }
 
 .inbox-compose .wysihtml5-toolbar .dropdown.open .dropdown-toggle,

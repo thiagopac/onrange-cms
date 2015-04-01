@@ -21,6 +21,38 @@ grunt
 Changelog
 ---------
 
+0.4.15
+-----------------------
+* Add overlay to mouseTarget when click event is set
+* addControl/createControl now accepts HTML elements or HTML strings
+* Add containsLatLng to google.maps.Circle
+
+0.4.14
+-----------------------
+* Fix bug in drawPolygon
+* Hide context menu before the zoom is changed
+
+0.4.13
+-----------------------
+* Allow unitSystem setting in travelRoute
+* Add functionality to remove controls
+* Delegates non custom events to google.map
+* Convert featureType and elementType toLowerCase in static maps
+
+0.4.12
+-----------------------
+* Adds ability to listen for clicks on overlays
+
+0.4.11
+-----------------------
+* Add RadarSearch to the places layer
+* Update default control styles to match new Google Maps release.
+
+0.4.10
+-----------------------
+* Fix and optimize removeMarkers
+* Fix bug in addMarker (issue #270)
+
 0.4.9
 -----------------------
 * Add UMD support (AMD, CommonJS, browser globals)
@@ -379,7 +411,7 @@ Changelog
 
 License
 ---------
-MIT License. Copyright 2012 Gustavo Leon. http://github.com/hpneo
+MIT License. Copyright 2014 Gustavo Leon. http://github.com/hpneo
 
 Permission is hereby granted, free of charge, to any
 person obtaining a copy of this software and associated

@@ -1,4 +1,4 @@
-# Bootbox - Twitter Bootstrap powered alert, confirm and flexible dialog boxes
+# Bootbox - Bootstrap powered alert, confirm and flexible dialog boxes
 
 Please see http://bootboxjs.com for full usage instructions, or head over to http://paynedigital.com/bootbox for
 the original writeup about the project.
@@ -11,7 +11,7 @@ The easiest thing is to [find me on twitter @makeusabrew](http://twitter.com/mak
 
 Please see the [CONTRIBUTING](https://github.com/makeusabrew/bootbox/blob/master/CONTRIBUTING.md) file for guidelines.
 
-## Running Tests [![Build Status](https://api.travis-ci.org/makeusabrew/bootbox.png)](http://travis-ci.org/makeusabrew/bootbox)
+## Running Tests [![Build Status](https://api.travis-ci.org/makeusabrew/bootbox.svg)](http://travis-ci.org/makeusabrew/bootbox)
 
 Tests are run using [Karma](http://karma-runner.github.io/0.8/index.html) using the Mocha test adapter.
 To run the tests yourself, simply run ```npm install``` within the project followed by ```npm test```.

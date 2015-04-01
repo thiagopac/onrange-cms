@@ -47,6 +47,8 @@
     top: 17px;
     border:1px solid #fefefe;
     background:#777;
+
+    border-radius: 3px;
 }
 #irs-active-slider, .irs-slider:hover {
     
@@ -59,7 +61,7 @@
     text-shadow: none;
     top: 0; padding: 1px 3px;
     background: rgba(0,0,0,0.1);
-    border-radius: 0;
+    border-radius: 3px;
 }
 .lt-ie9 .irs-min, .lt-ie9 .irs-max {
     background: #ccc;

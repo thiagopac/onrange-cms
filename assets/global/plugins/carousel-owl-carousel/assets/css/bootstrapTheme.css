@@ -1741,7 +1741,6 @@ table {
   border-top: 1px solid #ffffff;
 }
 .table td {
-  //background: #f5f5f5;
   background: #FFF;
   border-top: 1px solid #E0E0E0;
 }
@@ -1849,11 +1848,9 @@ table {
 }
 .table-striped tbody > tr:nth-child(odd) > td,
 .table-striped tbody > tr:nth-child(odd) > th {
-  //background-color: #f5f5f5;
 }
 .table-hover tbody tr:hover > td,
 .table-hover tbody tr:hover > th {
-  //background-color: #ededed;
 }
 table td[class*="span"],
 table th[class*="span"],
@@ -3238,7 +3235,7 @@ input[type="submit"].btn.btn-mini {
 }
 .alert-danger,
 .alert-error {
-  background-color: #F0E86D;
+  background-color: #f2dede;
   border-color: #eed3d7;
   color: #b94a48;
 }

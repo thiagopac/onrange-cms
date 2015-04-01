@@ -5,9 +5,12 @@
         bold: 'Напівжирний',
         italic: 'Курсив',
         underline: 'Підкреслений',
-        strike: 'Закреслений',
+        strikethrough: 'Закреслений',
+        subscript: 'Нижній індекс',
+        superscript: 'Верхній індекс',
         clear: 'Прибрати стилі шрифту',
         height: 'Висота лінії',
+        name: 'Шрифт',
         size: 'Розмір шрифту'
       },
       image: {
@@ -38,7 +41,7 @@
         videoLink: 'Посилання на відео',
         insert: 'Вставити відео',
         url: 'URL відео',
-        providers: '(YouTube, Vimeo, Vine, Instagram чи DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion чи Youku)'
       },
       table: {
         table: 'Таблиця'

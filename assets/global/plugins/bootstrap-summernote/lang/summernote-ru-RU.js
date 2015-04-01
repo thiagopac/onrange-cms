@@ -5,9 +5,12 @@
         bold: 'Полужирный',
         italic: 'Курсив',
         underline: 'Подчёркнутый',
-        strike: 'Зачёркнутый',
+        strikethrough: 'Зачёркнутый',
+        subscript: 'Нижний индекс',
+        superscript: 'Верхний индекс',
         clear: 'Убрать стили шрифта',
         height: 'Высота линии',
+        name: 'Шрифт',
         size: 'Размер шрифта'
       },
       image: {
@@ -38,7 +41,7 @@
         videoLink: 'Ссылка на видео',
         insert: 'Вставить видео',
         url: 'URL видео',
-        providers: '(YouTube, Vimeo, Vine, Instagram или DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion или Youku)'
       },
       table: {
         table: 'Таблица'

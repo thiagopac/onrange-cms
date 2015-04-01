@@ -163,6 +163,7 @@ var FormValidation = function () {
                 submitHandler: function (form) {
                     success2.show();
                     error2.hide();
+                    form[0].submit(); // submit the form
                 }
             });
 
@@ -284,6 +285,7 @@ var FormValidation = function () {
                 submitHandler: function (form) {
                     success3.show();
                     error3.hide();
+                    form[0].submit(); // submit the form
                 }
 
             });
@@ -305,7 +307,7 @@ var FormValidation = function () {
                 rtl: Metronic.isRTL(),
                 autoclose: true
             });
-            $('.DD/MM/YYYY .form-control').change(function() {
+            $('.date-picker .form-control').change(function() {
                 form3.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input 
             })
     }

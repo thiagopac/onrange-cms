@@ -5,7 +5,7 @@
         bold: 'Fett',
         italic: 'Kursiv',
         underline: 'Unterstreichen',
-        strike: 'Durchgestrichen',
+        strikethrough: 'Durchgestrichen',
         clear: 'Zurücksetzen',
         height: 'Zeilenhöhe',
         size: 'Schriftgröße'
@@ -36,9 +36,9 @@
       video: {
         video: 'Video',
         videoLink: 'Video Link',
-        insert: 'Insert Video',
+        insert: 'Video einfügen',
         url: 'Video URL?',
-        providers: '(YouTube, Vimeo, Vine, Instagram, or DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, oder Youku)'
       },
       table: {
         table: 'Tabelle'
@@ -60,7 +60,7 @@
       },
       lists: {
         unordered: 'Aufzählung',
-        ordered: 'Nummerieung'
+        ordered: 'Nummerierung'
       },
       options: {
         help: 'Hilfe',

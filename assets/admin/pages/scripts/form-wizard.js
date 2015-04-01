@@ -104,7 +104,7 @@ var FormWizard = function () {
                 errorPlacement: function (error, element) { // render error placement for each input type
                     if (element.attr("name") == "gender") { // for uniform radio buttons, insert the after the given container
                         error.insertAfter("#form_gender_error");
-                    } else if (element.attr("name") == "payment[]") { // for uniform radio buttons, insert the after the given container
+                    } else if (element.attr("name") == "payment[]") { // for uniform checkboxes, insert the after the given container
                         error.insertAfter("#form_payment_error");
                     } else {
                         error.insertAfter(element); // for other inputs, just perform default behavior
@@ -159,9 +159,9 @@ var FormWizard = function () {
                         $(this).html(input.find('option:selected').text());
                     } else if (input.is(":radio") && input.is(":checked")) {
                         $(this).html(input.attr("data-title"));
-                    } else if ($(this).attr("data-display") == 'payment') {
+                    } else if ($(this).attr("data-display") == 'payment[]') {
                         var payment = [];
-                        $('[name="payment[]"]:checked').each(function(){
+                        $('[name="payment[]"]:checked', form).each(function(){ 
                             payment.push($(this).attr('data-title'));
                         });
                         $(this).html(payment.join("<br>"));
@@ -203,12 +203,15 @@ var FormWizard = function () {
                 'nextSelector': '.button-next',
                 'previousSelector': '.button-previous',
                 onTabClick: function (tab, navigation, index, clickedIndex) {
+                    return false;
+                    /*
                     success.hide();
                     error.hide();
                     if (form.valid() == false) {
                         return false;
                     }
                     handleTitle(tab, navigation, clickedIndex);
+                    */
                 },
                 onNext: function (tab, navigation, index) {
                     success.hide();
@@ -240,6 +243,11 @@ var FormWizard = function () {
             $('#form_wizard_1 .button-submit').click(function () {
                 alert('Finished! Hope you like it :)');
             }).hide();
+
+            //apply validation on select2 dropdown value change, this only needed for chosen dropdown integration.
+            $('#country_list', form).change(function () {
+                form.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
         }
 
     };

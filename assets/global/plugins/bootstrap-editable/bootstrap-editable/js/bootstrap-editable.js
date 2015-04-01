@@ -5679,7 +5679,7 @@ Editableform based on Twitter Bootstrap
         daysOfWeekDisabled: [],
         endDate: Infinity,
         forceParse: true,
-        format: 'DD/MM/YYYY',
+        format: 'mm/dd/yyyy',
         keyboardNavigation: true,
         language: 'en',
         minViewMode: 0,

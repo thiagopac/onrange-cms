@@ -5,7 +5,7 @@
 		bold: 'In Đậm',
         italic: 'In Nghiên',
         underline: 'Gạch Dưới',
-        strike: 'Gạch Ngang',
+        strikethrough: 'Gạch Ngang',
         clear: 'Bỏ Định Dạng',
         height: 'Khoảng Cách Hàng',
         size: 'Cỡ Chữ',
@@ -39,7 +39,7 @@
         videoLink: 'Đường Dẫn đến Video',
         insert: 'Chèn Video',
         url: 'URL',
-        providers: '(YouTube, Vimeo, Vine, Instagram và DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion và Youku)'
       },
       table: {
         table: 'Bảng'

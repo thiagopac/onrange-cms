@@ -2,7 +2,7 @@
 Invoice page
 ***/
 .invoice table {
-  margin: 30px 0 30px;
+  margin: 30px 0 30px 0;
 }
 
 .invoice .invoice-logo {

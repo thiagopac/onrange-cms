@@ -5,7 +5,7 @@
         bold: 'Testo in grassetto',
         italic: 'Testo in corsivo',
         underline: 'Testo sottolineato',
-        strike: 'Testo barrato',
+        strikethrough: 'Testo barrato',
         clear: 'Elimina la formattazione del testo',
         height: 'Altezza della linea di testo',
         name: 'Famiglia Font',
@@ -39,7 +39,7 @@
         videoLink: 'Collegamento ad un Video',
         insert: 'Inserisci Video',
         url: 'URL del Video',
-        providers: '(YouTube, Vimeo, Vine, Instagram o DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion o Youku)'
       },
       table: {
         table: 'Tabella'

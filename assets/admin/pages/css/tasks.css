@@ -11,11 +11,11 @@ Tasks Widget
 }
 .tasks-widget .task-list > li {
   position: relative;
-  padding: 10px 5px;
-  border-bottom: 1px solid #eaeaea;
+  padding: 10px 0;
+  border-bottom: 1px solid #F4F6F9;
 }
 .tasks-widget .task-list > li:hover {
-  background: #f9f9f9;
+  background: #F4F6F9;
 }
 .tasks-widget .task-list > li.last-line {
   border-bottom: none;
@@ -40,6 +40,7 @@ Tasks Widget
   cursor: pointer;
 }
 .tasks-widget .task-list > li > .task-title {
+  color: #838FA1;
   margin-right: 10px;
 }
 .tasks-widget .task-list > li > .task-title .task-title-sp {

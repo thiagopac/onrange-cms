@@ -5,7 +5,7 @@
         bold: 'Pogrubienie',
         italic: 'Pochylenie',
         underline: 'Podkreślenie',
-        strike: 'Przekreślenie',
+        strikethrough: 'Przekreślenie',
         clear: 'Usuń formatowanie',
         height: 'Interlinia',
         name: 'Czcionka',
@@ -39,7 +39,7 @@
         videoLink: 'Adres wideo',
         insert: 'Wstaw wideo',
         url: 'Adres wideo',
-        providers: '(YouTube, Vimeo, Vine, Instagram, lub DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, lub Youku)'
       },
       table: {
         table: 'Tabela'

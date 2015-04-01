@@ -8,7 +8,7 @@ var EcommerceIndex = function () {
             left: x - 60,
             border: '0px solid #ccc',
             padding: '2px 6px',
-            'background-color': '#fff',
+            'background-color': '#fff'
         }).appendTo("body").fadeIn(200);
     }
 
@@ -35,7 +35,7 @@ var EcommerceIndex = function () {
                         data:data,
                         lines: {
                             fill: 0.6,
-                            lineWidth: 0,
+                            lineWidth: 0
                         },
                         color: ['#f89f9f']
                     },
@@ -142,7 +142,7 @@ var EcommerceIndex = function () {
                         data:data,
                         lines: {
                             fill: 0.6,
-                            lineWidth: 0,
+                            lineWidth: 0
                         },
                         color: ['#BAD9F5']
                     },

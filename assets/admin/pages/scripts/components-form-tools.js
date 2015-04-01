@@ -68,7 +68,7 @@ var ComponentsFormTools = function () {
         }  
         $('#typeahead_example_3').typeahead(null, {
           name: 'datypeahead_example_3',
-          displayKey: 'name',
+          displayKey: 'value',
           source: custom.ttAdapter(),
           hint: (Metronic.isRTL() ? false : true),
           templates: {
@@ -199,7 +199,7 @@ var ComponentsFormTools = function () {
         }
         $('#typeahead_example_modal_3').typeahead(null, {
           name: 'datypeahead_example_modal_3',
-          displayKey: 'name',
+          displayKey: 'value',
           hint: (Metronic.isRTL() ? false : true),
           source: custom.ttAdapter(),
           templates: {
@@ -347,8 +347,7 @@ var ComponentsFormTools = function () {
         $('#spinner1').spinner();
         $('#spinner2').spinner({disabled: true});
         $('#spinner3').spinner({value:0, min: 0, max: 10});
-        $('#spinner4').spinner({value:0, step: 1, min: 0, max: 1000});
-        $('#spinner5').spinner({value:0, step: 1, min: 0, max: 1000});
+        $('#spinner4').spinner({value:0, step: 5, min: 0, max: 200});
     }
     
     var handleTagsInput = function () {
@@ -427,7 +426,7 @@ var ComponentsFormTools = function () {
                 input.pwstrength({
                     raisePower: 1.4,
                     minChar: 8,
-                    verdicts: ["", "", "", "", ""],
+                    verdicts: ["Weak", "Normal", "Medium", "Strong", "Very Strong"],
                     scores: [17, 26, 40, 50, 60]
                 });
 
@@ -522,6 +521,9 @@ var ComponentsFormTools = function () {
             var input = $(this);
 
             if (input.val() === "") {
+                input.closest('.form-group').removeClass('has-error').removeClass('has-success');
+                $('.fa-check, fa-warning', input.closest('.form-group')).remove();
+
                 return;
             }
 
@@ -539,13 +541,13 @@ var ComponentsFormTools = function () {
                 // change popover font color based on the result
                 if (res.status == 'OK') {
                     input.closest('.form-group').removeClass('has-error').addClass('has-success');
-                    $('.icon-exclamation-sign', input.closest('.form-group')).remove();
-                    input.before('<i class="icon-ok"></i>');
+                    $('.fa-warning', input.closest('.form-group')).remove();
+                    input.before('<i class="fa fa-check"></i>');
                     input.data('bs.popover').tip().removeClass('error').addClass('success');
                 } else {
                     input.closest('.form-group').removeClass('has-success').addClass('has-error');
-                    $('.icon-ok', input.closest('.form-group')).remove();
-                    input.before('<i class="icon-exclamation-sign"></i>');
+                    $('.fa-check', input.closest('.form-group')).remove();
+                    input.before('<i class="fa fa-warning"></i>');
 
                     input.popover('destroy');
                     input.popover({

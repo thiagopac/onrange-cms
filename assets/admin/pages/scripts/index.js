@@ -13,6 +13,9 @@ var Index = function () {
         },
 
         initJQVMAP: function () {
+            if (!jQuery().vectorMap) {
+                return;
+            }
 
             var showMap = function (name) {
                 jQuery('.vmaps').hide();
@@ -126,13 +129,15 @@ var Index = function () {
                 }
             }
 
+           
+
             $('#calendar').fullCalendar('destroy'); // destroy the calendar
             $('#calendar').fullCalendar({ //re-initialize the calendar
-                disableDragging: false,
+                disableDragging : false,
                 header: h,
                 editable: true,
                 events: [{
-                    title: 'All Day Event',
+                    title: 'All Day',
                     start: new Date(y, m, 1),
                     backgroundColor: Metronic.getBrandColor('yellow')
                 }, {
@@ -147,21 +152,21 @@ var Index = function () {
                     backgroundColor: Metronic.getBrandColor('red')
                 }, {
                     title: 'Repeating Event',
-                    start: new Date(y, m, d + 4, 16, 0),
+                    start: new Date(y, m, d + 6, 16, 0),
                     allDay: false,
                     backgroundColor: Metronic.getBrandColor('green')
                 }, {
                     title: 'Meeting',
-                    start: new Date(y, m, d, 10, 30),
+                    start: new Date(y, m, d+9, 10, 30),
                     allDay: false
                 }, {
                     title: 'Lunch',
-                    start: new Date(y, m, d, 12, 0),
+                    start: new Date(y, m, d, 14, 0),
                     end: new Date(y, m, d, 14, 0),
                     backgroundColor: Metronic.getBrandColor('grey'),
                     allDay: false
                 }, {
-                    title: 'Birthday Party',
+                    title: 'Birthday',
                     start: new Date(y, m, d + 1, 19, 0),
                     end: new Date(y, m, d + 1, 22, 30),
                     backgroundColor: Metronic.getBrandColor('purple'),
@@ -220,14 +225,14 @@ var Index = function () {
 
             var visitors = [
                 ['02/2013', 1500],
-                ['03/2013', 2600],
-                ['04/2013', 1200],
-                ['05/2013', 560],
-                ['06/2013', 2000],
+                ['03/2013', 2500],
+                ['04/2013', 1700],
+                ['05/2013', 800],
+                ['06/2013', 1500],
                 ['07/2013', 2350],
                 ['08/2013', 1500],
-                ['09/2013', 4700],
-                ['10/2013', 1300]
+                ['09/2013', 1300],
+                ['10/2013', 4600]
             ];
 
 
@@ -241,7 +246,7 @@ var Index = function () {
                         data: visitors,
                         lines: {
                             fill: 0.6,
-                            lineWidth: 0,
+                            lineWidth: 0
                         },
                         color: ['#f89f9f']
                     }, {
@@ -418,6 +423,9 @@ var Index = function () {
         },
 
         initMiniCharts: function () {
+            if (!jQuery().easyPieChart || !jQuery().sparkline) {
+                return;
+            }
 
             // IE8 Fix: function.bind polyfill
             if (Metronic.isIE8() && !Function.prototype.bind) {
@@ -566,6 +574,10 @@ var Index = function () {
 
         initDashboardDaterange: function () {
 
+            if (!jQuery().daterangepicker) {
+                return;
+            }
+
             $('#dashboard-report-range').daterangepicker({
                     opens: (Metronic.isRTL() ? 'right' : 'left'),
                     startDate: moment().subtract('days', 29),
@@ -591,7 +603,7 @@ var Index = function () {
                     buttonClasses: ['btn btn-sm'],
                     applyClass: ' blue',
                     cancelClass: 'default',
-                    format: 'DD/MM/YYYY',
+                    format: 'MM/DD/YYYY',
                     separator: ' to ',
                     locale: {
                         applyLabel: 'Apply',
@@ -604,7 +616,6 @@ var Index = function () {
                     }
                 },
                 function (start, end) {
-                    console.log("Callback has been called!");
                     $('#dashboard-report-range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
                 }
             );
@@ -612,105 +623,6 @@ var Index = function () {
 
             $('#dashboard-report-range span').html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
             $('#dashboard-report-range').show();
-        },
-
-        initIntro: function () {
-
-            // display marketing alert only once
-            if (!$.cookie('intro_show')) {
-                setTimeout(function () {
-                    var unique_id = $.gritter.add({
-                        // (string | mandatory) the heading of the notification
-                        title: '<a href="http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank">Get Metronic Just For 25$</a>',
-                        // (string | mandatory) the text inside the notification
-                        text: 'Metronic is World\'s #1 Selling Bootstrap 3 Admin Theme Ever! 15400+ Users Can\'t be Wrong.',
-                        // (string | optional) the image to display on the left
-                        image: '../../assets/admin/layout/img/avatar1.jpg',
-                        // (bool | optional) if you want it to fade out on its own or just sit there
-                        sticky: true,
-                        // (int | optional) the time you want it to be alive for before fading out
-                        time: '',
-                        // (string | optional) the class name you want to apply to that specific message
-                        class_name: 'my-sticky-class'
-                    });
-
-                    // You can have it return a unique id, this can be used to manually remove it later using
-                    setTimeout(function () {
-                        $.gritter.remove(unique_id, {
-                            fade: true,
-                            speed: 'slow'
-                        });
-                    }, 12000);
-                }, 2000);
-
-                setTimeout(function () {
-                    var unique_id = $.gritter.add({
-                        // (string | mandatory) the heading of the notification
-                        title: '<a href="http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank">Develop with Metronic!</a>',
-                        // (string | mandatory) the text inside the notification
-                        text: 'Metronic comes with 160+ templates, 70+ plugins and 500+ UI components. Also 3 Frontend Themes, Corporate Frontend, eCommerce Frontend and One Page Parallax Frontend are included. Buy 1 Get 4!',
-                        // (string | optional) the image to display on the left
-                        image: '../../assets/admin/layout/img/avatar1.jpg',
-                        // (bool | optional) if you want it to fade out on its own or just sit there
-                        sticky: true,
-                        // (int | optional) the time you want it to be alive for before fading out
-                        time: '',
-                        // (string | optional) the class name you want to apply to that specific message
-                        class_name: 'my-sticky-class'
-                    });
-
-                    // You can have it return a unique id, this can be used to manually remove it later using
-                    setTimeout(function () {
-                        $.gritter.remove(unique_id, {
-                            fade: true,
-                            speed: 'slow'
-                        });
-                    }, 13000);
-                }, 8000);
-
-                setTimeout(function () {
-
-                    $('#styler').pulsate({
-                        color: "#bb3319",
-                        repeat: 10
-                    });
-
-                    $.extend($.gritter.options, {
-                        position: 'top-left'
-                    });
-
-                    var unique_id = $.gritter.add({
-                        position: 'top-left',
-                        // (string | mandatory) the heading of the notification
-                        title: '<a href="http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target="_blank">Customize Metronic!</a>',
-                        // (string | mandatory) the text inside the notification
-                        text: 'Metronic allows you to easily customize the theme with unlimited layout options and color schemes. Try Metronic Today!',
-                        // (string | optional) the image to display on the left
-                        image1: './assets/img/avatar1.png',
-                        // (bool | optional) if you want it to fade out on its own or just sit there
-                        sticky: true,
-                        // (int | optional) the time you want it to be alive for before fading out
-                        time: '',
-                        // (string | optional) the class name you want to apply to that specific message
-                        class_name: 'my-sticky-class'
-                    });
-
-                    $.extend($.gritter.options, {
-                        position: 'top-right'
-                    });
-
-                    // You can have it return a unique id, this can be used to manually remove it later using
-                    setTimeout(function () {
-                        $.gritter.remove(unique_id, {
-                            fade: true,
-                            speed: 'slow'
-                        });
-                    }, 10000);
-
-                }, 23000);
-
-                $.cookie('intro_show', 1);
-            }
         }
 
     };

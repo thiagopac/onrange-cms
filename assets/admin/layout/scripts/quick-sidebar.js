@@ -9,7 +9,7 @@ var QuickSidebar = function () {
         $('.top-menu .dropdown-quick-sidebar-toggler a, .page-quick-sidebar-toggler').click(function (e) {
             $('body').toggleClass('page-quick-sidebar-open'); 
         });
-    }
+    };
 
     // Handles quick sidebar chats
     var handleQuickSidebarChat = function () {
@@ -34,7 +34,7 @@ var QuickSidebar = function () {
             Metronic.destroySlimScroll(chatMessages);
             chatMessages.attr("data-height", chatMessagesHeight);
             Metronic.initSlimScroll(chatMessages);
-        }
+        };
 
         initChatSlimScroll();
         Metronic.addResizeHandler(initChatSlimScroll); // reinitialize on window resize
@@ -54,7 +54,7 @@ var QuickSidebar = function () {
             var input = wrapperChat.find('.page-quick-sidebar-chat-user-form .form-control');
 
             var text = input.val();
-            if (text.length == 0) {
+            if (text.length === 0) {
                 return;
             }
 
@@ -73,7 +73,7 @@ var QuickSidebar = function () {
                 tpl += '</div>';
 
                 return tpl;
-            }
+            };
 
             // handle post
             var time = new Date();
@@ -88,7 +88,7 @@ var QuickSidebar = function () {
                 });
 
                 return height;
-            }           
+            };           
 
             chatContainer.slimScroll({
                 scrollTo: getLastPostPos()
@@ -107,7 +107,7 @@ var QuickSidebar = function () {
                     scrollTo: getLastPostPos()
                 });
             }, 3000);
-        }
+        };
 
         wrapperChat.find('.page-quick-sidebar-chat-user-form .btn').click(handleChatMessagePost);
         wrapperChat.find('.page-quick-sidebar-chat-user-form .form-control').keypress(function (e) {
@@ -116,7 +116,7 @@ var QuickSidebar = function () {
                 return false;
             }
         });
-    }
+    };
 
     // Handles quick sidebar tasks
     var handleQuickSidebarAlerts = function () {
@@ -133,11 +133,11 @@ var QuickSidebar = function () {
             Metronic.destroySlimScroll(alertList);
             alertList.attr("data-height", alertListHeight);
             Metronic.initSlimScroll(alertList);
-        }
+        };
 
         initAlertsSlimScroll();
         Metronic.addResizeHandler(initAlertsSlimScroll); // reinitialize on window resize
-    }
+    };
 
     // Handles quick sidebar settings
     var handleQuickSidebarSettings = function () {
@@ -154,11 +154,11 @@ var QuickSidebar = function () {
             Metronic.destroySlimScroll(settingsList);
             settingsList.attr("data-height", settingsListHeight);
             Metronic.initSlimScroll(settingsList);
-        }
+        };
 
         initSettingsSlimScroll();
         Metronic.addResizeHandler(initSettingsSlimScroll); // reinitialize on window resize
-    }
+    };
 
     return {
 

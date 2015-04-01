@@ -5,7 +5,7 @@
         bold: 'Tebal',
         italic: 'Miring',
         underline: 'Garis bawah',
-        strike: 'Coret',
+        strikethrough: 'Coret',
         clear: 'Bersihkan gaya',
         height: 'Jarak baris',
         size: 'Ukuran font'
@@ -38,7 +38,7 @@
         videoLink: 'Link video',
         insert: 'Sisipkan video',
         url: 'Tautan video',
-        providers: '(YouTube, Vimeo, Vine, Instagram, atau DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, atau Youku)'
       },
       table: {
         table: 'Tabel'
@@ -63,7 +63,7 @@
         ordered: 'Penomoran'
       },
       options: {
-        help: 'Tolong',
+        help: 'Bantuan',
         fullscreen: 'Layar penuh',
         codeview: 'Kode HTML'
       },
@@ -82,8 +82,8 @@
         background: 'Warna latar',
         foreground: 'Warna font',
         transparent: 'Transparan',
-        setTransparent: 'Set transparansi',
-        reset: 'Reset',
+        setTransparent: 'Atur transparansi',
+        reset: 'Atur ulang',
         resetToDefault: 'Kembalikan kesemula'
       },
       shortcut: {
@@ -98,7 +98,6 @@
         undo: 'Kembali',
         redo: 'Ulang'
       }
-
     }
   });
 })(jQuery);

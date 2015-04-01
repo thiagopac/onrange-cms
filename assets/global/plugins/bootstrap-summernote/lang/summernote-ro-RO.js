@@ -5,7 +5,7 @@
         bold: 'Îngroșat',
         italic: 'Înclinat',
         underline: 'Subliniat',
-        strike: 'Tăiat',
+        strikethrough: 'Tăiat',
         clear: 'Înlătură formatare font',
         height: 'Înălțime rând',
         size: 'Dimensiune font'
@@ -36,7 +36,7 @@
         videoLink: 'Link video',
         insert: 'Inserează video',
         url: 'URL video?',
-        providers: '(YouTube, Vimeo, Vine, Instagram, sau DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, sau Youku)'
       },
       table: {
         table: 'Tabel'

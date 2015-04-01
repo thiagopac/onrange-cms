@@ -218,9 +218,15 @@ h2.results		{	-webkit-transition: all 0.2s ease-out;
 ********************************/
 
 
-pre				{	font-size:12px; font-family: 'Open Sans', sans-serif; color:#888; line-height:16px; background:url(../editor/assets/prebg.png) repeat; padding:16px; padding-bottom:15px;}
+pre				{	font-size:12px; font-family: 'Open Sans', sans-serif; color:#888; line-height:16px; background:url(../images/prebg.png) repeat; padding:16px; padding-bottom:15px;}
 pre .linedark	{	background:#888}
 pre span		{	font-weight:700}
 pre strong		{	color:#555;font-weight:800}
 
 h3				{	font-size:14px; color:#e33a0c; line-height:20px;}
+
+/******************************
+	-	SPECIALS	-
+********************************/
+
+.step { float: left; margin-right: 20px; margin-top: -10px; width: 40px; height: 40px; text-align: center; font-size: 15px; line-height: 40px; border-radius:50px; -moz-border-radius:50px; -webkit-border-radius:50px; /*border: 2px solid #e33a0c;*/ color: #fff; background: #e33a0c; }

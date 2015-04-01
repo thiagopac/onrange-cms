@@ -5,9 +5,10 @@
         bold: '太字',
         italic: '斜体',
         underline: '下線',
-        strike: '取り消し線',
+        strikethrough: '取り消し線',
         clear: 'クリア',
         height: '文字高',
+        name: 'フォント',
         size: '大きさ'
       },
       image: {
@@ -38,7 +39,7 @@
         videoLink: '動画リンク',
         insert: '動画挿入',
         url: '動画のURL',
-        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion, Youku)'
       },
       table: {
         table: 'テーブル'

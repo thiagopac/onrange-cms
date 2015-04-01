@@ -7,8 +7,7 @@ Login page
 }
 
 .login .logo {
-  margin: 0 auto;
-  margin-top: 60px;
+  margin: 60px auto 20px auto;
   padding: 15px;
   text-align: center;
 }
@@ -21,6 +20,11 @@ Login page
   padding: 30px;
   padding-top: 20px;
   padding-bottom: 15px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -o-border-radius: 7px;
+  border-radius: 7px;
 }
 
 .login .content h3 {

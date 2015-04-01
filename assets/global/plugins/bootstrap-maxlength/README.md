@@ -11,8 +11,8 @@ The indicator badge show up on focusing on the element, and disappear when the f
 
  * **alwaysShow**: if true the threshold will be ignored and the remaining length indication will be always showing up while typing or on focus on the input. Default: false.
  * **threshold**: this is a number indicating how many chars are left to start displaying the indications. Default: 10.
- * **warningClass**: it's the class of the element with the indicator. By default is the bootstrap "badge badge-info" but can be changed to anything you'd like.
- * **limitReachedClass**: it's the class the element gets when the limit is reached. Default is "badge badge-warning".
+ * **warningClass**: it's the class of the element with the indicator. By default is the bootstrap "label label-success" but can be changed to anything you'd like.
+ * **limitReachedClass**: it's the class the element gets when the limit is reached. Default is "label label-important label-danger" (to support Bootstrap 2 and 3).
  * **separator**: represents the separator between the number of typed chars and total number of available chars. Default is "/".
  * **preText**: is a string of text that can be outputted in front of the indicator. preText is empty by default.
  * **postText**: is a string outputted after the indicator. postText is empty by default.
@@ -21,7 +21,8 @@ The indicator badge show up on focusing on the element, and disappear when the f
  * **placement**: is a string, define where to output the counter. Possible values are: **bottom** ( *default option* ), **left**, **top**, **right**, **bottom-right**, **top-right**, **top-left**, **bottom-left** and **centered-right**.
  * **message**: an alternative way to provide the message text, i.e. 'You have typed %charsTyped% chars, %charsRemaining% of %charsTotal% remaining'. %charsTyped%, %charsRemaining% and %charsTotal% will be replaced by the actual values. This overrides the options separator, preText, postText and showMaxLength.
  * **utf8**: if true the input will count using utf8 bytesize/encoding.  For example: the '£' character is counted as two characters.
-
+ * **twoCharLinebreak**: count linebreak as 2 characters to match IE/Chrome textarea validation.
+ * **customMaxAttribute**: allows a custom maxlength attribute to allow exceeding maxlength.  'overmax' class gets added when exceeded to allow user to implement form validation.
 
 ## Examples
 
@@ -35,7 +36,7 @@ Change the threshold value:
         threshold: 20
     });
 
-An example will all the configurable options:
+An example with some of the configurable options:
 
     $('input.className').maxlength({
         alwaysShow: true,
@@ -59,7 +60,48 @@ The same example using the message option:
         message: 'used %charsTyped% of %charsTotal% chars.'
     });
 
+An example allowing user to enter over max characters.
+	Sample HTML element:
+```html
+		<textarea class="form-control" id="xyz" name="xyz" maxlength="10"></textarea>
+```
+
+	// Setup maxlength
+	$('.form-control').maxlength({
+		alwaysShow: true,
+		validate: false,
+		allowOverMax: true
+	});
+
+	// validate form before submit
+	$('form').on('submit', function (e) {
+		$('.form-control').each(
+			function () {
+				if ($(this).hasClass('overmax')) {
+					alert('prevent submit here');
+					e.preventDefault();
+					return false;
+				}
+			}
+		);
+	});
+
 ## Changelog
+
+### 1.5.7
+*   Fixed issue with bower
+
+### 1.5.6
+*   Added over maxlength functionality with customMaxAttribute
+*   Added twoCharLinebreak option
+
+### 1.5.5
+*   Implemented input event rather than keydown to improve usability
+*   Fixed jshint, jscs errors
+
+### 1.5.4
+
+*   When an input with associated maxlength element is removed, maxlength is also removed.
 
 ### 1.5.3
 

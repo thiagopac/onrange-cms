@@ -5,7 +5,7 @@
         bold: 'Tučné',
         italic: 'Kurzíva',
         underline: 'Podtržené',
-        strike: 'Přeškrtnuté',
+        strikethrough: 'Přeškrtnuté',
         clear: 'Odstranit styl písma',
         height: 'Výška řádku',
         size: 'Velikost písma'
@@ -37,7 +37,7 @@
         videoLink: 'Odkaz videa',
         insert: 'Vložit video',
         url: 'URL videa?',
-        providers: '(YouTube, Vimeo, Vine, Instagram nebo DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion nebo Youku)'
       },
       table: {
         table: 'Tabulka'

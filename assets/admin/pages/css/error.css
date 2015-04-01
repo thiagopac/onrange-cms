@@ -81,7 +81,7 @@ Error Pages
 
 /* 404 page option #3*/
 .page-404-3 {
-  background: black !important;
+  background: #000 !important;
 }
 
 .page-404-3 .page-inner img {

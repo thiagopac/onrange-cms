@@ -5,7 +5,9 @@
         bold: 'Gras',
         italic: 'Italique',
         underline: 'Souligné',
-        strike: 'Barré',
+        strikethrough: 'Barré',
+        superscript: 'Exposant',
+        subscript: 'Indicé',
         clear: 'Effacer la mise en forme',
         height: 'Interligne',
         name: 'Famille de police',
@@ -39,7 +41,7 @@
         videoLink: 'Lien vidéo',
         insert: 'Insérer une vidéo',
         url: 'URL de la vidéo',
-        providers: '(YouTube, Vimeo, Vine, Instagram ou DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion ou Youku)'
       },
       table: {
         table: 'Tableau'

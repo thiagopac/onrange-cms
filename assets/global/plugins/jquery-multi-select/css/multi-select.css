@@ -91,3 +91,8 @@
   color: #aaa;
   cursor: text;
 }
+
+.multi-select {
+  right: auto !important;
+  left: -9999px !important;
+}

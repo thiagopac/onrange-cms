@@ -5,7 +5,7 @@
         bold: 'Vet',
         italic: 'Cursief',
         underline: 'Onderstrepen',
-        strike: 'Doorhalen',
+        strikethrough: 'Doorhalen',
         clear: 'Stijl verwijderen',
         height: 'Regelhoogte',
         name: 'Lettertype',
@@ -39,7 +39,7 @@
         videoLink: 'Video link',
         insert: 'Video invoegen',
         url: 'URL van de video',
-        providers: '(YouTube, Vimeo, Vine, Instagram of DailyMotion)'
+        providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion of Youku)'
       },
       table: {
         table: 'Tabel'

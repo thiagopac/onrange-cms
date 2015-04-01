@@ -5,7 +5,7 @@
         bold: '粗體',
         italic: '斜體',
         underline: '底線',
-        strike: '刪除線',
+        strikethrough: '刪除線',
         clear: '清除格式',
         height: '行高',
         size: '字體大小'
@@ -37,7 +37,7 @@
         videoLink: '影片連結',
         insert: '插入影片',
         url: '影片網址',
-        providers: '(優酷, Instagram, Youtube等)'
+        providers: '(優酷, Instagram, DailyMotion, Youtube等)'
       },
       table: {
         table: '表格'

@@ -1,31 +1,79 @@
-/**@preserve
-$.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
+/*! noUiSlider - 7.0.10 - 2014-12-27 14:50:46 */
 
 /*jslint browser: true */
-/*jslint sub: true */
 /*jslint white: true */
-/*jslint continue: true */
-/*jslint plusplus: true */
 
 (function( $ ){
 
 	'use strict';
 
+
+	// Removes duplicates from an array.
+	function unique(array) {
+		return $.grep(array, function(el, index) {
+			return index === $.inArray(el, array);
+		});
+	}
+
+	// Round a value to the closest 'to'.
+	function closest ( value, to ) {
+		return Math.round(value / to) * to;
+	}
+
+	// Checks whether a value is numerical.
+	function isNumeric ( a ) {
+		return typeof a === 'number' && !isNaN( a ) && isFinite( a );
+	}
+
+	// Rounds a number to 7 supported decimals.
+	function accurateNumber( number ) {
+		var p = Math.pow(10, 7);
+		return Number((Math.round(number*p)/p).toFixed(7));
+	}
+
+	// Sets a class and removes it after [duration] ms.
+	function addClassFor ( element, className, duration ) {
+		element.addClass(className);
+		setTimeout(function(){
+			element.removeClass(className);
+		}, duration);
+	}
+
+	// Limits a value to 0 - 100
+	function limit ( a ) {
+		return Math.max(Math.min(a, 100), 0);
+	}
+
+	// Wraps a variable as an array, if it isn't one yet.
+	function asArray ( a ) {
+		return $.isArray(a) ? a : [a];
+	}
+
+	// Counts decimals
+	function countDecimals ( numStr ) {
+		var pieces = numStr.split(".");
+		return pieces.length > 1 ? pieces[1].length : 0;
+	}
+
+
 	var
 	// Cache the document selector;
 	/** @const */
 	doc = $(document),
+	// Make a backup of the original jQuery/Zepto .val() method.
+	/** @const */
+	$val = $.fn.val,
 	// Namespace for binding and unbinding slider events;
 	/** @const */
 	namespace = '.nui',
 	// Determine the events to bind. IE11 implements pointerEvents without
 	// a prefix, which breaks compatibility with the IE10 implementation.
 	/** @const */
-	actions = window.navigator['pointerEnabled'] ? {
+	actions = window.navigator.pointerEnabled ? {
 		start: 'pointerdown',
 		move: 'pointermove',
 		end: 'pointerup'
-	} : window.navigator['msPointerEnabled'] ? {
+	} : window.navigator.msPointerEnabled ? {
 		start: 'MSPointerDown',
 		move: 'MSPointerMove',
 		end: 'MSPointerUp'
@@ -53,54 +101,17 @@ $.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
 /* 13 */ ,''
 /* 14 */ ,'noUi-state-tap'
 /* 15 */ ,'noUi-active'
-/* 16 */ ,'noUi-extended'
+/* 16 */ ,''
 /* 17 */ ,'noUi-stacking'
 	];
 
 
-// General helpers
-
-	// Limits a value to 0 - 100
-	function limit ( a ) {
-		return Math.max(Math.min(a, 100), 0);
-	}
-
-	// Round a value to the closest 'to'.
-	function closest ( value, to ) {
-		return Math.round(value / to) * to;
-	}
+// Value calculation
 
 	// Determine the size of a sub-range in relation to a full range.
 	function subRangeRatio ( pa, pb ) {
 		return (100 / (pb - pa));
 	}
-
-
-// Type validation
-
-	// Checks whether a value is numerical.
-	function isNumeric ( a ) {
-		return typeof a === 'number' && !isNaN( a ) && isFinite( a );
-	}
-
-	// Wraps a variable as an array, if it isn't one yet.
-	function asArray ( a ) {
-		return $.isArray(a) ? a : [a];
-	}
-
-
-// Class handling
-
-	// Sets a class and removes it after [duration] ms.
-	function addClassFor ( element, className, duration ) {
-		element.addClass(className);
-		setTimeout(function(){
-			element.removeClass(className);
-		}, duration);
-	}
-
-
-// Value calculation
 
 	// (percentage) How many percent is this value of this range?
 	function fromPercentage ( range, value ) {
@@ -119,60 +130,71 @@ $.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
 		return ((value * ( range[1] - range[0] )) / 100) + range[0];
 	}
 
-	// (percentage)
-	function toStepping ( options, value ) {
 
-		if ( value >= options.xVal.slice(-1)[0] ){
+// Range conversion
+
+	function getJ ( value, arr ) {
+
+		var j = 1;
+
+		while ( value >= arr[j] ){
+			j += 1;
+		}
+
+		return j;
+	}
+
+	// (percentage) Input a value, find where, on a scale of 0-100, it applies.
+	function toStepping ( xVal, xPct, value ) {
+
+		if ( value >= xVal.slice(-1)[0] ){
 			return 100;
 		}
 
-		var j = 1, va, vb, pa, pb;
-		while ( value >= options.xVal[j] ){
-			j++;
-		}
+		var j = getJ( value, xVal ), va, vb, pa, pb;
 
-		va = options.xVal[j-1];
-		vb = options.xVal[j];
-		pa = options.xPct[j-1];
-		pb = options.xPct[j];
+		va = xVal[j-1];
+		vb = xVal[j];
+		pa = xPct[j-1];
+		pb = xPct[j];
 
 		return pa + (toPercentage([va, vb], value) / subRangeRatio (pa, pb));
 	}
 
-	// (value)
-	function fromStepping ( options, value ) {
+	// (value) Input a percentage, find where it is on the specified range.
+	function fromStepping ( xVal, xPct, value ) {
 
 		// There is no range group that fits 100
 		if ( value >= 100 ){
-			return options.xVal.slice(-1)[0];
+			return xVal.slice(-1)[0];
 		}
 
-		var j = 1, va, vb, pa, pb;
-		while ( value >= options.xPct[j] ){
-			j++;
-		}
+		var j = getJ( value, xPct ), va, vb, pa, pb;
 
-		va = options.xVal[j-1];
-		vb = options.xVal[j];
-		pa = options.xPct[j-1];
-		pb = options.xPct[j];
+		va = xVal[j-1];
+		vb = xVal[j];
+		pa = xPct[j-1];
+		pb = xPct[j];
 
 		return isPercentage([va, vb], (value - pa) * subRangeRatio (pa, pb));
 	}
 
 	// (percentage) Get the step that applies at a certain value.
-	function getStep ( options, value ){
+	function getStep ( xPct, xSteps, snap, value ) {
 
-		var j = 1, a, b;
-		while ( value >= options.xPct[j] ){
-			j++;
+		if ( value === 100 ) {
+			return value;
 		}
 
-		if ( options.snap ) {
+		var j = getJ( value, xPct ), a, b;
 
-			a = options.xPct[j-1];
-			b = options.xPct[j];
+		// If 'snap' is set, steps are used as fixed points on the slider.
+		if ( snap ) {
 
+			a = xPct[j-1];
+			b = xPct[j];
+
+			// Find the closest position, a or b.
 			if ((value - a) > ((b-a)/2)){
 				return b;
 			}
@@ -180,14 +202,449 @@ $.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
 			return a;
 		}
 
-		if ( !options.xSteps[j-1] ){
+		if ( !xSteps[j-1] ){
 			return value;
 		}
 
-		return options.xPct[j-1] + closest(
-			value - options.xPct[j-1],
-			options.xSteps[j-1]
+		return xPct[j-1] + closest(
+			value - xPct[j-1],
+			xSteps[j-1]
 		);
+	}
+
+
+// Entry parsing
+
+	function handleEntryPoint ( index, value, that ) {
+
+		var percentage;
+
+		// Wrap numerical input in an array.
+		if ( typeof value === "number" ) {
+			value = [value];
+		}
+
+		// Reject any invalid input, by testing whether value is an array.
+		if ( Object.prototype.toString.call( value ) !== '[object Array]' ){
+			throw new Error("noUiSlider: 'range' contains invalid value.");
+		}
+
+		// Covert min/max syntax to 0 and 100.
+		if ( index === 'min' ) {
+			percentage = 0;
+		} else if ( index === 'max' ) {
+			percentage = 100;
+		} else {
+			percentage = parseFloat( index );
+		}
+
+		// Check for correct input.
+		if ( !isNumeric( percentage ) || !isNumeric( value[0] ) ) {
+			throw new Error("noUiSlider: 'range' value isn't numeric.");
+		}
+
+		// Store values.
+		that.xPct.push( percentage );
+		that.xVal.push( value[0] );
+
+		// NaN will evaluate to false too, but to keep
+		// logging clear, set step explicitly. Make sure
+		// not to override the 'step' setting with false.
+		if ( !percentage ) {
+			if ( !isNaN( value[1] ) ) {
+				that.xSteps[0] = value[1];
+			}
+		} else {
+			that.xSteps.push( isNaN(value[1]) ? false : value[1] );
+		}
+	}
+
+	function handleStepPoint ( i, n, that ) {
+
+		// Ignore 'false' stepping.
+		if ( !n ) {
+			return true;
+		}
+
+		// Factor to range ratio
+		that.xSteps[i] = fromPercentage([
+			 that.xVal[i]
+			,that.xVal[i+1]
+		], n) / subRangeRatio (
+			that.xPct[i],
+			that.xPct[i+1] );
+	}
+
+
+// Interface
+
+	// The interface to Spectrum handles all direction-based
+	// conversions, so the above values are unaware.
+
+	function Spectrum ( entry, snap, direction, singleStep ) {
+
+		this.xPct = [];
+		this.xVal = [];
+		this.xSteps = [ singleStep || false ];
+		this.xNumSteps = [ false ];
+
+		this.snap = snap;
+		this.direction = direction;
+
+		var index, ordered = [ /* [0, 'min'], [1, '50%'], [2, 'max'] */ ];
+
+		// Map the object keys to an array.
+		for ( index in entry ) {
+			if ( entry.hasOwnProperty(index) ) {
+				ordered.push([entry[index], index]);
+			}
+		}
+
+		// Sort all entries by value (numeric sort).
+		ordered.sort(function(a, b) { return a[0] - b[0]; });
+
+		// Convert all entries to subranges.
+		for ( index = 0; index < ordered.length; index++ ) {
+			handleEntryPoint(ordered[index][1], ordered[index][0], this);
+		}
+
+		// Store the actual step values.
+		// xSteps is sorted in the same order as xPct and xVal.
+		this.xNumSteps = this.xSteps.slice(0);
+
+		// Convert all numeric steps to the percentage of the subrange they represent.
+		for ( index = 0; index < this.xNumSteps.length; index++ ) {
+			handleStepPoint(index, this.xNumSteps[index], this);
+		}
+	}
+
+	Spectrum.prototype.getMargin = function ( value ) {
+		return this.xPct.length === 2 ? fromPercentage(this.xVal, value) : false;
+	};
+
+	Spectrum.prototype.toStepping = function ( value ) {
+
+		value = toStepping( this.xVal, this.xPct, value );
+
+		// Invert the value if this is a right-to-left slider.
+		if ( this.direction ) {
+			value = 100 - value;
+		}
+
+		return value;
+	};
+
+	Spectrum.prototype.fromStepping = function ( value ) {
+
+		// Invert the value if this is a right-to-left slider.
+		if ( this.direction ) {
+			value = 100 - value;
+		}
+
+		return accurateNumber(fromStepping( this.xVal, this.xPct, value ));
+	};
+
+	Spectrum.prototype.getStep = function ( value ) {
+
+		// Find the proper step for rtl sliders by search in inverse direction.
+		// Fixes issue #262.
+		if ( this.direction ) {
+			value = 100 - value;
+		}
+
+		value = getStep(this.xPct, this.xSteps, this.snap, value );
+
+		if ( this.direction ) {
+			value = 100 - value;
+		}
+
+		return value;
+	};
+
+	Spectrum.prototype.getApplicableStep = function ( value ) {
+
+		// If the value is 100%, return the negative step twice.
+		var j = getJ(value, this.xPct), offset = value === 100 ? 2 : 1;
+		return [this.xNumSteps[j-2], this.xVal[j-offset], this.xNumSteps[j-offset]];
+	};
+
+	// Outside testing
+	Spectrum.prototype.convert = function ( value ) {
+		return this.getStep(this.toStepping(value));
+	};
+
+/*	Every input option is tested and parsed. This'll prevent
+	endless validation in internal methods. These tests are
+	structured with an item for every option available. An
+	option can be marked as required by setting the 'r' flag.
+	The testing function is provided with three arguments:
+		- The provided value for the option;
+		- A reference to the options object;
+		- The name for the option;
+
+	The testing function returns false when an error is detected,
+	or true when everything is OK. It can also modify the option
+	object, to make sure all values can be correctly looped elsewhere. */
+
+	/** @const */
+	var defaultFormatter = { 'to': function( value ){
+		return value.toFixed(2);
+	}, 'from': Number };
+
+	function testStep ( parsed, entry ) {
+
+		if ( !isNumeric( entry ) ) {
+			throw new Error("noUiSlider: 'step' is not numeric.");
+		}
+
+		// The step option can still be used to set stepping
+		// for linear sliders. Overwritten if set in 'range'.
+		parsed.singleStep = entry;
+	}
+
+	function testRange ( parsed, entry ) {
+
+		// Filter incorrect input.
+		if ( typeof entry !== 'object' || $.isArray(entry) ) {
+			throw new Error("noUiSlider: 'range' is not an object.");
+		}
+
+		// Catch missing start or end.
+		if ( entry.min === undefined || entry.max === undefined ) {
+			throw new Error("noUiSlider: Missing 'min' or 'max' in 'range'.");
+		}
+
+		parsed.spectrum = new Spectrum(entry, parsed.snap, parsed.dir, parsed.singleStep);
+	}
+
+	function testStart ( parsed, entry ) {
+
+		entry = asArray(entry);
+
+		// Validate input. Values aren't tested, as the public .val method
+		// will always provide a valid location.
+		if ( !$.isArray( entry ) || !entry.length || entry.length > 2 ) {
+			throw new Error("noUiSlider: 'start' option is incorrect.");
+		}
+
+		// Store the number of handles.
+		parsed.handles = entry.length;
+
+		// When the slider is initialized, the .val method will
+		// be called with the start options.
+		parsed.start = entry;
+	}
+
+	function testSnap ( parsed, entry ) {
+
+		// Enforce 100% stepping within subranges.
+		parsed.snap = entry;
+
+		if ( typeof entry !== 'boolean' ){
+			throw new Error("noUiSlider: 'snap' option must be a boolean.");
+		}
+	}
+
+	function testAnimate ( parsed, entry ) {
+
+		// Enforce 100% stepping within subranges.
+		parsed.animate = entry;
+
+		if ( typeof entry !== 'boolean' ){
+			throw new Error("noUiSlider: 'animate' option must be a boolean.");
+		}
+	}
+
+	function testConnect ( parsed, entry ) {
+
+		if ( entry === 'lower' && parsed.handles === 1 ) {
+			parsed.connect = 1;
+		} else if ( entry === 'upper' && parsed.handles === 1 ) {
+			parsed.connect = 2;
+		} else if ( entry === true && parsed.handles === 2 ) {
+			parsed.connect = 3;
+		} else if ( entry === false ) {
+			parsed.connect = 0;
+		} else {
+			throw new Error("noUiSlider: 'connect' option doesn't match handle count.");
+		}
+	}
+
+	function testOrientation ( parsed, entry ) {
+
+		// Set orientation to an a numerical value for easy
+		// array selection.
+		switch ( entry ){
+		  case 'horizontal':
+			parsed.ort = 0;
+			break;
+		  case 'vertical':
+			parsed.ort = 1;
+			break;
+		  default:
+			throw new Error("noUiSlider: 'orientation' option is invalid.");
+		}
+	}
+
+	function testMargin ( parsed, entry ) {
+
+		if ( !isNumeric(entry) ){
+			throw new Error("noUiSlider: 'margin' option must be numeric.");
+		}
+
+		parsed.margin = parsed.spectrum.getMargin(entry);
+
+		if ( !parsed.margin ) {
+			throw new Error("noUiSlider: 'margin' option is only supported on linear sliders.");
+		}
+	}
+
+	function testLimit ( parsed, entry ) {
+
+		if ( !isNumeric(entry) ){
+			throw new Error("noUiSlider: 'limit' option must be numeric.");
+		}
+
+		parsed.limit = parsed.spectrum.getMargin(entry);
+
+		if ( !parsed.limit ) {
+			throw new Error("noUiSlider: 'limit' option is only supported on linear sliders.");
+		}
+	}
+
+	function testDirection ( parsed, entry ) {
+
+		// Set direction as a numerical value for easy parsing.
+		// Invert connection for RTL sliders, so that the proper
+		// handles get the connect/background classes.
+		switch ( entry ) {
+		  case 'ltr':
+			parsed.dir = 0;
+			break;
+		  case 'rtl':
+			parsed.dir = 1;
+			parsed.connect = [0,2,1,3][parsed.connect];
+			break;
+		  default:
+			throw new Error("noUiSlider: 'direction' option was not recognized.");
+		}
+	}
+
+	function testBehaviour ( parsed, entry ) {
+
+		// Make sure the input is a string.
+		if ( typeof entry !== 'string' ) {
+			throw new Error("noUiSlider: 'behaviour' must be a string containing options.");
+		}
+
+		// Check if the string contains any keywords.
+		// None are required.
+		var tap = entry.indexOf('tap') >= 0,
+			drag = entry.indexOf('drag') >= 0,
+			fixed = entry.indexOf('fixed') >= 0,
+			snap = entry.indexOf('snap') >= 0;
+
+		parsed.events = {
+			tap: tap || snap,
+			drag: drag,
+			fixed: fixed,
+			snap: snap
+		};
+	}
+
+	function testFormat ( parsed, entry ) {
+
+		parsed.format = entry;
+
+		// Any object with a to and from method is supported.
+		if ( typeof entry.to === 'function' && typeof entry.from === 'function' ) {
+			return true;
+		}
+
+		throw new Error( "noUiSlider: 'format' requires 'to' and 'from' methods.");
+	}
+
+	// Test all developer settings and parse to assumption-safe values.
+	function testOptions ( options ) {
+
+		var parsed = {
+			margin: 0,
+			limit: 0,
+			animate: true,
+			format: defaultFormatter
+		}, tests;
+
+		// Tests are executed in the order they are presented here.
+		tests = {
+			'step': { r: false, t: testStep },
+			'start': { r: true, t: testStart },
+			'connect': { r: true, t: testConnect },
+			'direction': { r: true, t: testDirection },
+			'snap': { r: false, t: testSnap },
+			'animate': { r: false, t: testAnimate },
+			'range': { r: true, t: testRange },
+			'orientation': { r: false, t: testOrientation },
+			'margin': { r: false, t: testMargin },
+			'limit': { r: false, t: testLimit },
+			'behaviour': { r: true, t: testBehaviour },
+			'format': { r: false, t: testFormat }
+		};
+
+		// Set defaults where applicable.
+		options = $.extend({
+			'connect': false,
+			'direction': 'ltr',
+			'behaviour': 'tap',
+			'orientation': 'horizontal'
+		}, options);
+
+		// Run all options through a testing mechanism to ensure correct
+		// input. It should be noted that options might get modified to
+		// be handled properly. E.g. wrapping integers in arrays.
+		$.each( tests, function( name, test ){
+
+			// If the option isn't set, but it is required, throw an error.
+			if ( options[name] === undefined ) {
+
+				if ( test.r ) {
+					throw new Error("noUiSlider: '" + name + "' is required.");
+				}
+
+				return true;
+			}
+
+			test.t( parsed, options[name] );
+		});
+
+		// Pre-define the styles.
+		parsed.style = parsed.ort ? 'top' : 'left';
+
+		return parsed;
+	}
+
+// Class handling
+
+	// Delimit proposed values for handle positions.
+	function getPositions ( a, b, delimit ) {
+
+		// Add movement to current position.
+		var c = a + b[0], d = a + b[1];
+
+		// Only alter the other position on drag,
+		// not on standard sliding.
+		if ( delimit ) {
+			if ( c < 0 ) {
+				d += Math.abs(c);
+			}
+			if ( d > 100 ) {
+				c -= ( d - 100 );
+			}
+
+			// Limit values to 0 and 100.
+			return [limit(c), limit(d)];
+		}
+
+		return [c,d];
 	}
 
 
@@ -246,327 +703,15 @@ $.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
 	}
 
 
-// Input validation
-
-	function testStep ( parsed, entry ) {
-
-		if ( !isNumeric( entry ) ) {
-			throw new Error("noUiSlider: 'step' is not numeric.");
-		}
-
-		// The step option can still be used to set stepping
-		// for linear sliders. Overwritten if set in 'range'.
-		parsed.xSteps[0] = entry;
-	}
-
-	function testRange ( parsed, entry ) {
-
-		// Filter incorrect input.
-		if ( typeof entry !== 'object' || $.isArray(entry) ) {
-			throw new Error("noUiSlider: 'range' is not an object.");
-		}
-
-		// Loop all entries.
-		$.each( entry, function ( index, value ) {
-
-			var percentage;
-
-			// Wrap numerical input in an array.
-			if ( typeof value === "number" ) {
-				value = [value];
-			}
-
-			// Reject any invalid input.
-			if ( !$.isArray( value ) ){
-				throw new Error("noUiSlider: 'range' contains invalid value.");
-			}
-
-			// Covert min/max syntax to 0 and 100.
-			if ( index === 'min' ) {
-				percentage = 0;
-			} else if ( index === 'max' ) {
-				percentage = 100;
-			} else {
-				percentage = parseFloat( index );
-			}
-
-			// Check for correct input.
-			if ( !isNumeric( percentage ) || !isNumeric( value[0] ) ) {
-				throw new Error("noUiSlider: 'range' value isn't numeric.");
-			}
-
-			// Store values.
-			parsed.xPct.push( percentage );
-			parsed.xVal.push( value[0] );
-
-			// NaN will evaluate to false too, but to keep
-			// logging clear, set step explicitly. Make sure
-			// not to override the 'step' setting with false.
-			if ( !percentage ) {
-				if ( !isNaN( value[1] ) ) {
-					parsed.xSteps[0] = value[1];
-				}
-			} else {
-				parsed.xSteps.push( isNaN(value[1]) ? false : value[1] );
-			}
-		});
-
-		$.each(parsed.xSteps, function(i,n){
-
-			// Ignore 'false' stepping.
-			if ( !n ) {
-				return true;
-			}
-
-			// Check if step fits. Not required, but this might serve some goal.
-			// !((parsed.xVal[i+1] - parsed.xVal[i]) % n);
-
-			// Factor to range ratio
-			parsed.xSteps[i] = fromPercentage([
-				 parsed.xVal[i]
-				,parsed.xVal[i+1]
-			], n) / subRangeRatio (
-				parsed.xPct[i],
-				parsed.xPct[i+1] );
-		});
-	}
-
-	function testStart ( parsed, entry ) {
-
-		if ( typeof entry === "number" ) {
-			entry = [entry];
-		}
-
-		// Validate input. Values aren't tested, the internal Link will do
-		// that and provide a valid location.
-		if ( !$.isArray( entry ) || !entry.length || entry.length > 2 ) {
-			throw new Error("noUiSlider: 'start' option is incorrect.");
-		}
-
-		// Store the number of handles.
-		parsed.handles = entry.length;
-
-		// When the slider is initialized, the .val method will
-		// be called with the start options.
-		parsed.start = entry;
-	}
-
-	function testSnap ( parsed, entry ) {
-
-		// Enforce 100% stepping within subranges.
-		parsed.snap = entry;
-
-		if ( typeof entry !== 'boolean' ){
-			throw new Error("noUiSlider: 'snap' option must be a boolean.");
-		}
-	}
-
-	function testConnect ( parsed, entry ) {
-
-		if ( entry === 'lower' && parsed.handles === 1 ) {
-			parsed.connect = 1;
-		} else if ( entry === 'upper' && parsed.handles === 1 ) {
-			parsed.connect = 2;
-		} else if ( entry === true && parsed.handles === 2 ) {
-			parsed.connect = 3;
-		} else if ( entry === false ) {
-			parsed.connect = 0;
-		} else {
-			throw new Error("noUiSlider: 'connect' option doesn't match handle count.");
-		}
-	}
-
-	function testOrientation ( parsed, entry ) {
-
-		// Set orientation to an a numerical value for easy
-		// array selection.
-		switch ( entry ){
-		  case 'horizontal':
-			parsed.ort = 0;
-			break;
-		  case 'vertical':
-			parsed.ort = 1;
-			break;
-		  default:
-			throw new Error("noUiSlider: 'orientation' option is invalid.");
-		}
-	}
-
-	function testMargin ( parsed, entry ) {
-
-		if ( parsed.xPct.length > 2 ) {
-			throw new Error("noUiSlider: 'margin' option is only supported on linear sliders.");
-		}
-
-		// Parse value to range and store. As xVal is checked
-		// to be no bigger than 2, use it as range.
-		parsed.margin = fromPercentage(parsed.xVal, entry);
-
-		if ( !isNumeric(entry) ){
-			throw new Error("noUiSlider: 'margin' option must be numeric.");
-		}
-	}
-
-	function testDirection ( parsed, entry ) {
-
-		// Set direction as a numerical value for easy parsing.
-		// Invert connection for RTL sliders, so that the proper
-		// handles get the connect/background classes.
-		switch ( entry ) {
-		  case 'ltr':
-			parsed.dir = 0;
-			break;
-		  case 'rtl':
-			parsed.dir = 1;
-			parsed.connect = [0,2,1,3][parsed.connect];
-			break;
-		  default:
-			throw new Error("noUiSlider: 'direction' option was not recognized.");
-		}
-	}
-
-	function testBehaviour ( parsed, entry ) {
-
-		// Make sure the input is a string.
-		if ( typeof entry !== 'string' ) {
-			throw new Error("noUiSlider: 'behaviour' must be a string containing options.");
-		}
-
-		// Check if the string contains any keywords.
-		// None are required.
-		var tap = entry.indexOf('tap') >= 0,
-			extend = entry.indexOf('extend') >= 0,
-			drag = entry.indexOf('drag') >= 0,
-			fixed = entry.indexOf('fixed') >= 0,
-			snap = entry.indexOf('snap') >= 0;
-
-		parsed.events = {
-			tap: tap || snap,
-			extend: extend,
-			drag: drag,
-			fixed: fixed,
-			snap: snap
-		};
-	}
-
-	function testSerialization ( parsed, entry, sliders ) {
-
-		parsed.ser = [ entry['lower'], entry['upper'] ];
-		parsed.formatting = entry['format'];
-
-		$.each( parsed.ser, function( index, linkInstances ){
-
-			// Check if the provided option is an array.
-			if ( !$.isArray(linkInstances) ) {
-				throw new Error("noUiSlider: 'serialization."+(!index ? 'lower' : 'upper')+"' must be an array.");
-			}
-
-			$.each(linkInstances, function(){
-
-				// Check if entry is a Link.
-				if ( !(this instanceof $.Link) ) {
-					throw new Error("noUiSlider: 'serialization."+(!index ? 'lower' : 'upper')+"' can only contain Link instances.");
-				}
-
-				// Assign properties.
-				this.setIndex ( index );
-				this.setObject( sliders );
-				this.setFormatting( entry['format'] );
-			});
-		});
-
-		// If the slider has two handles and is RTL,
-		// reverse the serialization input. For one handle,
-		// lower is still lower.
-		if ( parsed.dir && parsed.handles > 1 ) {
-			parsed.ser.reverse();
-		}
-	}
-
-	// Test all developer settings and parse to assumption-safe values.
-	function test ( options, sliders ){
-
-	/*	Every input option is tested and parsed. This'll prevent
-		endless validation in internal methods. These tests are
-		structured with an item for every option available. An
-		option can be marked as required by setting the 'r' flag.
-		The testing function is provided with three arguments:
-			- The provided value for the option;
-			- A reference to the options object;
-			- The name for the option;
-
-		The testing function returns false when an error is detected,
-		or true when everything is OK. It can also modify the option
-		object, to make sure all values can be correctly looped elsewhere. */
-
-		var parsed = {
-			 xPct: []
-			,xVal: []
-			,xSteps: [ false ]
-			,margin: 0
-		}, tests;
-
-		tests = {
-			'step': { r: false, t: testStep },
-			'range': { r: true, t: testRange },
-			'start': { r: true, t: testStart },
-			'snap': { r: false, t: testSnap },
-			'connect': { r: true, t: testConnect },
-			'orientation': { r: false, t: testOrientation },
-			'margin': { r: false, t: testMargin },
-			'direction': { r: true, t: testDirection },
-			'behaviour': { r: true, t: testBehaviour },
-			'serialization': { r: true, t: testSerialization }
-		};
-
-		// Set defaults where applicable.
-		options = $.extend({
-			'connect': false,
-			'direction': 'ltr',
-			'behaviour': 'tap',
-			'orientation': 'horizontal'
-		}, options);
-
-		// Make sure the test for serialization runs.
-		options['serialization'] = $.extend({
-			 'lower': []
-			,'upper': []
-			,'format': {}
-		}, options['serialization']);
-
-		// Run all options through a testing mechanism to ensure correct
-		// input. It should be noted that options might get modified to
-		// be handled properly. E.g. wrapping integers in arrays.
-		$.each( tests, function( name, test ){
-
-			if ( options[name] === undefined ) {
-
-				if ( test.r ) {
-					throw new Error("noUiSlider: '" + name + "' is required.");
-				}
-
-				return true;
-			}
-
-			test.t( parsed, options[name], sliders );
-		});
-
-		// Pre-define the styles.
-		parsed.style = parsed.ort ? 'top' : 'left';
-
-		return parsed;
-	}
-
-
 // DOM additions
 
 	// Append a handle to the base.
-	function addHandle ( options, index ) {
+	function addHandle ( direction, index ) {
 
 		var handle = $('<div><div/></div>').addClass( Classes[2] ),
 			additions = [ '-lower', '-upper' ];
 
-		if ( options.dir ) {
+		if ( direction ) {
 			additions.reverse();
 		}
 
@@ -575,65 +720,6 @@ $.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
 		);
 
 		return handle;
-	}
-
-	// Create a copy of an element-creating Link.
-	function addElement ( handle, link ) {
-
-		// If the Link requires creation of a new element,
-		// create this element and return a new Link instance.
-		if ( link.el ) {
-
-			link = new $.Link({
-				'target': $(link.el).clone().appendTo( handle ),
-				'method': link.method,
-				'format': link.formatting
-			}, true);
-		}
-
-		// Otherwise, return the reference.
-		return link;
-	}
-
-	// Loop all links for a handle.
-	function addElements ( elements, handle, formatting ) {
-
-		var index, list = [], standard = new $.Link({}, true);
-
-		// Use the Link interface to provide unified
-		// formatting for the .val() method.
-		standard.setFormatting(formatting);
-
-		// The list now contains at least one element.
-		list.push( standard );
-
-		// Loop all links in either 'lower' or 'upper'.
-		for ( index = 0; index < elements.length; index++ ) {
-			list.push(addElement(handle, elements[index]));
-		}
-
-		return list;
-	}
-
-	// Go over all Links and assign them to a handle.
-	function addLinks ( options, handles ) {
-
-		var index, links = [];
-
-		// Copy the links into a new array, instead of modifying
-		// the 'options.ser' list. This allows replacement of the invalid
-		// '.el' Links, while the others are still passed by reference.
-		for ( index = 0; index < options.handles; index++ ) {
-
-			// Append a new array.
-			links[index] = addElements(
-				options.ser[index],
-				handles[index].children(),
-				options.formatting
-			);
-		}
-
-		return links;
 	}
 
 	// Add the proper connection classes.
@@ -656,36 +742,33 @@ $.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
 		}
 	}
 
-	// Add handles and loop Link elements.
-	function addHandles ( options, base ) {
+	// Add handles to the slider base.
+	function addHandles ( nrHandles, direction, base ) {
 
 		var index, handles = [];
 
 		// Append handles.
-		for ( index = 0; index < options.handles; index++ ) {
+		for ( index = 0; index < nrHandles; index += 1 ) {
 
 			// Keep a list of all added handles.
-			handles.push( addHandle( options, index ).appendTo(base) );
+			handles.push( addHandle( direction, index ).appendTo(base) );
 		}
 
 		return handles;
 	}
 
 	// Initialize a single slider.
-	function addSlider ( options, target ) {
+	function addSlider ( direction, orientation, target ) {
 
 		// Apply classes and data to the target.
 		target.addClass([
 			Classes[0],
-			Classes[8 + options.dir],
-			Classes[4 + options.ort]
+			Classes[8 + direction],
+			Classes[4 + orientation]
 		].join(' '));
 
 		return $('<div/>').appendTo(target).addClass( Classes[1] );
 	}
-
-
-// Slider scope
 
 function closure ( target, options, originalOptions ){
 
@@ -695,17 +778,26 @@ function closure ( target, options, originalOptions ){
 	var $Target = $(target),
 		$Locations = [-1, -1],
 		$Base,
-		$Serialization,
-		$Handles;
+		$Handles,
+		$Spectrum = options.spectrum,
+		$Values = [],
+	// libLink. For rtl sliders, 'lower' and 'upper' should not be inverted
+	// for one-handle sliders, so trim 'upper' it that case.
+		triggerPos = ['lower', 'upper'].slice(0, options.handles);
+
+	// Invert the libLink connection for rtl sliders.
+	if ( options.dir ) {
+		triggerPos.reverse();
+	}
+
+// Helpers
 
 	// Shorthand for base dimensions.
 	function baseSize ( ) {
 		return $Base[['width', 'height'][options.ort]]();
 	}
 
-
-// External event handling
-
+	// External event handling
 	function fireEvents ( events ) {
 
 		// Use the external api to get the values.
@@ -713,113 +805,97 @@ function closure ( target, options, originalOptions ){
 		// only one additional argument.
 		var index, values = [ $Target.val() ];
 
-		for ( index = 0; index < events.length; index++ ){
+		for ( index = 0; index < events.length; index += 1 ){
 			$Target.trigger(events[index], values);
 		}
 	}
 
+	// Returns the input array, respecting the slider direction configuration.
+	function inSliderOrder ( values ) {
 
-// Handle placement
-
-	// Test suggested values and apply margin, step.
-	function setHandle ( handle, to, delimit ) {
-
-		var n = handle[0] !== $Handles[0][0] ? 1 : 0,
-			lower = $Locations[0] + options.margin,
-			upper = $Locations[1] - options.margin;
-
-		// Don't delimit range dragging.
-		if ( delimit && $Handles.length > 1 ) {
-			to = n ? Math.max( to, lower ) : Math.min( to, upper );
+		// If only one handle is used, return a single value.
+		if ( values.length === 1 ){
+			return values[0];
 		}
 
-		// Handle the step option.
-		if ( to < 100 ){
-			to = getStep(options, to);
-		}
-
-		// Limit to 0/100 for .val input, trim anything beyond 7 digits, as
-		// JavaScript has some issues in its floating point implementation.
-		to = limit(parseFloat(to.toFixed(7)));
-
-		// Return falsy if handle can't move. False for 0 or 100 limit,
-		// '0' for limiting by another handle.
-		if ( to === $Locations[n] ) {
-			if ( $Handles.length === 1 ) {
-				return false;
-			}
-			return ( to === lower || to === upper ) ? 0 : false;
-		}
-
-		// Set the handle to the new position.
-		handle.css( options.style, to + '%' );
-
-		// Force proper handle stacking
-		if ( handle.is(':first-child') ) {
-			handle.toggleClass(Classes[17], to > 50 );
-		}
-
-		// Update locations.
-		$Locations[n] = to;
-
-		// Invert the value if this is a right-to-left slider.
 		if ( options.dir ) {
-			to = 100 - to;
+			return values.reverse();
 		}
 
-		// Write values to serialization Links.
-		// Convert the value to the correct relative representation.
-		// Convert the value to the slider stepping/range.
-		$($Serialization[n]).each(function(){
-			this.write( fromStepping( options, to ), handle.children(), $Target );
-		});
-
-		return true;
+		return values;
 	}
 
-	// Delimit proposed values for handle positions.
-	function getPositions ( a, b, delimit ) {
+// libLink integration
 
-		// Add movement to current position.
-		var c = a + b[0], d = a + b[1];
+	// Create a new function which calls .val on input change.
+	function createChangeHandler ( trigger ) {
+		return function ( ignore, value ){
+			// Determine which array position to 'null' based on 'trigger'.
+			$Target.val( [ trigger ? null : value, trigger ? value : null ], true );
+		};
+	}
 
-		// Only alter the other position on drag,
-		// not on standard sliding.
-		if ( delimit ) {
-			if ( c < 0 ) {
-				d += Math.abs(c);
+	// Called by libLink when it wants a set of links updated.
+	function linkUpdate ( flag ) {
+
+		var trigger = $.inArray(flag, triggerPos);
+
+		// The API might not have been set yet.
+		if ( $Target[0].linkAPI && $Target[0].linkAPI[flag] ) {
+			$Target[0].linkAPI[flag].change(
+				$Values[trigger],
+				$Handles[trigger].children(),
+				$Target
+			);
+		}
+	}
+
+	// Called by libLink to append an element to the slider.
+	function linkConfirm ( flag, element ) {
+
+		// Find the trigger for the passed flag.
+		var trigger = $.inArray(flag, triggerPos);
+
+		// If set, append the element to the handle it belongs to.
+		if ( element ) {
+			element.appendTo( $Handles[trigger].children() );
+		}
+
+		// The public API is reversed for rtl sliders, so the changeHandler
+		// should not be aware of the inverted trigger positions.
+		// On rtl slider with one handle, 'lower' should be used.
+		if ( options.dir && options.handles > 1 ) {
+			trigger = trigger === 1 ? 0 : 1;
+		}
+
+		return createChangeHandler( trigger );
+	}
+
+	// Place elements back on the slider.
+	function reAppendLink ( ) {
+
+		var i, flag;
+
+		// The API keeps a list of elements: we can re-append them on rebuild.
+		for ( i = 0; i < triggerPos.length; i += 1 ) {
+			if ( this.linkAPI && this.linkAPI[(flag = triggerPos[i])] ) {
+				this.linkAPI[flag].reconfirm(flag);
 			}
-			if ( d > 100 ) {
-				c -= ( d - 100 );
-			}
-
-			// Limit values to 0 and 100.
-			return [limit(c), limit(d)];
 		}
-
-		return [c,d];
 	}
 
-	// Handles movement by tapping.
-	function jump ( handle, to, instant ) {
+	target.LinkUpdate = linkUpdate;
+	target.LinkConfirm = linkConfirm;
+	target.LinkDefaultFormatter = options.format;
+	target.LinkDefaultFlag = 'lower';
 
-		if ( !instant ) {
-			// Flag the slider as it is now in a transitional state.
-			// Transition takes 300 ms, so re-enable the slider afterwards.
-			addClassFor( $Target, Classes[14], 300 );
-		}
+	target.reappend = reAppendLink;
 
-		// Move the handle to the new position.
-		setHandle( handle, to, false );
-
-		fireEvents(['slide', 'set', 'change']);
-	}
-
-
-// Events
 
 	// Handler for attaching events trough a proxy.
 	function attach ( events, element, callback, data ) {
+
+		// This function can be used to 'filter' events to the slider.
 
 		// Add the noUiSlider namespace to all events.
 		events = events.replace( /\s/g, namespace + ' ' ) + namespace;
@@ -827,14 +903,14 @@ function closure ( target, options, originalOptions ){
 		// Bind a closure on the target.
 		return element.on( events, function( e ){
 
-			// jQuery and Zepto handle unset attributes differently.
-			var disabled = $Target.attr('disabled');
-				disabled = !( disabled === undefined || disabled === null );
+			// jQuery and Zepto (1) handle unset attributes differently,
+			// but always falsy; #208
+			if ( !!$Target.attr('disabled') ) {
+				return false;
+			}
 
-			// Test if there is anything that should prevent an event
-			// from being handled, such as a disabled state or an active
-			// 'tap' transition.
-			if( $Target.hasClass( Classes[14] ) || disabled ) {
+			// Stop if an active 'tap' transition is taking place.
+			if ( $Target.hasClass( Classes[14] ) ) {
 				return false;
 			}
 
@@ -951,24 +1027,21 @@ function closure ( target, options, originalOptions ){
 		// Calculate the new position.
 		to = ( location * 100 ) / baseSize();
 
+		if ( !options.events.snap ) {
+			// Flag the slider as it is now in a transitional state.
+			// Transition takes 300 ms, so re-enable the slider afterwards.
+			addClassFor( $Target, Classes[14], 300 );
+		}
+
 		// Find the closest handle and calculate the tapped point.
 		// The set handle to the new position.
-		jump( $Handles[total], to, options.events.snap );
+		setHandle( $Handles[total], to );
+
+		fireEvents(['slide', 'set', 'change']);
 
 		if ( options.events.snap ) {
 			start(event, { handles: [$Handles[total]] });
 		}
-	}
-
-	// Move handle to edges when target gets tapped.
-	function edge ( event ) {
-
-		var i = event.calcPoint < $Base.offset()[ options.style ],
-			to = i ? 0 : 100;
-
-		i = i ? 0 : $Handles.length - 1;
-
-		jump( $Handles[i], to, false );
 	}
 
 	// Attach events to several slider parts.
@@ -979,7 +1052,7 @@ function closure ( target, options, originalOptions ){
 		// Attach the standard drag event to the handles.
 		if ( !behaviour.fixed ) {
 
-			for ( i = 0; i < $Handles.length; i++ ) {
+			for ( i = 0; i < $Handles.length; i += 1 ) {
 
 				// These events are only bound to the visual handle
 				// element, not the 'real' origin element.
@@ -991,21 +1064,10 @@ function closure ( target, options, originalOptions ){
 
 		// Attach the tap event to the slider base.
 		if ( behaviour.tap ) {
+
 			attach ( actions.start, $Base, tap, {
 				handles: $Handles
 			});
-		}
-
-		// Extend tapping behaviour to target
-		if ( behaviour.extend ) {
-
-			$Target.addClass( Classes[16] );
-
-			if ( behaviour.tap ) {
-				attach ( actions.start, $Target, edge, {
-					handles: $Handles
-				});
-			}
 		}
 
 		// Make the range dragable.
@@ -1028,6 +1090,218 @@ function closure ( target, options, originalOptions ){
 	}
 
 
+	// Test suggested values and apply margin, step.
+	function setHandle ( handle, to, noLimitOption ) {
+
+		var trigger = handle[0] !== $Handles[0][0] ? 1 : 0,
+			lowerMargin = $Locations[0] + options.margin,
+			upperMargin = $Locations[1] - options.margin,
+			lowerLimit = $Locations[0] + options.limit,
+			upperLimit = $Locations[1] - options.limit;
+
+		// For sliders with multiple handles,
+		// limit movement to the other handle.
+		// Apply the margin option by adding it to the handle positions.
+		if ( $Handles.length > 1 ) {
+			to = trigger ? Math.max( to, lowerMargin ) : Math.min( to, upperMargin );
+		}
+
+		// The limit option has the opposite effect, limiting handles to a
+		// maximum distance from another. Limit must be > 0, as otherwise
+		// handles would be unmoveable. 'noLimitOption' is set to 'false'
+		// for the .val() method, except for pass 4/4.
+		if ( noLimitOption !== false && options.limit && $Handles.length > 1 ) {
+			to = trigger ? Math.min ( to, lowerLimit ) : Math.max( to, upperLimit );
+		}
+
+		// Handle the step option.
+		to = $Spectrum.getStep( to );
+
+		// Limit to 0/100 for .val input, trim anything beyond 7 digits, as
+		// JavaScript has some issues in its floating point implementation.
+		to = limit(parseFloat(to.toFixed(7)));
+
+		// Return false if handle can't move.
+		if ( to === $Locations[trigger] ) {
+			return false;
+		}
+
+		// Set the handle to the new position.
+		handle.css( options.style, to + '%' );
+
+		// Force proper handle stacking
+		if ( handle.is(':first-child') ) {
+			handle.toggleClass(Classes[17], to > 50 );
+		}
+
+		// Update locations.
+		$Locations[trigger] = to;
+
+		// Convert the value to the slider stepping/range.
+		$Values[trigger] = $Spectrum.fromStepping( to );
+
+		linkUpdate(triggerPos[trigger]);
+
+		return true;
+	}
+
+	// Loop values from value method and apply them.
+	function setValues ( count, values ) {
+
+		var i, trigger, to;
+
+		// With the limit option, we'll need another limiting pass.
+		if ( options.limit ) {
+			count += 1;
+		}
+
+		// If there are multiple handles to be set run the setting
+		// mechanism twice for the first handle, to make sure it
+		// can be bounced of the second one properly.
+		for ( i = 0; i < count; i += 1 ) {
+
+			trigger = i%2;
+
+			// Get the current argument from the array.
+			to = values[trigger];
+
+			// Setting with null indicates an 'ignore'.
+			// Inputting 'false' is invalid.
+			if ( to !== null && to !== false ) {
+
+				// If a formatted number was passed, attemt to decode it.
+				if ( typeof to === 'number' ) {
+					to = String(to);
+				}
+
+				to = options.format.from( to );
+
+				// Request an update for all links if the value was invalid.
+				// Do so too if setting the handle fails.
+				if ( to === false || isNaN(to) || setHandle( $Handles[trigger], $Spectrum.toStepping( to ), i === (3 - options.dir) ) === false ) {
+
+					linkUpdate(triggerPos[trigger]);
+				}
+			}
+		}
+	}
+
+	// Set the slider value.
+	function valueSet ( input ) {
+
+		// LibLink: don't accept new values when currently emitting changes.
+		if ( $Target[0].LinkIsEmitting ) {
+			return this;
+		}
+
+		var count, values = asArray( input );
+
+		// The RTL settings is implemented by reversing the front-end,
+		// internal mechanisms are the same.
+		if ( options.dir && options.handles > 1 ) {
+			values.reverse();
+		}
+
+		// Animation is optional.
+		// Make sure the initial values where set before using animated
+		// placement. (no report, unit testing);
+		if ( options.animate && $Locations[0] !== -1 ) {
+			addClassFor( $Target, Classes[14], 300 );
+		}
+
+		// Determine how often to set the handles.
+		count = $Handles.length > 1 ? 3 : 1;
+
+		if ( values.length === 1 ) {
+			count = 1;
+		}
+
+		setValues ( count, values );
+
+		// Fire the 'set' event. As of noUiSlider 7,
+		// this is no longer optional.
+		fireEvents(['set']);
+
+		return this;
+	}
+
+	// Get the slider value.
+	function valueGet ( ) {
+
+		var i, retour = [];
+
+		// Get the value from all handles.
+		for ( i = 0; i < options.handles; i += 1 ){
+			retour[i] = options.format.to( $Values[i] );
+		}
+
+		return inSliderOrder( retour );
+	}
+
+	// Destroy the slider and unbind all events.
+	function destroyTarget ( ) {
+
+		// Unbind events on the slider, remove all classes and child elements.
+		$(this).off(namespace)
+			.removeClass(Classes.join(' '))
+			.empty();
+
+		delete this.LinkUpdate;
+		delete this.LinkConfirm;
+		delete this.LinkDefaultFormatter;
+		delete this.LinkDefaultFlag;
+		delete this.reappend;
+		delete this.vGet;
+		delete this.vSet;
+		delete this.getCurrentStep;
+		delete this.getInfo;
+		delete this.destroy;
+
+		// Return the original options from the closure.
+		return originalOptions;
+	}
+
+	// Get the current step size for the slider.
+	function getCurrentStep ( ) {
+
+		// Check all locations, map them to their stepping point.
+		// Get the step point, then find it in the input list.
+		var retour = $.map($Locations, function( location, index ){
+
+			var step = $Spectrum.getApplicableStep( location ),
+
+				// As per #391, the comparison for the decrement step can have some rounding issues.
+				// Round the value to the precision used in the step.
+				stepDecimals = countDecimals(String(step[2])),
+
+				// Get the current numeric value
+				value = $Values[index],
+
+				// To move the slider 'one step up', the current step value needs to be added.
+				// Use null if we are at the maximum slider value.
+				increment = location === 100 ? null : step[2],
+
+				// Going 'one step down' might put the slider in a different sub-range, so we
+				// need to switch between the current or the previous step.
+				prev = Number((value - step[2]).toFixed(stepDecimals)),
+
+				// If the value fits the step, return the current step value. Otherwise, use the
+				// previous step. Return null if the slider is at its minimum value.
+				decrement = location === 0 ? null : (prev >= step[1]) ? step[2] : (step[0] || false);
+
+			return [[decrement, increment]];
+		});
+
+		// Return values in the proper order.
+		return inSliderOrder( retour );
+	}
+
+	// Get the original set of options.
+	function getOriginalOptions ( ) {
+		return originalOptions;
+	}
+
+
 // Initialize slider
 
 	// Throw an error if the slider was already initialized.
@@ -1037,9 +1311,8 @@ function closure ( target, options, originalOptions ){
 
 	// Create the base element, initialise HTML and set classes.
 	// Add handles and links.
-	$Base = addSlider( options, $Target );
-	$Handles = addHandles( options, $Base );
-	$Serialization = addLinks( options, $Handles );
+	$Base = addSlider( options.dir, options.ort, $Target );
+	$Handles = addHandles( options.handles, options.dir, $Base );
 
 	// Set the connect classes.
 	addConnection ( options.connect, $Target, $Handles );
@@ -1047,163 +1320,34 @@ function closure ( target, options, originalOptions ){
 	// Attach user events.
 	events( options.events );
 
-
 // Methods
 
-	// Set the slider value.
-	/** @expose */
-	target.vSet = function ( ) {
+	target.vSet = valueSet;
+	target.vGet = valueGet;
+	target.destroy = destroyTarget;
 
-		var args = Array.prototype.slice.call( arguments, 0 ),
-			callback, link, update, animate,
-			i, count, actual, to, values = asArray( args[0] );
+	target.getCurrentStep = getCurrentStep;
+	target.getOriginalOptions = getOriginalOptions;
 
-		// Extract modifiers for value method.
-		if ( typeof args[1] === 'object' ) {
-			callback = args[1]['set'];
-			link = args[1]['link'];
-			update = args[1]['update'];
-			animate = args[1]['animate'];
-
-		// Support the 'true' option.
-		} else if ( args[1] === true ) {
-			callback = true;
-		}
-
-		// The RTL settings is implemented by reversing the front-end,
-		// internal mechanisms are the same.
-		if ( options.dir && options.handles > 1 ) {
-			values.reverse();
-		}
-
-		// Animation is optional.
-		if ( animate ) {
-			addClassFor( $Target, Classes[14], 300 );
-		}
-
-		// Determine how often to set the handles.
-		count = $Handles.length > 1 ? 3 : 1;
-		if ( values.length === 1 ) {
-			count = 1;
-		}
-
-		// If there are multiple handles to be set run the setting
-		// mechanism twice for the first handle, to make sure it
-		// can be bounced of the second one properly.
-		for ( i = 0; i < count; i++ ) {
-
-			to = link || $Serialization[i%2][0];
-			to = to.getValue( values[i%2] );
-
-			if ( to === false ) {
-				continue;
-			}
-
-			// Calculate the new handle position
-			to = toStepping( options, to );
-
-			// Invert the value if this is a right-to-left slider.
-			if ( options.dir ) {
-				to = 100 - to;
-			}
-
-			// Force delimitation.
-			if ( setHandle( $Handles[i%2], to, true ) === true ) {
-				continue;
-			}
-
-			// Reset the input if it doesn't match the slider.
-			$($Serialization[i%2]).each(function(index){
-
-				if (!index) {
-					actual = this.actual;
-					return true;
-				}
-
-				this.write(
-					actual,
-					$Handles[i%2].children(),
-					$Target,
-					update
-				);
-			});
-		}
-
-		// Optionally fire the 'set' event.
-		if( callback === true ) {
-			fireEvents(['set']);
-		}
-
-		return this;
+	target.getInfo = function(){
+		return [
+			$Spectrum,
+			options.style,
+			options.ort
+		];
 	};
-
-	// Get the slider value.
-	/** @expose */
-	target.vGet = function ( ) {
-
-		var i, retour = [];
-
-		// Get the value from all handles.
-		for ( i = 0; i < options.handles; i++ ){
-			retour[i] = $Serialization[i][0].saved;
-		}
-
-		// If only one handle is used, return a single value.
-		if ( retour.length === 1 ){
-			return retour[0];
-		}
-
-		if ( options.dir ) {
-			return retour.reverse();
-		}
-
-		return retour;
-	};
-
-	// Destroy the slider and unbind all events.
-	/** @expose */
-	target.destroy = function ( ) {
-
-		// Loop all linked serialization objects and unbind all
-		// events in the noUiSlider namespace.
-		$.each($Serialization, function(){
-			$.each(this, function(){
-				// Won't remove 'change' when bound implicitly.
-				if ( this.target ) {
-					this.target.off( namespace );
-				}
-			});
-		});
-
-		// Unbind events on the slider, remove all classes and child elements.
-		$(this).off(namespace)
-			.removeClass(Classes.join(' '))
-			.empty();
-
-		// Return the original options from the closure.
-		return originalOptions;
-	};
-
-
-// Value setting
 
 	// Use the public value method to set the start values.
 	$Target.val( options.start );
+
 }
 
-
-// Access points
 
 	// Run the standard initializer
 	function initialize ( originalOptions ) {
 
-		// Throw error if group is empty.
-		if ( !this.length ){
-			throw new Error("noUiSlider: Can't initialize slider on empty selection.");
-		}
-
 		// Test the options once, not for every slider.
-		var options = test( originalOptions, this );
+		var options = testOptions( originalOptions, this );
 
 		// Loop all items, and provide a new closed-scope environment.
 		return this.each(function(){
@@ -1216,16 +1360,24 @@ function closure ( target, options, originalOptions ){
 
 		return this.each(function(){
 
+			// The rebuild flag can be used if the slider wasn't initialized yet.
+			if ( !this.destroy ) {
+				$(this).noUiSlider( options );
+				return;
+			}
+
 			// Get the current values from the slider,
 			// including the initialization options.
-			var values = $(this).val(),
-				originalOptions = this.destroy(),
+			var values = $(this).val(), originalOptions = this.destroy(),
 
 				// Extend the previous options with the newly provided ones.
 				newOptions = $.extend( {}, originalOptions, options );
 
 			// Run the standard initializer.
 			$(this).noUiSlider( newOptions );
+
+			// Place Link elements back.
+			this.reappend();
 
 			// If the start option hasn't changed,
 			// reset the previous values.
@@ -1235,18 +1387,54 @@ function closure ( target, options, originalOptions ){
 		});
 	}
 
+	// Access the internal getting and setting methods based on argument count.
+	function value ( ) {
+		return this[0][ !arguments.length ? 'vGet' : 'vSet' ].apply(this[0], arguments);
+	}
 
-// Remap the serialization constructor for legacy support.
-	/** @expose */
-	$.noUiSlider = { 'Link': $.Link };
+	// Override the .val() method. Test every element. Is it a slider? Go to
+	// the slider value handling. No? Use the standard method.
+	// Note how $.fn.val expects 'this' to be an instance of $. For convenience,
+	// the above 'value' function does too.
+	$.fn.val = function ( arg ) {
 
-// Extend jQuery/Zepto with the noUiSlider method.
-	/** @expose */
-	$.fn.noUiSlider = function ( options, re ) {
-		return ( re ? rebuild : initialize ).call(this, options);
+		// this === instanceof $
+
+		function valMethod( a ){
+			return a.hasClass(Classes[0]) ? value : $val;
+		}
+
+		// If no value is passed, this is 'get'.
+		if ( !arguments.length ) {
+			var first = $(this[0]);
+			return valMethod(first).call(first);
+		}
+
+		var isFunction = $.isFunction(arg);
+
+		// Return the set so it remains chainable. Make sure not to break
+		// jQuery's .val(function( index, value ){}) signature.
+		return this.each(function( i ){
+
+			var val = arg, $t = $(this);
+
+			if ( isFunction ) {
+				val = arg.call(this, i, $t.val());
+			}
+
+			valMethod($t).call($t, val);
+		});
 	};
 
-// Attach a classbased val handler.
-	$.classVal(Classes[0], 'vGet', 'vSet', false);
+// Extend jQuery/Zepto with the noUiSlider method.
+	$.fn.noUiSlider = function ( options, rebuildFlag ) {
 
-}( window['jQuery'] || window['Zepto'] ));
+		switch ( options ) {
+			case 'step': return this[0].getCurrentStep();
+			case 'options': return this[0].getOriginalOptions();
+		}
+
+		return ( rebuildFlag ? rebuild : initialize ).call(this, options);
+	};
+
+}( window.jQuery || window.Zepto ));
