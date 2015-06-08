@@ -210,7 +210,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                                                                     <label class="control-label col-md-3">Descrição</label>
                                                                                    
                                                                                      <div class="col-md-5">
-																						<textarea class="form-control" placeholder="Descrição breve" maxlength="225" name="DescricaoPromo" id="DescricaoPromo"></textarea>
+																						<textarea class="form-control" placeholder="Descrição breve" name="DescricaoPromo" id="DescricaoPromo"></textarea>
 																						<span class="help-block"> Descrição básica do promo.</span>
 																					</div>
                                                                                     
